@@ -37,6 +37,7 @@ public class ForgeManger : MonoBehaviour
         Weapon.Instance.SetDamage((int)weaponUpSOList[(int)WeaponUpgradeType.AttackNumber].baseValue);
         Weapon.Instance.SetExplosionRange((int)weaponUpSOList[(int)WeaponUpgradeType.AttackRange].baseValue);
         Weapon.Instance.SetCannonSpeed((int)weaponUpSOList[(int)WeaponUpgradeType.CannonSpeed].baseValue);
+        WinchController.Instance.SetRopeSpeed(forcepSOList[(int)ForcepUpgradeType.ForcepBasicSpeed].baseValue);
         
     }
 
@@ -47,6 +48,7 @@ public class ForgeManger : MonoBehaviour
         
         float levelValue = weaponUpSOList[index].recipes[weaponLevelList[index]].levelValue;
         Cost[] cost = weaponUpSOList[index].recipes[weaponLevelList[index]].cost;
+        Debug.Log("Attempting to upgrade weapon at index " + index + " with levelValue " + levelValue);
         if(inventoryManger.CheckOre(cost))
         {
             foreach (var item in cost)
@@ -81,11 +83,17 @@ public class ForgeManger : MonoBehaviour
         
         float levelValue = forcepSOList[index].recipes[forcepLevelList[index]].levelValue;
         Cost[] cost = forcepSOList[index].recipes[forcepLevelList[index]].cost;
+        Debug.Log("Attempting to upgrade forcep at index " + index + " with levelValue " + levelValue);
         if (inventoryManger.CheckOre(cost))
         {
             foreach (var item in cost)
             {
                 inventoryManger.RemoveOre(item.oreType, item.amount);
+            }
+
+            if (index == (int)ForcepUpgradeType.ForcepBasicSpeed)
+            {
+                WinchController.Instance.AddRopeSpeed(levelValue);
             }
             forcepLevelList[index]++;
         }
