@@ -22,6 +22,8 @@ public class TilemapManager : MonoBehaviour
     [Header("절대 수치 내구도 색상 설정")]
     [Tooltip("내구도가 높은 순서대로 정렬하지 않아도 괜찮습니다. 자동으로 정렬됩니다.")]
     public DurabilityColorMapping[] colorMappings;
+    [Header("구독할 채널")] // ✨ 추가된 부분
+    public TileDamageEventChannelSO onTileDamageChannel;
 
     private Dictionary<Vector3Int, int> currentDurabilityMap = new Dictionary<Vector3Int, int>();
     private Dictionary<Vector3Int, int> maxDurabilityMap = new Dictionary<Vector3Int, int>();
@@ -55,6 +57,24 @@ public class TilemapManager : MonoBehaviour
             }
         }
     }
+private void OnEnable()
+    {
+        // 방송국에 "나 이 방송 들을래" 하고 구독 신청
+        if (onTileDamageChannel != null)
+        {
+            onTileDamageChannel.OnEventRaised += ReceiveDamage;
+        }
+    }
+
+    // ✨ OnDisable: 이 스크립트가 비활성화될 때 실행됨 (오브젝트 파괴 포함)
+    private void OnDisable()
+    {
+        // 방송국에 "나 이제 안 들을래" 하고 구독 취소 (메모리 누수 방지)
+        if (onTileDamageChannel != null)
+        {
+            onTileDamageChannel.OnEventRaised -= ReceiveDamage;
+        }
+    }
 
     /// <summary>
     /// 현재 내구도 수치에 맞는 색상을 찾아 반환하는 함수
@@ -78,6 +98,16 @@ public class TilemapManager : MonoBehaviour
         // 모든 문턱값보다 내구도가 낮으면, 가장 낮은 단계의 색상으로 처리
         return colorMappings.Last().color;
     }
+
+// ✨ 추가된 함수: 방송을 수신했을 때 실행될 함수
+    private void ReceiveDamage(TileDamageEvent damageEvent)
+    {
+        Debug.Log("📡 EVENT RECEIVED! Damaging cell: " + damageEvent.cellPosition); // 이 줄을 추가!
+
+        // 전달받은 정보로 기존의 DamageTile 함수를 호출
+        DamageTile(damageEvent.cellPosition, damageEvent.damageAmount);
+    }
+
 
     public void DamageTile(Vector3Int cellPosition, int damage)
     {

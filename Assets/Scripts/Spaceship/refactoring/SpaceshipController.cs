@@ -28,6 +28,13 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private float boostMaxVolume = 0.8f;
     [SerializeField] private float gasMaxVolume = 0.5f;
 
+    [Header("총알 발사 설정")]
+    [Tooltip("발사할 총알 프리팹")]
+    public GameObject bulletPrefab;
+
+    [Tooltip("총알이 생성될 위치 (총구)")]
+    public Transform firePoint;
+
     // 제어할 컴포넌트들
     private SpaceshipInput shipInput;
     private SpaceshipMotor shipMotor;
@@ -65,6 +72,7 @@ public class SpaceshipController : MonoBehaviour
 
         // 효과 업데이트
         UpdateEffects(isThrusting, isBoosting, canControl ? shipInput.RotateInput : 0);
+        HandleShooting();
     }
 
     private void FixedUpdate()
@@ -101,9 +109,33 @@ public class SpaceshipController : MonoBehaviour
         if (state && !particle.isPlaying) particle.Play();
         else if (!state && particle.isPlaying) particle.Stop();
     }
-    
+
     private void SetupLoopingAudio(AudioSource audio)
     {
         if (audio != null) { audio.loop = true; audio.volume = 0; audio.Play(); }
+    }
+    void HandleShooting()
+    {
+        // 예시: 스페이스바 또는 마우스 왼쪽 버튼을 눌렀을 때 발사
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        {
+            Fire();
+        }
+    }
+
+    // ✨ 4. 실제 발사 함수 새로 추가
+    void Fire()
+    {
+        // 총알 프리팹과 총구가 제대로 설정되었는지 확인
+        if (bulletPrefab != null && firePoint != null)
+        {
+            // FirePoint의 위치와 회전값으로 총알을 생성
+            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        }
+        else
+        {
+            // 설정이 안 되어있을 경우 경고 메시지 출력
+            Debug.LogWarning("Bullet Prefab 또는 Fire Point가 설정되지 않았습니다!");
+        }
     }
 }

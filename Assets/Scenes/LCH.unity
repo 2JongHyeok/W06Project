@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &79360459 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7180292076679184082, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+  m_PrefabInstance: {fileID: 2650487591359582109}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &130237618
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,15 +171,16 @@ MonoBehaviour:
   mainTilemap: {fileID: 1375457351}
   colorMappings:
   - durabilityThreshold: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
+    color: {r: 0.21509439, g: 0.21509439, b: 0.21509439, a: 1}
   - durabilityThreshold: 10
-    color: {r: 0.7433963, g: 0.7433963, b: 0.7433963, a: 1}
+    color: {r: 0.3056603, g: 0.3056603, b: 0.3056603, a: 1}
   - durabilityThreshold: 20
     color: {r: 0.3886792, g: 0.3886792, b: 0.3886792, a: 1}
+  - durabilityThreshold: 30
+    color: {r: 0.7433963, g: 0.7433963, b: 0.7433963, a: 1}
   - durabilityThreshold: 40
-    color: {r: 0.3056603, g: 0.3056603, b: 0.3056603, a: 1}
-  - durabilityThreshold: 50
-    color: {r: 0, g: 0, b: 0, a: 1}
+    color: {r: 1, g: 1, b: 1, a: 1}
+  onTileDamageChannel: {fileID: 11400000, guid: a07d8077511f7a345b35b835cc9f14ad, type: 2}
 --- !u!198 &196437859 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 3521509932480347430, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
@@ -217,6 +223,37 @@ Transform:
   - {fileID: 130237619}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1334798007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1334798008}
+  m_Layer: 3
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1334798008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334798007}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1.86, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 79360459}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &1375457348
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,6 +265,7 @@ GameObject:
   - component: {fileID: 1375457349}
   - component: {fileID: 1375457351}
   - component: {fileID: 1375457350}
+  - component: {fileID: 1375457352}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -295,7 +333,7 @@ TilemapRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
+  m_ChunkCullingBounds: {x: 0.5, y: 0.5, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -36462,6 +36500,44 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!19719996 &1375457352
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375457348}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0
+  m_UseDelaunayMesh: 0
 --- !u!1 &1816835809
 GameObject:
   m_ObjectHideFlags: 0
@@ -36487,7 +36563,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1816835809}
   m_Enabled: 1
-  m_CellSize: {x: 0.5, y: 0.5, z: 0}
+  m_CellSize: {x: 2, y: 2, z: 0}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
@@ -36519,6 +36595,14 @@ PrefabInstance:
       propertyPath: directRotationSpeed
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 3322526151059652749, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+      propertyPath: firePoint
+      value: 
+      objectReference: {fileID: 1334798008}
+    - target: {fileID: 3322526151059652749, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 4923620323294686948, guid: c73c2dfd0fc8d71409b774a38db692be, type: 3}
     - target: {fileID: 3322526151059652749, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
       propertyPath: leftThrusterParticle
       value: 
@@ -36573,7 +36657,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7180292076679184082, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1334798008}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
 --- !u!1660057539 &9223372036854775807
