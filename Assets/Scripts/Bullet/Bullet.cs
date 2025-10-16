@@ -1,4 +1,3 @@
-// Bullet.cs (CS0034 에러 해결 최종 버전)
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -17,8 +16,17 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.linearVelocity = transform.right * speed;
+        rb.linearVelocity = transform.up * speed * -1;
         Destroy(gameObject, lifeTime);
+    }
+
+    void Update()
+    {
+        // (0,0,0)와 거리가 0.1 이하이면 총알 삭제
+        if (Vector3.Distance(transform.position, Vector3.zero) <= 0.1f)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -28,12 +36,9 @@ public class Bullet : MonoBehaviour
         if (tilemap != null)
         {
             Vector3 hitPosition = collision.GetContact(0).point;
-            
-            // ✨ 에러 해결 부분: collision.GetContact(0).normal (Vector2)을
-            // (Vector3)으로 명시적으로 형변환하여 계산합니다.
             Vector3 normalV3 = collision.GetContact(0).normal;
             Vector3Int cellPos = tilemap.WorldToCell(hitPosition - normalV3 * 0.01f);
-            
+
             TileDamageEvent damageEvent = new TileDamageEvent
             {
                 cellPosition = cellPos,
