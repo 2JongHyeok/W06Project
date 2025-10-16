@@ -6,15 +6,14 @@ public class SpaceshipMotor : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float thrustPower = 2000f;
-    [SerializeField] private float maxSpeed = 10000f;
+    [Tooltip("이동 저항값. 높을수록 최고 속도가 낮아지고 감속이 빨라집니다.")]
+    [SerializeField] private float movementDrag = 0.5f;
 
     [Header("Rotation")]
-    [SerializeField] private float directRotationSpeed = 30f;
     [SerializeField] private float additiveTorque = 10f;
-    private const float VELOCITY_THRESHOLD = 0.01f;
-    private const float ANGULAR_VELOCITY_THRESHOLD = 0.1f;
-    private bool isDirectRotationActive = false;
-    private float desiredRotation;
+    // --- 아래 한 줄 추가 ---
+    [Tooltip("회전 저항값. 높을수록 회전이 빨리 멈춥니다.")]
+    [SerializeField] private float angularDrag = 1f;
 
     public Rigidbody2D Rb { get; private set; }
 
@@ -22,7 +21,10 @@ public class SpaceshipMotor : MonoBehaviour
     {
         Rb = GetComponent<Rigidbody2D>();
         Rb.gravityScale = 0;
-        desiredRotation = Rb.rotation;
+        
+        Rb.linearDamping = movementDrag;
+        // --- 아래 한 줄 추가 ---
+        Rb.angularDamping = angularDrag; // Rigidbody2D의 각저항 값을 설정합니다.
     }
 
     public void Move(float thrustInput, float boostMultiplier)
@@ -31,39 +33,13 @@ public class SpaceshipMotor : MonoBehaviour
         {
             Rb.AddForce(transform.up * thrustPower * thrustInput * boostMultiplier, ForceMode2D.Force);
         }
-
-        if (Rb.linearVelocity.sqrMagnitude > maxSpeed * maxSpeed)
-        {
-            Rb.linearVelocity = Rb.linearVelocity.normalized * maxSpeed;
-        }
     }
 
     public void Rotate(float rotateInput)
     {
-        bool isTurning = Mathf.Abs(rotateInput) > 0.1f;
-        
-        if (isTurning)
+        if (Mathf.Abs(rotateInput) > 0.1f)
         {
-            if (!isDirectRotationActive && Rb.linearVelocity.sqrMagnitude < VELOCITY_THRESHOLD && Mathf.Abs(Rb.angularVelocity) < ANGULAR_VELOCITY_THRESHOLD)
-            {
-                isDirectRotationActive = true;
-                desiredRotation = Rb.rotation;
-            }
-
-            if (isDirectRotationActive)
-            {
-                desiredRotation += -rotateInput * directRotationSpeed * Time.fixedDeltaTime;
-                Rb.MoveRotation(desiredRotation);
-                Rb.angularVelocity = 0f;
-            }
-            else
-            {
-                Rb.AddTorque(-rotateInput * additiveTorque);
-            }
-        }
-        else
-        {
-            isDirectRotationActive = false;
+            Rb.AddTorque(-rotateInput * additiveTorque);
         }
     }
 }
