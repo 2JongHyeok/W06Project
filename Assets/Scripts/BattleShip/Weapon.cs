@@ -79,5 +79,4 @@ public class Weapon : MonoBehaviour
     public void SetExplosionRange(float val) { explosionRadius = val; }
     public void AddExplosionRange(float val) { explosionRadius += val; }
     #endregion
-
 }

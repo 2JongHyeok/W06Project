@@ -10,5 +10,5 @@ public struct Cost
 public struct LevelRecipe
 {
     public float levelValue;
-    public Cost[] oreType;
+    public Cost[] cost;
 }

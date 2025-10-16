@@ -4,7 +4,7 @@ using UnityEngine;
 public class InventoryManger : MonoBehaviour
 {
     [SerializeField] private OreSO[] orePools;
-    [HideInInspector] public int[] OreList;
+    public int[] OreList;
     [SerializeField] private InventoryUI inventoryUI;
 
     private void Start()
@@ -25,6 +25,7 @@ public class InventoryManger : MonoBehaviour
             AddOre(OreType.Iron, 100);
             AddOre(OreType.Gold, 100);
             AddOre(OreType.Diamond, 100);
+            Debug.Log("Added 100 of each ore type.");
         }
     }
     public void AddOre(OreType oreType, int amount)
@@ -40,5 +41,17 @@ public class InventoryManger : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public bool CheckOre(Cost[] costs)
+    {
+        foreach (var item in costs)
+        {
+            if (OreList[(int)item.oreType] < item.amount)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
