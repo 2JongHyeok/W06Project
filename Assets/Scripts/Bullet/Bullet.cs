@@ -21,15 +21,11 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        // 주의: linearVelocity 대신 Unity의 최신 버전에서 권장되는 velocity를 사용합니다.
-        // 우주선 방향(transform.up)의 역방향으로 속도를 설정합니다.
         rb.linearVelocity = transform.up * speed * -1;
         
         Destroy(gameObject, lifeTime);
     }
 
-    // 💡 참고: 기존 Update 함수는 AoE 로직과 관련 없으며, 원점 근처에서 예상치 못한 파괴를 유발할 수 있어 제거했습니다.
-    // 필요하다면 다시 추가할 수 있습니다.
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

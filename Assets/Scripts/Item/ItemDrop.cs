@@ -15,7 +15,7 @@ public class ItemDrop : MonoBehaviour
     public float minRadius = 0.05f;
 
     [Tooltip("역제곱 법칙 사용 여부 (행성처럼 가까울수록 더 강하게)")]
-    public bool useInverseSquare = false;
+    public bool useInverseSquare = false;   // false면 일정한 속도로.
 
     private Rigidbody2D rb;
 
