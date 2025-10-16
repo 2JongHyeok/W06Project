@@ -2,16 +2,28 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public static Weapon Instance { get; private set; }
     [Header("WeaponPivot")]
     [SerializeField] private GameObject weaponPivot;
 
     [Header("Values")]
+    [SerializeField] private int damage = 10;
     [SerializeField] private float rotationSpeed = 100f;
     [SerializeField] private float fireRate = 0.1f;  
     [SerializeField] private GameObject bulletPrefab; 
     [SerializeField] private Transform firePoint;   // 총알이 발사될 위치
+    [SerializeField] private float explosionRadius = 1.5f;    // 폭발 반경
     private float nextFireTime = 0f;  // 다음 총알을 발사할 수 있는 시간
-    // Update is called once per frame
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
     void Update()
     {
         MoveWeapon();
@@ -52,4 +64,20 @@ public class Weapon : MonoBehaviour
             }
         }
     }
+
+    #region Getter Setter
+    public int GetDamage() { return damage; }
+    public void SetDamage(int val) {  damage = val; }
+    public void AddDamage(int val) { damage += val; }
+    public float GetAttackSpeed() { return fireRate; }
+    public void SetAttackSpeed(float val) { fireRate = val; }
+    public void AddAttackSpeed(float val) { fireRate += val; }
+    public float GetCannonSpeed() { return rotationSpeed; }
+    public void SetCannonSpeed(float val) { rotationSpeed = val; }
+    public void AddCannonSpeed(float val) { rotationSpeed += val; }
+    public float GetExplosionRange() { return explosionRadius; }
+    public void SetExplosionRange(float val) { explosionRadius = val; }
+    public void AddExplosionRange(float val) { explosionRadius += val; }
+    #endregion
+
 }
