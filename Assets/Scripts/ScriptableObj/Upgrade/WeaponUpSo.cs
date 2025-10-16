@@ -37,9 +37,9 @@ public enum WeaponUpgradeType
 [System.Serializable]
 public struct AttackUpgrade
 {
+    public WeaponUpgradeType upgradeType;
     public float baseValue;
-    public float[] levelValue;
-    public Recipe[] recipes;
+    public LevelRecipe[] recipes;
 }
 [CreateAssetMenu(fileName = "New Weapon Upgrade", menuName = "ScriptableObjects/Weapon Upgrade")]
 public class WeaponUpSo : ScriptableObject

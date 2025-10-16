@@ -2,9 +2,9 @@ using UnityEngine;
 [System.Serializable]
 public struct ForcepUpgrade
 {
+    public ForcepUpgradeType upgradeType;
     public float baseValue;
-    public float[] levelValue;
-    public Recipe[] recipes;
+    public LevelRecipe[] recipes;
 }
 public enum ForcepUpgradeType
 {

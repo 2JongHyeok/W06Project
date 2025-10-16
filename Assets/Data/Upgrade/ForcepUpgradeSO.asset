@@ -9,25 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f02c9a01a9a1e8a4d982aee552def98c, type: 3}
-  m_Name: New Weapon Upgrade
+  m_Script: {fileID: 11500000, guid: f0f2706002f2c73488de538caae98b26, type: 3}
+  m_Name: ForcepUpgradeSO
   m_EditorClassIdentifier: 
-  attackSpeed:
+  forcepCapacity:
+    upgradeType: 0
     baseValue: 0
-    levelValue: []
     recipes: []
-  attackRange:
+  forcepBasicSpeepd:
+    upgradeType: 0
     baseValue: 0
-    levelValue: []
     recipes: []
-  attackNumber:
+  forcepMaxSpeed:
+    upgradeType: 0
     baseValue: 0
-    levelValue: []
     recipes: []
-  cannonSpeed:
-    baseValue: 0
-    levelValue: []
-    recipes:
-    - oreType:
-      - oreType: 0
-        amount: 0
