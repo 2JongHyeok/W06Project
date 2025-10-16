@@ -34,6 +34,6 @@ public class InventoryUI : MonoBehaviour
     }
     public void UpdateOreUI(OreType oreType, int amount)
     {
-        OreUIList[(int)oreType].oreAmountText.text = amount.ToString();
+        OreUIList[(int)oreType].oreAmountText.text = "x"+amount.ToString();
     }
 }

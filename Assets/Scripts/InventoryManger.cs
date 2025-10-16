@@ -31,7 +31,7 @@ public class InventoryManger : MonoBehaviour
     public void AddOre(OreType oreType, int amount)
     {
         OreList[(int)oreType] += amount;
-        inventoryUI.UpdateOreUI(oreType, amount);
+        inventoryUI.UpdateOreUI(oreType, OreList[(int)oreType]);
     }
     public bool RemoveOre(OreType oreType, int amount)
     {
