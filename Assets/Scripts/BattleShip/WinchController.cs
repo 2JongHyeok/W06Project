@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class WinchController : MonoBehaviour
 {
+    public static WinchController Instance { get; private set; }
     [Header("오브젝트 연결")]
     [Tooltip("생성할 Forcep 프리팹을 연결하세요.")]
     public GameObject forcepPrefab;
@@ -28,6 +29,15 @@ public class WinchController : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
         lineRenderer.enabled = false;
+    }
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
     void Update()
@@ -98,7 +108,7 @@ public class WinchController : MonoBehaviour
             lineRenderer.SetPosition(1, currentForcepInstance.transform.position);
         }
     }
-    
+
     private void ResetWinch()
     {
         currentForcepInstance = null;
@@ -113,4 +123,20 @@ public class WinchController : MonoBehaviour
             Debug.Log("Weapon 다시 활성화됨");
         }
     }
+    #region Getter Setter
+    public float GetRopeSpeed()
+    {
+        return ropeSpeed;
+    }
+
+    public void SetRopeSpeed(float newSpeed)
+    {
+        // 속도가 0보다 작아지는 것을 방지하는 등의 안전장치를 넣을 수 있습니다.
+        ropeSpeed = Mathf.Max(0, newSpeed);
+    }
+    public void AddRopeSpeed(float amountToAdd)
+    {
+        ropeSpeed += amountToAdd;
+    }
+    #endregion
 }
