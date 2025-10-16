@@ -44,13 +44,13 @@ public class WinchController : MonoBehaviour
         // Forcep이 존재할 때만 로프 길이 조절
         if (currentForcepInstance != null)
         {
-            // W를 누르고 있으면 로프가 길어짐
-            if (Input.GetKey(KeyCode.W))
+            // [수정] W를 누르고 있고 + Forcep이 땅에 닿아있지 않을 때만 로프가 길어짐
+            if (Input.GetKey(KeyCode.W) && !forcepController.isGrounded)
             {
                 distanceJoint.distance += ropeSpeed * Time.deltaTime;
             }
 
-            // S를 누르고 있으면 로프가 짧아짐
+            // S를 누르고 있으면 로프가 짧아짐 (이 부분은 수정할 필요 없음)
             if (Input.GetKey(KeyCode.S))
             {
                 distanceJoint.distance -= ropeSpeed * Time.deltaTime;

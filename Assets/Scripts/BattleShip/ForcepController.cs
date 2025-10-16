@@ -9,6 +9,7 @@ public class ForcepController : MonoBehaviour
     public float gravityAcceleration = 9.81f;
     public float minRadius = 0.1f;
     public bool useInverseSquare = true;
+    public bool isGrounded = false;
 
     // --- 디버깅용 시각 효과 ---
     private SpriteRenderer spriteRenderer;
@@ -59,6 +60,27 @@ public class ForcepController : MonoBehaviour
             {
                 Debug.Log("감지된 광물이 없어서 잡기 기능을 실행할 수 없습니다.");
             }
+        }
+    }
+// [추가] 다른 Collider와 충돌을 시작했을 때 호출되는 함수
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 충돌한 오브젝트의 태그가 "Ground"라면
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            Debug.Log("땅에 닿았습니다! 로프 연장을 중지합니다.");
+        }
+    }
+
+    // [추가] 충돌하고 있던 Collider와 떨어졌을 때 호출되는 함수
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // 떨어진 오브젝트의 태그가 "Ground"라면
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+            Debug.Log("땅에서 떨어졌습니다! 로프 연장을 다시 시작할 수 있습니다.");
         }
     }
 
