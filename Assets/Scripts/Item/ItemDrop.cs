@@ -1,28 +1,51 @@
 // ItemDrop.cs
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class ItemDrop : MonoBehaviour
 {
     [Tooltip("아이템이 드랍된 후 자동으로 사라질 시간 (초)")]
     public float autoDestroyTime = 300f;
 
+    [Header("원점(0,0) 중력 설정")]
+    [Tooltip("원점(0,0) 방향으로의 중력 가속도 (m/s^2)")]
+    public float gravityAcceleration = 9.81f;
+
+    [Tooltip("너무 가까워졌을 때 가속도 폭주를 막기 위한 최소 반지름 클램프")]
+    public float minRadius = 0.05f;
+
+    [Tooltip("역제곱 법칙 사용 여부 (행성처럼 가까울수록 더 강하게)")]
+    public bool useInverseSquare = false;
+
+    private Rigidbody2D rb;
+
     void Start()
     {
-        // autoDestroyTime 후에 스스로 파괴됩니다.
+        rb = GetComponent<Rigidbody2D>();
+
+        rb.gravityScale = 0f;
+
         Destroy(gameObject, autoDestroyTime);
     }
 
-    // --- (추가 기능 예시) ---
-    // 만약 플레이어가 이 아이템을 줍는 기능을 추가하고 싶다면,
-    // 이 곳에 OnMouseDown()이나 OnTriggerEnter2D() 같은 함수를 구현할 수 있습니다.
-    /*
-    private void OnTriggerEnter2D(Collider2D other)
+    void FixedUpdate()
     {
-        if (other.CompareTag("Player")) // 플레이어 태그와 충돌 시
+        Vector2 toOrigin = -(Vector2)transform.position;
+        float dist = toOrigin.magnitude;
+
+        if (dist < Mathf.Epsilon) return;
+
+        Vector2 dir = toOrigin / Mathf.Max(dist, 1e-6f);
+
+        float accel = gravityAcceleration;
+
+        if (useInverseSquare)
         {
-            // 플레이어 인벤토리에 아이템 추가 로직
-            // Destroy(gameObject); // 아이템을 주웠으니 파괴
+            float r = Mathf.Max(dist, minRadius);
+            accel = gravityAcceleration / (r * r);
         }
+
+        Vector2 force = dir * (rb.mass * accel);
+        rb.AddForce(force, ForceMode2D.Force);
     }
-    */
 }

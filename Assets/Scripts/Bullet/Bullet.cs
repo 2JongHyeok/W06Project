@@ -74,10 +74,5 @@ public class Bullet : MonoBehaviour
             // 폭발 처리가 끝났으므로 총알은 파괴됩니다.
             Destroy(gameObject);
         }
-        else
-        {
-             // 타일맵이 아닌 다른 물체(예: 플레이어)와 부딪혔다면, 즉시 파괴합니다.
-             Destroy(gameObject);
-        }
     }
 }
