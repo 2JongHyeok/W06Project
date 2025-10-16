@@ -13,6 +13,9 @@ public class WinchController : MonoBehaviour
     public float maxRopeLength = 20f;
     [Tooltip("로프 최소 길이")]
     public float minRopeLength = 1.5f;
+    [SerializeField]
+    [Tooltip("씬에 있는 InventoryManger 오브젝트를 여기에 연결하세요.")]
+    private InventoryManger inventoryManger;
 
     // --- 내부 변수 ---
     private LineRenderer lineRenderer;
@@ -71,6 +74,8 @@ public class WinchController : MonoBehaviour
         
         distanceJoint = currentForcepInstance.GetComponent<DistanceJoint2D>();
         forcepController = currentForcepInstance.GetComponent<ForcepController>();
+
+        forcepController.inventoryManger = this.inventoryManger;
 
         distanceJoint.connectedBody = GetComponent<Rigidbody2D>();
         distanceJoint.distance = minRopeLength;

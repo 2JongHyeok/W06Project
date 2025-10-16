@@ -5,6 +5,8 @@ using System.Collections.Generic;
 [RequireComponent(typeof(DistanceJoint2D))]
 public class ForcepController : MonoBehaviour
 {
+    [HideInInspector] // 인스펙터 창에서는 숨깁니다. WinchController가 설정해줄 것이기 때문입니다.
+    public InventoryManger inventoryManger;
     [Header("원점(0,0) 중력 설정")]
     public float gravityAcceleration = 9.81f;
     public float minRadius = 0.1f;
@@ -135,40 +137,50 @@ public class ForcepController : MonoBehaviour
     private void GrabOres()
     {
         isGrabbing = true;
-        rb.linearDamping = 2f; // 잡았을 때의 저항 (떨림 방지가 아니므로 값을 줄여도 됨)
+        rb.linearDamping = 2f;
         rb.angularDamping = 2f;
 
         if (spriteRenderer != null) spriteRenderer.color = grabColor;
 
-        foreach (var oreCollider in detectedOres)
+        // [핵심] 1. 감지된 광물 리스트의 "복사본"을 만듭니다.
+        List<Collider2D> oresToGrab = new List<Collider2D>(detectedOres);
+
+        // [핵심] 2. 원본 감지 리스트는 즉시 비워서, 더 이상 트리거 이벤트의 영향을 받지 않게 합니다.
+        detectedOres.Clear();
+
+        // [핵심] 3. 이제 원본이 아닌 "복사본" 리스트를 순회하며 안전하게 처리합니다.
+        foreach (var oreCollider in oresToGrab)
         {
+            // oreCollider가 null이거나 파괴된 경우를 대비한 안전장치
+            if (oreCollider == null) continue;
+
             GameObject oreObject = oreCollider.gameObject;
             if (oreObject != null)
             {
-                // [핵심] 1. 광물의 Rigidbody를 Kinematic으로 전환하여 물리 효과를 끕니다.
+                // 콜라이더 비활성화
+                oreCollider.enabled = false;
+
                 Rigidbody2D oreRb = oreObject.GetComponent<Rigidbody2D>();
                 if (oreRb != null)
                 {
                     oreRb.isKinematic = true;
-                    oreRb.linearVelocity = Vector2.zero; // 움직이던 속도도 0으로 초기화
+                    oreRb.linearVelocity = Vector2.zero;
                 }
 
-                // [핵심] 2. 광물을 Forcep의 자식으로 만들어 위치를 완벽히 동기화합니다.
                 oreObject.transform.SetParent(this.transform);
 
-                // 자체 중력 스크립트가 있다면 비활성화
                 ItemDrop oreGravity = oreObject.GetComponent<ItemDrop>();
                 if (oreGravity != null) oreGravity.enabled = false;
 
+                // 최종적으로 잡은 아이템 목록에 추가
                 grabbedOres.Add(oreObject);
             }
         }
-        detectedOres.Clear();
     }
     private void ReleaseOres()
     {
         isGrabbing = false;
-        rb.linearDamping = 0f; // 저항을 원래대로
+        rb.linearDamping = 0f;
         rb.angularDamping = 0.05f;
 
         if (spriteRenderer != null) spriteRenderer.color = originalColor;
@@ -177,17 +189,21 @@ public class ForcepController : MonoBehaviour
         {
             if (oreObject != null)
             {
-                // 부모-자식 관계를 해제하여 독립적으로 움직이게 합니다.
                 oreObject.transform.SetParent(null);
 
-                // 물리 효과를 다시 켭니다 (Dynamic 상태로 복귀).
+                // [수정] 해당 오브젝트의 "모든" 콜라이더를 찾아서 켭니다.
+                Collider2D[] allColliders = oreObject.GetComponents<Collider2D>();
+                foreach (var col in allColliders)
+                {
+                    col.enabled = true;
+                }
+
                 Rigidbody2D oreRb = oreObject.GetComponent<Rigidbody2D>();
                 if (oreRb != null)
                 {
                     oreRb.isKinematic = false;
                 }
 
-                // 자체 중력 스크립트를 다시 활성화
                 ItemDrop oreGravity = oreObject.GetComponent<ItemDrop>();
                 if (oreGravity != null) oreGravity.enabled = true;
             }
@@ -199,9 +215,29 @@ public class ForcepController : MonoBehaviour
     {
          foreach (var ore in grabbedOres) { AddToInventory(ore); Destroy(ore); } Destroy(gameObject); 
     }
-    private void AddToInventory(GameObject ore) 
+    private void AddToInventory(GameObject oreObject)
     {
-        Debug.Log(ore.name + "을(를) 인벤토리에 추가했습니다."); 
+        // 1. inventoryManger 참조가 제대로 설정되었는지 확인합니다.
+        if (inventoryManger == null)
+        {
+            Debug.LogError("Forcep에 InventoryManger가 연결되지 않았습니다! WinchController를 확인하세요.");
+            return;
+        }
+
+        // 2. 전달받은 광물 오브젝트에서 'Ore' 컴포넌트(신분증)를 찾습니다.
+        Ore oreInfo = oreObject.GetComponent<Ore>();
+
+        // 3. 신분증이 있는지 확인합니다.
+        if (oreInfo != null)
+        {
+            // 4. 저장해둔 inventoryManger 참조를 이용해 AddOre 함수를 호출합니다.
+            inventoryManger.AddOre(oreInfo.oreType, oreInfo.amount);
+            Debug.Log(oreInfo.oreType + " " + oreInfo.amount + "개를 인벤토리에 추가했습니다.");
+        }
+        else
+        {
+            Debug.LogWarning(oreObject.name + "에 Ore.cs 컴포넌트가 없어서 인벤토리에 추가할 수 없습니다!");
+        }
     }
     private void ApplyCentralGravity()
     {
