@@ -24,7 +24,7 @@ public class WinchController : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
-        lineRenderer.enabled = false; // 처음에는 로프를 숨깁니다.
+        lineRenderer.enabled = false;
     }
 
     void Update()
@@ -35,31 +35,28 @@ public class WinchController : MonoBehaviour
 
     private void HandleInput()
     {
-        // W 키를 처음 눌렀고, Forcep이 없다면 새로 생성
-        if (Input.GetKeyDown(KeyCode.W) && currentForcepInstance == null)
+        // [수정] S 키를 처음 눌렀고, Forcep이 없다면 새로 생성
+        if (Input.GetKeyDown(KeyCode.S) && currentForcepInstance == null)
         {
             SpawnForcep();
         }
 
-        // Forcep이 존재할 때만 로프 길이 조절
         if (currentForcepInstance != null)
         {
-            // [수정] W를 누르고 있고 + Forcep이 땅에 닿아있지 않을 때만 로프가 길어짐
-            if (Input.GetKey(KeyCode.W) && !forcepController.isGrounded)
+            // [수정] S키: Forcep이 땅에 닿아있지 않을 때만 로프가 길어짐
+            if (Input.GetKey(KeyCode.S) && !forcepController.isGrounded)
             {
                 distanceJoint.distance += ropeSpeed * Time.deltaTime;
             }
 
-            // S를 누르고 있으면 로프가 짧아짐 (이 부분은 수정할 필요 없음)
-            if (Input.GetKey(KeyCode.S))
+            // [수정] W키: 로프가 짧아짐
+            if (Input.GetKey(KeyCode.W))
             {
                 distanceJoint.distance -= ropeSpeed * Time.deltaTime;
             }
 
-            // 로프 길이 제한
             distanceJoint.distance = Mathf.Clamp(distanceJoint.distance, minRopeLength, maxRopeLength);
 
-            // 로프 길이가 최소값에 도달하면 Forcep과 수집된 광물 처리
             if (distanceJoint.distance <= minRopeLength)
             {
                 forcepController.ProcessAndDestroy();
@@ -72,33 +69,43 @@ public class WinchController : MonoBehaviour
     {
         currentForcepInstance = Instantiate(forcepPrefab, transform.position, Quaternion.identity);
         
-        // 생성된 Forcep에서 필요한 컴포넌트들을 가져와 저장합니다.
         distanceJoint = currentForcepInstance.GetComponent<DistanceJoint2D>();
         forcepController = currentForcepInstance.GetComponent<ForcepController>();
 
-        // Distance Joint의 연결 대상을 이 Winch 오브젝트로 설정합니다.
         distanceJoint.connectedBody = GetComponent<Rigidbody2D>();
-        distanceJoint.distance = minRopeLength; // 초기 길이는 최소값으로 설정
+        distanceJoint.distance = minRopeLength;
 
-        lineRenderer.enabled = true; // 로프를 보이게 합니다.
+        lineRenderer.enabled = true;
+
+        // [추가] 무기 시스템 비활성화 (Weapon 스크립트가 Singleton일 경우)
+        if (Weapon.Instance != null)
+        {
+            Weapon.Instance.enabled = false;
+            Debug.Log("Weapon 비활성화됨");
+        }
     }
 
     private void UpdateRopeVisuals()
     {
-        // Forcep이 있을 때만 로프를 그립니다.
         if (currentForcepInstance != null)
         {
             lineRenderer.SetPosition(0, transform.position);
             lineRenderer.SetPosition(1, currentForcepInstance.transform.position);
         }
     }
-
-    // Forcep이 파괴된 후 Winch를 초기 상태로 되돌립니다.
+    
     private void ResetWinch()
     {
         currentForcepInstance = null;
         distanceJoint = null;
         forcepController = null;
         lineRenderer.enabled = false;
+
+        // [추가] 무기 시스템 다시 활성화
+        if (Weapon.Instance != null)
+        {
+            Weapon.Instance.enabled = true;
+            Debug.Log("Weapon 다시 활성화됨");
+        }
     }
 }
