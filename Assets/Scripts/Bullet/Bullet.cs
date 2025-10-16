@@ -6,12 +6,9 @@ public class Bullet : MonoBehaviour
     [Header("총알 설정")]
     public float speed = 10f;
     [Tooltip("폭발 반경 내의 각 타일에 입힐 데미지 양입니다.")]
-    public int damagePerTile = 10;
     public float lifeTime = 3f;
 
-    [Header("폭발 설정")]
-    [Tooltip("데미지를 입힐 원의 반경입니다. 이 원 안의 모든 타일이 데미지를 받습니다.")]
-    public float explosionRadius = 1.5f;
+    
 
     [Header("이벤트 채널")]
     public TileDamageEventChannelSO onTileDamageChannel;
@@ -50,15 +47,15 @@ public class Bullet : MonoBehaviour
                 Vector3 cellCenterWorld = tilemap.GetCellCenterWorld(cellPos);
                 
                 // 4. 타일 중심과 폭발 중심 사이의 거리를 계산하여 반경 내에 있는지 확인합니다.
-                if (Vector3.Distance(cellCenterWorld, explosionCenterWorld) <= explosionRadius)
+                if (Vector3.Distance(cellCenterWorld, explosionCenterWorld) <= Weapon.Instance.GetExplosionRange())
                 {
                     // 5. 폭발 반경 내에 있는 타일에 데미지 이벤트를 개별적으로 보냅니다.
                     TileDamageEvent damageEvent = new TileDamageEvent
                     {
                         cellPosition = cellPos,
-                        damageAmount = this.damagePerTile // AoE 내의 모든 타일이 동일한 데미지를 받습니다.
+                        damageAmount = Weapon.Instance.GetDamage()
                     };
-
+                    
                     if (onTileDamageChannel != null)
                     {
                         onTileDamageChannel.RaiseEvent(damageEvent);
