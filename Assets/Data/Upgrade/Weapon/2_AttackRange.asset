@@ -13,25 +13,15 @@ MonoBehaviour:
   m_Name: 2_AttackRange
   m_EditorClassIdentifier: 
   upgradeType: 1
-  baseValue: 5
+  baseValue: 0.2
   recipes:
-  - levelValue: 5
-    oreType:
-    - oreType: 0
-      amount: 1
-  - levelValue: 5
-    oreType:
-    - oreType: 0
-      amount: 1
-  - levelValue: 5
-    oreType:
-    - oreType: 0
-      amount: 1
-  - levelValue: 5
-    oreType:
-    - oreType: 0
-      amount: 1
-  - levelValue: 5
-    oreType:
-    - oreType: 0
-      amount: 1
+  - levelValue: 0.3
+    cost: []
+  - levelValue: 0.3
+    cost: []
+  - levelValue: 0.3
+    cost: []
+  - levelValue: 0.3
+    cost: []
+  - levelValue: 0.3
+    cost: []

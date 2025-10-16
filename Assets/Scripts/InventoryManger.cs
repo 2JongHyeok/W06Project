@@ -38,6 +38,7 @@ public class InventoryManger : MonoBehaviour
         if (OreList[(int)oreType] >= amount)
         {
             OreList[(int)oreType] -= amount;
+            inventoryUI.UpdateOreUI(oreType, OreList[(int)oreType]);
             return true;
         }
         return false;

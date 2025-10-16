@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ForgeUI : MonoBehaviour
 {
+    [SerializeField] private GameObject ForgePanel;
     [SerializeField] private GameObject UIMainGrid;
     [SerializeField] private GameObject UITextGrid;
     [SerializeField] private GameObject SubTreePrefab;
@@ -16,6 +17,23 @@ public class ForgeUI : MonoBehaviour
     private List<List<Color>> weaponButtonDefaultColors = new List<List<Color>>();
     private List<List<Button>> forcepButtons = new List<List<Button>>();
     private List<List<Color>> forcepButtonDefaultColors = new List<List<Color>>();
+
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            ToggleForgePanel();
+        }
+    }
+    public void ToggleForgePanel()
+    {
+        if (ForgePanel != null)
+        {
+            bool isActive = ForgePanel.activeSelf;
+            ForgePanel.SetActive(!isActive);
+        }
+    }
 
     public void CreateForgeUI(ForgeManger forgeManger)
     {
