@@ -69,6 +69,7 @@ public class Enemy : MonoBehaviour
         enemyData.enemyHP -= damage;
         if (enemyData.enemyHP <= 0)
         {
+            WaveManager.Instance.EnemyCount--;
             Destroy(gameObject);
         }
     }

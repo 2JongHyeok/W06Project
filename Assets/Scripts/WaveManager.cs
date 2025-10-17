@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
+    public static WaveManager Instance;
     public GameObject[] enemyPrefabs; // 적 프리팹 배열
     public Transform[] spawnPoints;   // 스폰 위치 배열
     public float timeBetweenWaves = 5f; // 웨이브 간 시간 간격
@@ -11,6 +13,20 @@ public class WaveManager : MonoBehaviour
     private int waveIndex = 0; // 현재 웨이브 인덱스
     public Transform Target;
     public TMP_Text waveTimmerText;
+    public TMP_Text enemyCountText;
+
+    public int EnemyCount = 0;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -25,12 +41,14 @@ public class WaveManager : MonoBehaviour
         }
         countdown -= Time.deltaTime;
         waveTimmerText.text = "Next Wave In: " + Mathf.Ceil(countdown).ToString();
+        enemyCountText.text = "Enemies Left: " + EnemyCount.ToString();
     }
     private void SpawnEnemy()
     {
         int spawnIndex = Random.Range(0, spawnPoints.Length);
         int enemyIndex = Random.Range(0, enemyPrefabs.Length);
         GameObject enemy = Instantiate(enemyPrefabs[enemyIndex], spawnPoints[spawnIndex].position, spawnPoints[spawnIndex].rotation);
+        EnemyCount++;
         enemy.GetComponent<Enemy>().SetTaget(Target);
     }
     private IEnumerator SpawnWave()
