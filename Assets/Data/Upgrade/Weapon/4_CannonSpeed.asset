@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4_CannonSpeed
   m_EditorClassIdentifier: 
   upgradeType: 3
-  baseValue: 30
+  baseValue: 60
   recipes:
   - levelValue: 20
     cost:
