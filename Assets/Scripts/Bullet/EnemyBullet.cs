@@ -10,6 +10,7 @@ public class EnemyBullet : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = transform.up * speed;
+        Destroy(gameObject,lifeTime);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -34,6 +35,6 @@ public class EnemyBullet : MonoBehaviour
             manager?.DamageTile(cellPos, damage);
             Destroy(gameObject);
         }
-        Destroy(gameObject, lifeTime);
+        Destroy(gameObject);
     }
 }
