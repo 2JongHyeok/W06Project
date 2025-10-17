@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Spaceship
   - Ground
+  - Asteroid
+  - Core
   layers:
   - Default
   - TransparentFX

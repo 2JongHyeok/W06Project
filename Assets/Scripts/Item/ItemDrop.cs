@@ -7,6 +7,7 @@ public class ItemDrop : MonoBehaviour
     [Tooltip("아이템이 드랍된 후 자동으로 사라질 시간 (초)")]
     public float autoDestroyTime = 300f;
 
+    /* 원점 중력 관련 변수들을 주석 처리 또는 삭제합니다.
     [Header("원점(0,0) 중력 설정")]
     [Tooltip("원점(0,0) 방향으로의 중력 가속도 (m/s^2)")]
     public float gravityAcceleration = 9.81f;
@@ -15,7 +16,8 @@ public class ItemDrop : MonoBehaviour
     public float minRadius = 0.05f;
 
     [Tooltip("역제곱 법칙 사용 여부 (행성처럼 가까울수록 더 강하게)")]
-    public bool useInverseSquare = false;   // false면 일정한 속도로.
+    public bool useInverseSquare = false;
+    */
 
     private Rigidbody2D rb;
 
@@ -23,29 +25,12 @@ public class ItemDrop : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
+        // 이 값을 1로 바꾸면 유니티의 기본 중력(아래 방향)이 적용됩니다.
+        // 0으로 두면 중력 없이 그냥 그 자리에 떠 있습니다.
         rb.gravityScale = 0f;
 
         Destroy(gameObject, autoDestroyTime);
     }
 
-    void FixedUpdate()
-    {
-        Vector2 toOrigin = -(Vector2)transform.position;
-        float dist = toOrigin.magnitude;
-
-        if (dist < Mathf.Epsilon) return;
-
-        Vector2 dir = toOrigin / Mathf.Max(dist, 1e-6f);
-
-        float accel = gravityAcceleration;
-
-        if (useInverseSquare)
-        {
-            float r = Mathf.Max(dist, minRadius);
-            accel = gravityAcceleration / (r * r);
-        }
-
-        Vector2 force = dir * (rb.mass * accel);
-        rb.AddForce(force, ForceMode2D.Force);
-    }
+    // 원점으로 끌어당기는 로직이 있던 FixedUpdate() 메서드를 완전히 제거했습니다.
 }
