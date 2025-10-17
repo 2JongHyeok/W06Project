@@ -12,6 +12,7 @@ public class SpaceshipInput : MonoBehaviour
 
     private PlayerInput playerInput;
     private InputAction thrustAction, boostAction, rotateAction, toggleControlAction;
+    private InputAction reverseThrustAction;
 
     private void Awake()
     {
@@ -20,13 +21,25 @@ public class SpaceshipInput : MonoBehaviour
         boostAction = playerInput.actions["Boost"];
         rotateAction = playerInput.actions["Rotate"];
         toggleControlAction = playerInput.actions["ToggleControl"];
+        reverseThrustAction = playerInput.actions["ReverseThrust"];
     }
 
     private void Update()
     {
         // thrustAction이 Button 타입이므로, IsPressed()로 눌림 상태를 확인하고
         // 눌렸으면 1.0f, 아니면 0.0f를 ThrustInput에 할당합니다.
-        ThrustInput = thrustAction.IsPressed() ? 1.0f : 0.0f;
+        if (thrustAction.IsPressed())
+        {
+            ThrustInput = 1.0f; // W 누르면 전진
+        }
+        else if (reverseThrustAction.IsPressed())
+        {
+            ThrustInput = -1.0f; // S 누르면 후진
+        }
+        else
+        {
+            ThrustInput = 0.0f; // 아무것도 안 누르면 0
+        }
         
         // boostAction도 Button 타입이므로 IsPressed()로 직접 상태를 가져옵니다.
         IsBoosting = boostAction.IsPressed();

@@ -1031,6 +1031,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ReverseThrust",
+                    "type": "Button",
+                    "id": "f27799f5-f9f3-4d95-9f88-2360b5d13e61",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1097,6 +1106,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ToggleControl",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e395c8a3-3f1f-442b-8234-2d565c2d98f9",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReverseThrust",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

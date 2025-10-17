@@ -15,6 +15,7 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private ParticleSystem boostParticle2;
     [SerializeField] private ParticleSystem leftThrusterParticle;
     [SerializeField] private ParticleSystem rightThrusterParticle;
+    [SerializeField] private ParticleSystem reverseThrusterParticle;
 
     [Header("SFX")]
     [SerializeField] private AudioSource engineSound;
@@ -92,9 +93,13 @@ public class SpaceshipController : MonoBehaviour
         ToggleParticle(boostParticle2, isBoosting);
         ToggleParticle(rightThrusterParticle, rotateInput > 0.1f);
         ToggleParticle(leftThrusterParticle, rotateInput < -0.1f);
+        ToggleParticle(reverseThrusterParticle, canControl && shipInput.ThrustInput < -0.1f);
+
         
         // 오디오
-        float targetEngineVol = (isThrusting && !isBoosting) ? engineMaxVolume : 0f;
+    
+        bool isApplyingThrust = canControl && Mathf.Abs(shipInput.ThrustInput) > 0.1f;
+        float targetEngineVol = (isApplyingThrust && !isBoosting) ? engineMaxVolume : 0f;
         float targetBoostVol = isBoosting ? boostMaxVolume : 0f;
         float targetGasVol = Mathf.Abs(rotateInput) > 0.1f ? gasMaxVolume : 0f;
 
