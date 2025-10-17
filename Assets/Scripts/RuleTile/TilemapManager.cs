@@ -16,12 +16,13 @@ public class DurabilityColorMapping
 }
 
 /// <summary>
-/// 타일맵의 내구도를 관리하고, 데미지 이벤트를 수신하여 타일을 변경하거나 파괴합니다.
+/// 여러 타일맵의 내구도를 관리하고, 데미지 이벤트를 수신하여 타일을 변경하거나 파괴합니다.
 /// </summary>
 public class TilemapManager : MonoBehaviour
 {
     [Header("필수 설정")]
-    public Tilemap mainTilemap;
+    [Tooltip("내구도를 관리할 모든 타일맵을 여기에 등록하세요.")]
+    public Tilemap[] targetTilemaps; // ✨ CHANGED: 단일 타일맵에서 배열로 변경
 
     [Header("일반 타일 색상 설정")]
     [Tooltip("내구도가 높은 순서대로 정렬하지 않아도 괜찮습니다. 자동으로 정렬됩니다.")]
@@ -30,12 +31,13 @@ public class TilemapManager : MonoBehaviour
     [Header("이벤트 채널 구독")]
     public TileDamageEventChannelSO onTileDamageChannel;
 
+    // 모든 타일맵의 내구도 데이터를 하나의 딕셔너리에서 관리합니다.
+    // (타일맵들이 서로 겹치지 않는다는 가정 하에 효율적입니다.)
     private Dictionary<Vector3Int, int> currentDurabilityMap = new Dictionary<Vector3Int, int>();
     private Dictionary<Vector3Int, int> maxDurabilityMap = new Dictionary<Vector3Int, int>();
 
     private void OnEnable()
     {
-        // 이벤트 채널을 구독합니다.
         if (onTileDamageChannel != null)
         {
             onTileDamageChannel.OnEventRaised += ReceiveDamage;
@@ -44,7 +46,6 @@ public class TilemapManager : MonoBehaviour
 
     private void OnDisable()
     {
-        // 이벤트 채널 구독을 취소하여 메모리 누수를 방지합니다.
         if (onTileDamageChannel != null)
         {
             onTileDamageChannel.OnEventRaised -= ReceiveDamage;
@@ -53,7 +54,6 @@ public class TilemapManager : MonoBehaviour
 
     void Start()
     {
-        // 사용자가 입력한 색상 매핑을 내구도 역순으로 자동 정렬합니다.
         if (colorMappings != null && colorMappings.Length > 0)
         {
             colorMappings = colorMappings.OrderByDescending(mapping => mapping.durabilityThreshold).ToArray();
@@ -63,46 +63,54 @@ public class TilemapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 게임 시작 시 타일맵을 스캔하여 모든 타일의 내구도 데이터를 초기화합니다.
-    /// </summary>
-/// <summary>
-    /// 게임 시작 시 타일맵을 스캔하여 모든 타일의 내구도와 색상을 초기화합니다.
+    /// 게임 시작 시 등록된 모든 타일맵을 스캔하여 타일의 내구도와 색상을 초기화합니다.
     /// </summary>
     void InitializeDurability()
     {
-        foreach (var pos in mainTilemap.cellBounds.allPositionsWithin)
+        if (targetTilemaps == null || targetTilemaps.Length == 0)
         {
-            if (!mainTilemap.HasTile(pos)) continue;
+            Debug.LogWarning("관리할 타일맵이 지정되지 않았습니다.");
+            return;
+        }
 
-            var tileBase = mainTilemap.GetTile(pos);
-            int maxDurability = 0;
+        // 등록된 모든 타일맵을 순회합니다.
+        foreach (var tilemap in targetTilemaps)
+        {
+            if (tilemap == null) continue;
 
-            // 런타임에 색상을 변경하기 위해 타일 플래그를 먼저 해제합니다.
-            mainTilemap.SetTileFlags(pos, TileFlags.None);
+            // ✨ OPTIMIZATION: 타일맵의 경계를 실제 타일이 있는 영역으로 압축합니다.
+            // 이렇게 하면 비어있는 공간을 검색하는 것을 방지하여 성능이 크게 향상됩니다.
+            tilemap.CompressBounds();
 
-            // 타일의 종류를 확인하여 내구도와 색상을 설정합니다.
-            if (tileBase is MineralRuleTile mineralTile)
+            foreach (var pos in tilemap.cellBounds.allPositionsWithin)
             {
-                // MineralRuleTile일 경우
-                maxDurability = mineralTile.maxDurability;
+                if (!tilemap.HasTile(pos)) continue;
 
-                // ✨ 핵심: 광물 애셋에 저장된 고유 색상(mineralColor)을 가져와 적용합니다.
-                mainTilemap.SetColor(pos, mineralTile.mineralColor);
-            }
-            else if (tileBase is DurabilityRuleTile durabilityTile)
-            {
-                // 일반 DurabilityRuleTile일 경우
-                maxDurability = durabilityTile.maxDurability;
+                var tileBase = tilemap.GetTile(pos);
+                int maxDurability = 0;
 
-                // 내구도 수치에 맞는 색상을 매핑에서 찾아 적용합니다.
-                mainTilemap.SetColor(pos, GetColorForDurability(maxDurability));
-            }
+                tilemap.SetTileFlags(pos, TileFlags.None);
 
-            // 유효한 내구도 값을 가진 타일만 맵에 등록합니다.
-            if (maxDurability > 0)
-            {
-                maxDurabilityMap[pos] = maxDurability;
-                currentDurabilityMap[pos] = maxDurability;
+                if (tileBase is MineralRuleTile mineralTile)
+                {
+                    maxDurability = mineralTile.maxDurability;
+                    tilemap.SetColor(pos, mineralTile.mineralColor);
+                }
+                else if (tileBase is DurabilityRuleTile durabilityTile)
+                {
+                    maxDurability = durabilityTile.maxDurability;
+                    tilemap.SetColor(pos, GetColorForDurability(maxDurability));
+                }
+
+                if (maxDurability > 0)
+                {
+                    // 딕셔너리에 이미 키가 있는지 확인 (겹치는 타일맵의 경우)
+                    if (!maxDurabilityMap.ContainsKey(pos))
+                    {
+                        maxDurabilityMap[pos] = maxDurability;
+                        currentDurabilityMap[pos] = maxDurability;
+                    }
+                }
             }
         }
     }
@@ -122,37 +130,51 @@ public class TilemapManager : MonoBehaviour
     {
         if (!currentDurabilityMap.ContainsKey(cellPosition)) return;
 
-        // 데미지를 적용하기 전에 타일 정보를 미리 가져옵니다.
-        var tileBeingDamaged = mainTilemap.GetTile(cellPosition);
+        // ✨ NEW: 해당 위치에 타일을 가지고 있는 타일맵을 찾습니다.
+        Tilemap targetTilemap = GetTilemapAtPosition(cellPosition);
+        if (targetTilemap == null) return; // 타일맵을 찾지 못하면 아무것도 하지 않음
+
+        var tileBeingDamaged = targetTilemap.GetTile(cellPosition);
         int newDurability = currentDurabilityMap[cellPosition] - damage;
         currentDurabilityMap[cellPosition] = newDurability;
 
         if (newDurability <= 0)
         {
-            // 내구도가 0 이하가 되면 타일을 파괴합니다.
-            // 파괴되는 타일이 광물인지 확인합니다.
             if (tileBeingDamaged is MineralRuleTile mineralTile && mineralTile.itemDropPrefab != null)
             {
-                // 설정된 아이템이 있다면, 타일 중앙 위치에 생성합니다.
-                Vector3 spawnPosition = mainTilemap.GetCellCenterWorld(cellPosition);
+                Vector3 spawnPosition = targetTilemap.GetCellCenterWorld(cellPosition);
                 Instantiate(mineralTile.itemDropPrefab, spawnPosition, Quaternion.identity);
             }
 
-            // 타일을 맵에서 제거하고 데이터를 삭제합니다.
-            mainTilemap.SetTile(cellPosition, null);
+            targetTilemap.SetTile(cellPosition, null);
             currentDurabilityMap.Remove(cellPosition);
             maxDurabilityMap.Remove(cellPosition);
         }
         else
         {
-            // 타일이 파괴되지 않았다면, 상태를 업데이트합니다.
-            // 광물 타일이 아닐 경우에만 내구도에 따라 색상을 변경합니다.
             if (!(tileBeingDamaged is MineralRuleTile))
             {
-                mainTilemap.SetColor(cellPosition, GetColorForDurability(newDurability));
+                targetTilemap.SetColor(cellPosition, GetColorForDurability(newDurability));
             }
         }
     }
+    
+    /// <summary>
+    /// 주어진 셀 위치에 타일을 가지고 있는 타일맵을 찾아 반환합니다.
+    /// </summary>
+    /// <returns>타일맵을 찾으면 해당 Tilemap 객체를, 못 찾으면 null을 반환합니다.</returns>
+    private Tilemap GetTilemapAtPosition(Vector3Int cellPosition)
+    {
+        foreach (var tilemap in targetTilemaps)
+        {
+            if (tilemap != null && tilemap.HasTile(cellPosition))
+            {
+                return tilemap;
+            }
+        }
+        return null;
+    }
+
 
     /// <summary>
     /// 현재 내구도 수치에 맞는 색상을 찾아 반환합니다.
