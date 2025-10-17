@@ -58,10 +58,14 @@ public class SpaceshipController : MonoBehaviour
 
     private void Update()
     {
-        if (shipInput.ToggleControlPressed)
-        {
-            canControl = !canControl;
-        }
+        // if (shipInput.ToggleControlPressed)
+        // {
+        //     canControl = !canControl;
+        // }
+        if (Input.GetKeyDown(KeyCode.P))
+            {
+                canControl = !canControl;
+            }
         
         // 현재 상태 결정 (연료 체크 없음)
         bool isThrusting = canControl && shipInput.ThrustInput > 0;

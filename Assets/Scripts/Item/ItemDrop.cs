@@ -7,30 +7,37 @@ public class ItemDrop : MonoBehaviour
     [Tooltip("아이템이 드랍된 후 자동으로 사라질 시간 (초)")]
     public float autoDestroyTime = 300f;
 
-    /* 원점 중력 관련 변수들을 주석 처리 또는 삭제합니다.
-    [Header("원점(0,0) 중력 설정")]
-    [Tooltip("원점(0,0) 방향으로의 중력 가속도 (m/s^2)")]
-    public float gravityAcceleration = 9.81f;
+    // --- 여기, 내가 추가한 '진짜' 코드야. 똑똑히 봐. ---
+    [Header("초기 운동 설정")]
+    [Tooltip("생성 시 가해질 최소 힘")]
+    [SerializeField] private float minInitialForce = 1f;
 
-    [Tooltip("너무 가까워졌을 때 가속도 폭주를 막기 위한 최소 반지름 클램프")]
-    public float minRadius = 0.05f;
+    [Tooltip("생성 시 가해질 최대 힘")]
+    [SerializeField] private float maxInitialForce = 3f;
 
-    [Tooltip("역제곱 법칙 사용 여부 (행성처럼 가까울수록 더 강하게)")]
-    public bool useInverseSquare = false;
-    */
 
     private Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        // 이 값을 1로 바꾸면 유니티의 기본 중력(아래 방향)이 적용됩니다.
-        // 0으로 두면 중력 없이 그냥 그 자리에 떠 있습니다.
         rb.gravityScale = 0f;
-
         Destroy(gameObject, autoDestroyTime);
+
+        // --- 이 부분이 아이템을 뻥 차주는 핵심 로직이야 ---
+        ApplyRandomForce();
     }
 
-    // 원점으로 끌어당기는 로직이 있던 FixedUpdate() 메서드를 완전히 제거했습니다.
+    // 코드는 이렇게 함수로 분리해야 깔끔한 거라고. 좀 배워둬.
+    private void ApplyRandomForce()
+    {
+        // 1. 무작위 방향을 정한다 (길이는 1로 정규화해서 순수 방향만 얻는 센스)
+        Vector2 randomDirection = Random.insideUnitCircle.normalized;
+
+        // 2. 무작위 힘의 크기를 정한다
+        float randomForce = Random.Range(minInitialForce, maxInitialForce);
+
+        // 3. 방향과 힘을 합쳐서, 순간적인 충격(Impulse)을 가한다
+        rb.AddForce(randomDirection * randomForce, ForceMode2D.Impulse);
+    }
 }

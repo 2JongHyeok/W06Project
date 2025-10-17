@@ -1,53 +1,56 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-// 역할: New Input System의 입력을 받아 다른 컴포넌트가 사용할 수 있도록 값을 제공.
-[RequireComponent(typeof(PlayerInput))]
+// 더 이상 PlayerInput은 필요 없어. 네가 버렸으니까.
 public class SpaceshipInput : MonoBehaviour
 {
-    public float ThrustInput { get; private set; }
-    public float RotateInput { get; private set; }
-    public bool IsBoosting { get; private set; }
-    public bool ToggleControlPressed { get; private set; }
-
-    private PlayerInput playerInput;
-    private InputAction thrustAction, boostAction, rotateAction, toggleControlAction;
-    private InputAction reverseThrustAction;
     [Tooltip("역추진 시 적용될 힘의 배율 (0.5 = 50%)")]
     [SerializeField] private float reverseThrustMultiplier = 0.5f;
 
-    private void Awake()
-    {
-        playerInput = GetComponent<PlayerInput>();
-        thrustAction = playerInput.actions["Thrust"];
-        boostAction = playerInput.actions["Boost"];
-        rotateAction = playerInput.actions["Rotate"];
-        toggleControlAction = playerInput.actions["ToggleControl"];
-        reverseThrustAction = playerInput.actions["ReverseThrust"];
-    }
+    // 이 값들은 다른 스크립트들이 여전히 사용하겠지.
+    public float ThrustInput { get; private set; }
+    public float RotateInput { get; private set; }
+    public bool IsBoosting { get; private set; }
+    
+    // 이딴 건 이제 필요 없어.
+    // public bool ToggleControlPressed { get; private set; }
 
+
+    // Awake()도 필요 없어. Input System을 안 쓰니까.
+    // private void Awake() { }
+
+    // 모든 걸 이 원시적인 Update() 안에서 해결해주지.
     private void Update()
     {
-        // thrustAction이 Button 타입이므로, IsPressed()로 눌림 상태를 확인하고
-        // 눌렸으면 1.0f, 아니면 0.0f를 ThrustInput에 할당합니다.
-        if (thrustAction.IsPressed())
+        // 전진/후진 (W/S)
+        if (Input.GetKey(KeyCode.W))
         {
-            ThrustInput = 1.0f; // W 누르면 전진
+            ThrustInput = 1.0f;
         }
-        else if (reverseThrustAction.IsPressed())
+        else if (Input.GetKey(KeyCode.S))
         {
             ThrustInput = -reverseThrustMultiplier;
         }
         else
         {
-            ThrustInput = 0.0f; // 아무것도 안 누르면 0
+            ThrustInput = 0.0f;
         }
         
-        // boostAction도 Button 타입이므로 IsPressed()로 직접 상태를 가져옵니다.
-        IsBoosting = boostAction.IsPressed();
+        // 부스트 (Shift)
+        IsBoosting = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
-        // 나머지 코드는 동일합니다.
-        RotateInput = rotateAction.ReadValue<float>();
-        ToggleControlPressed = toggleControlAction.WasPressedThisFrame();
+        // 회전 (A/D)
+        // A키는 양수, D키는 음수 값을 줘야 Motor에서 제대로 회전해.
+        if (Input.GetKey(KeyCode.A))
+        {
+            RotateInput = -1f;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            RotateInput = 1f;
+        }
+        else
+        {
+            RotateInput = 0f;
+        }
     }
 }
