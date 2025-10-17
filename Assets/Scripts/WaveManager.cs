@@ -42,7 +42,6 @@ public class WaveManager : MonoBehaviour
         countdown -= Time.deltaTime;
         waveTimmerText.text = "Next Wave In: " + Mathf.Ceil(countdown).ToString();
         enemyCountText.text = "Enemies Left: " + EnemyCount.ToString();
-        Debug.Log("Enemy Count: " + EnemyCount);
     }
     private void SpawnEnemy()
     {
