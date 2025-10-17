@@ -38,7 +38,7 @@ public class ForgeManger : MonoBehaviour
         Weapon.Instance.SetDamage((int)weaponUpSOList[(int)WeaponUpgradeType.AttackDamage].baseValue);
         Weapon.Instance.SetExplosionRange(weaponUpSOList[(int)WeaponUpgradeType.AttackRange].baseValue);
         Weapon.Instance.SetCannonSpeed(weaponUpSOList[(int)WeaponUpgradeType.CannonSpeed].baseValue);
-        WinchController.Instance.SetRopeSpeed(forcepSOList[(int)ForcepUpgradeType.ForcepBasicSpeed].baseValue);
+        // WinchController.Instance.SetRopeSpeed(forcepSOList[(int)ForcepUpgradeType.ForcepBasicSpeed].baseValue);
         
     }
 
