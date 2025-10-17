@@ -167,6 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoDestroyTime: 300
+  minInitialForce: 0.1
+  maxInitialForce: 1.5
 --- !u!114 &2092967285584099329
 MonoBehaviour:
   m_ObjectHideFlags: 0
