@@ -10,8 +10,8 @@ public class Planet: MonoBehaviour
     [SerializeField] private float respawnDelay = 3f;
 
     // 각 타일별 상태 저장용
-    private Dictionary<Vector3Int, int> tileHPs = new Dictionary<Vector3Int, int>();
-    private Dictionary<Vector3Int, TileBase> originalTiles = new Dictionary<Vector3Int, TileBase>();
+    private readonly Dictionary<Vector2Int, int> tileHPs = new();
+    private readonly Dictionary<Vector2Int, TileBase> originalTiles = new();
 
     void Start()
     {
@@ -20,8 +20,9 @@ public class Planet: MonoBehaviour
         {
             if (tilemap.HasTile(pos))
             {
-                originalTiles[pos] = tilemap.GetTile(pos);
-                tileHPs[pos] = defaultTileData.maxHP;
+                var key = new Vector2Int(pos.x, pos.y);
+                originalTiles[key] = tilemap.GetTile(pos);
+                tileHPs[key] = defaultTileData.maxHP;
             }
         }
     }
@@ -29,11 +30,13 @@ public class Planet: MonoBehaviour
     // 타일 데미지 처리
     public void DamageTile(Vector3Int cellPos, int damage)
     {
-        if (!tileHPs.ContainsKey(cellPos)) return;
+        Vector2Int newCellPos = new Vector2Int(cellPos.x, cellPos.y);
+        cellPos.z = tilemap.origin.z;
+        if (!tileHPs.ContainsKey(newCellPos)) return;
 
-        tileHPs[cellPos] -= damage;
+        tileHPs[newCellPos] -= damage;
 
-        if (tileHPs[cellPos] <= 0)
+        if (tileHPs[newCellPos] <= 0)
         {
             BreakTile(cellPos);
         }
@@ -48,11 +51,12 @@ public class Planet: MonoBehaviour
     private IEnumerator RespawnTile(Vector3Int cellPos)
     {
         yield return new WaitForSeconds(respawnDelay);
+        Vector2Int newCellPos = new Vector2Int(cellPos.x, cellPos.y);
 
-        if (originalTiles.ContainsKey(cellPos))
+        if (originalTiles.ContainsKey(newCellPos))
         {
-            tilemap.SetTile(cellPos, originalTiles[cellPos]);
-            tileHPs[cellPos] = defaultTileData.maxHP;
+            tilemap.SetTile(cellPos, originalTiles[newCellPos]);
+            tileHPs[newCellPos] = defaultTileData.maxHP;
         }
     }
 }
