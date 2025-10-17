@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
@@ -9,6 +10,12 @@ public class WaveManager : MonoBehaviour
     private float countdown = 2f; // 다음 웨이브까지 남은 시간
     private int waveIndex = 0; // 현재 웨이브 인덱스
     public Transform Target;
+    public TMP_Text waveTimmerText;
+
+    private void Start()
+    {
+        countdown = timeBetweenWaves;
+    }
     private void Update()
     {
         if (countdown <= 0f)
@@ -17,6 +24,7 @@ public class WaveManager : MonoBehaviour
             countdown = timeBetweenWaves;
         }
         countdown -= Time.deltaTime;
+        waveTimmerText.text = "Next Wave In: " + Mathf.Ceil(countdown).ToString();
     }
     private void SpawnEnemy()
     {
