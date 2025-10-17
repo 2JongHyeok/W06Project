@@ -84,6 +84,7 @@ public class KamikazeSO : EnemyBaseSO
 
             }
             Destroy(enemy.gameObject);
+            WaveManager.Instance.EnemyCount--;
         }
     }
 }

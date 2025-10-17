@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6642446227114851140}
   - component: {fileID: 5232763858317111763}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 204183708548855509}
   - component: {fileID: 2384024012010487978}
   - component: {fileID: 1900514363879975294}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Ranger
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -218,6 +218,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 9241bdfdc2775954cb7f6fc8109f25e2, type: 2}
+  enemyType: 0
+  enemyHP: 0
+  enemySpeed: 0
   target: {fileID: 0}
   firePoint: {fileID: 6642446227114851140}
   isAttacking: 0

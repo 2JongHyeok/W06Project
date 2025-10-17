@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1797321779970856651}
   - component: {fileID: 2111222217024513904}
   - component: {fileID: 4413237815760157451}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Kamikaze
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 9b15f643a0b7fa446a72aedeb5e4d923, type: 2}
+  enemyType: 0
+  enemyHP: 0
+  enemySpeed: 0
   target: {fileID: 0}
   firePoint: {fileID: 0}
   isAttacking: 0
