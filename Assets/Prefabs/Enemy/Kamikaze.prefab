@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1797321779970856651}
   - component: {fileID: 2111222217024513904}
   - component: {fileID: 4413237815760157451}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Kamikaze
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -133,6 +133,8 @@ MonoBehaviour:
   target: {fileID: 0}
   firePoint: {fileID: 0}
   isAttacking: 0
+  attackCooldown: 0
+  attackTimer: 0
 --- !u!61 &4413237815760157451
 BoxCollider2D:
   m_ObjectHideFlags: 0

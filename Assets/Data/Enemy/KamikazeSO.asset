@@ -16,8 +16,8 @@ MonoBehaviour:
   enemyHP: 5
   enemySpeed: 5
   ExplosionEffectPrefab: {fileID: 5807730180560662781, guid: 9b9b064fb4e0f0445a06122d7bfca6e6, type: 3}
-  damage: 10
-  explosionRadius: 1
+  damage: 5
+  explosionRadius: 3
   damageLayer:
     serializedVersion: 2
     m_Bits: 1

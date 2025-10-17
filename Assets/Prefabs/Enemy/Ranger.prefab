@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6642446227114851140}
   - component: {fileID: 5232763858317111763}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 204183708548855509}
   - component: {fileID: 2384024012010487978}
   - component: {fileID: 1900514363879975294}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ranger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -221,6 +221,8 @@ MonoBehaviour:
   target: {fileID: 0}
   firePoint: {fileID: 6642446227114851140}
   isAttacking: 0
+  attackCooldown: 0
+  attackTimer: 0
 --- !u!61 &1900514363879975294
 BoxCollider2D:
   m_ObjectHideFlags: 0
