@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8473342835721299119}
   - component: {fileID: 2216577619473368115}
   - component: {fileID: 1653356993137608833}
+  - component: {fileID: -867875663402336436}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Asteroid
@@ -1872,3 +1873,16 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!114 &-867875663402336436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8497246864591869856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fde21a1bcfca70c47963b84037e8ef63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorSettings: {fileID: 11400000, guid: 74e65dbc485382c469f7432d524ece46, type: 2}

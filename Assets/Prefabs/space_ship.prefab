@@ -147,7 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8317493956658974401}
   - component: {fileID: 2790577880462106669}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: gasThruster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,7 +276,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7779221237754496034}
   - component: {fileID: 2012274897314950108}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: engineSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 6109731791870418769}
   - component: {fileID: 3479647788218860603}
   - component: {fileID: 4397804802638857869}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: BoostParticle (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5239,7 +5239,7 @@ GameObject:
   - component: {fileID: 53190788925682519}
   - component: {fileID: 3169440467224192093}
   - component: {fileID: 7366496753625201695}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: thrusterParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10071,7 +10071,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1713604278990672236}
   - component: {fileID: 7671800590944222072}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: BoostSound (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10201,7 +10201,7 @@ GameObject:
   - component: {fileID: 4755258476992273223}
   - component: {fileID: 7405053946683596369}
   - component: {fileID: 248383446139984999}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: leftThrusterParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15023,6 +15023,37 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &6534144845789490653
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1587002805904655281}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1587002805904655281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6534144845789490653}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.735, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7180292076679184082}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7316924367933553028
 GameObject:
   m_ObjectHideFlags: 0
@@ -15034,7 +15065,7 @@ GameObject:
   - component: {fileID: 4002911770478469246}
   - component: {fileID: 3521509932480347430}
   - component: {fileID: 7515238568555997774}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: rightThrusterParticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19867,7 +19898,7 @@ GameObject:
   - component: {fileID: 7106678541252014716}
   - component: {fileID: 5069971719547671456}
   - component: {fileID: 6456756004280527997}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: BoostParticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24705,7 +24736,8 @@ GameObject:
   - component: {fileID: 3322526151059652749}
   - component: {fileID: 2413852135908817706}
   - component: {fileID: 908878209827147228}
-  m_Layer: 3
+  - component: {fileID: 5363256348143905287}
+  m_Layer: 0
   m_Name: space_ship
   m_TagString: Spaceship
   m_Icon: {fileID: 0}
@@ -24722,7 +24754,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 121.66, y: -4.67, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 53190788925682519}
@@ -24734,6 +24766,7 @@ Transform:
   - {fileID: 1713604278990672236}
   - {fileID: 8317493956658974401}
   - {fileID: 6678823491220158982}
+  - {fileID: 1587002805904655281}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &9148295601314746383
@@ -24996,8 +25029,8 @@ MonoBehaviour:
   thrusterParticle: {fileID: 3169440467224192093}
   boostParticle1: {fileID: 3479647788218860603}
   boostParticle2: {fileID: 5069971719547671456}
-  leftThrusterParticle: {fileID: 7405053946683596369}
-  rightThrusterParticle: {fileID: 3521509932480347430}
+  leftThrusterParticle: {fileID: 3521509932480347430}
+  rightThrusterParticle: {fileID: 7405053946683596369}
   engineSound: {fileID: 2012274897314950108}
   boostSound: {fileID: 7671800590944222072}
   gasDirectionSound: {fileID: 2790577880462106669}
@@ -25036,3 +25069,20 @@ MonoBehaviour:
   movementDrag: 0.5
   additiveTorque: 2
   angularDrag: 1
+--- !u!114 &5363256348143905287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7960328737568620720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b2a80eb13aca0347a3f23736d42a255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  missilePrefab: {fileID: 6168274529600972085, guid: ef5a9192f3c68224ea570c7ae20af42e, type: 3}
+  firePoint: {fileID: 1587002805904655281}
+  damage: 5
+  fireRate: 0.3
+  explosionRadius: 0.3
