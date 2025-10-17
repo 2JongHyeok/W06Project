@@ -15188,6 +15188,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetPosition: {x: 0, y: 0}
   indicatorRadius: 0.5
+  indicatorVisual: {fileID: 5063682309985950868}
+  closeColor: {r: 0.047937155, g: 1, b: 0, a: 1}
+  farColor: {r: 1, g: 0, b: 0, a: 1}
+  minDistance: 5
+  maxDistance: 50
+  maxScale: 2
+  minScale: 0.5
 --- !u!1 &6534144845789490653
 GameObject:
   m_ObjectHideFlags: 0
@@ -24904,6 +24911,7 @@ GameObject:
   - component: {fileID: 9003192783875796088}
   - component: {fileID: 3733043109894480575}
   - component: {fileID: 3954204389919689628}
+  - component: {fileID: 6283716779563996143}
   m_Layer: 0
   m_Name: space_ship
   m_TagString: Spaceship
@@ -25225,3 +25233,19 @@ MonoBehaviour:
   ropeSegmentPrefab: {fileID: 1511424944892775995, guid: 8124ae7bfdb537a46b6cc1ee4e6f8ad5, type: 3}
   numberOfSegments: 10
   maxRopeLength: 3
+--- !u!114 &6283716779563996143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7960328737568620720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ff15580f213e4b4881e5911ced2b783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topBoundary: 80
+  bottomBoundary: -80
+  leftBoundary: -80
+  rightBoundary: 80

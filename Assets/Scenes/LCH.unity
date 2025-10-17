@@ -659,18 +659,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: space_ship
       objectReference: {fileID: 0}
-    - target: {fileID: 8649852914500898234, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
-      propertyPath: closeColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649852914500898234, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
-      propertyPath: closeColor.r
-      value: 0.047937155
-      objectReference: {fileID: 0}
-    - target: {fileID: 8649852914500898234, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
-      propertyPath: indicatorVisual
-      value: 
-      objectReference: {fileID: 288653915}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -743,11 +731,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d695ca0ee353a445a239ecaa71a2ad1, type: 3}
---- !u!4 &288653915 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5063682309985950868, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
-  m_PrefabInstance: {fileID: 266651899}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &308260692 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6347528354586162424, guid: 1d695ca0ee353a445a239ecaa71a2ad1, type: 3}
