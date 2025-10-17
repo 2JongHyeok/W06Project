@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: RangerEnemySO
   m_EditorClassIdentifier: 
   enemyType: 0
-  enemyHP: 7
+  enemyHP: 9
   enemySpeed: 4
   bulletPrefab: {fileID: 6360892650054380025, guid: ef343e70042ee1140871eafb98ce9661, type: 3}
-  attackRange: 5
+  attackRange: 999
   bulletSpeed: 1
   attackCooldown: 0.5

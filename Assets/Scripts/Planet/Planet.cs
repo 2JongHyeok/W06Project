@@ -30,7 +30,6 @@ public class Planet: MonoBehaviour
     public void DamageTile(Vector3Int cellPos, int damage)
     {
         if (!tileHPs.ContainsKey(cellPos)) return;
-
         tileHPs[cellPos] -= damage;
 
         if (tileHPs[cellPos] <= 0)
@@ -48,6 +47,7 @@ public class Planet: MonoBehaviour
     private IEnumerator RespawnTile(Vector3Int cellPos)
     {
         yield return new WaitForSeconds(respawnDelay);
+
 
         if (originalTiles.ContainsKey(cellPos))
         {

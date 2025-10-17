@@ -10,7 +10,7 @@ public class WaveManager : MonoBehaviour
     public Transform[] spawnPoints;   // 스폰 위치 배열
     public float timeBetweenWaves = 5f; // 웨이브 간 시간 간격
     private float countdown = 2f; // 다음 웨이브까지 남은 시간
-    private int waveIndex = 0; // 현재 웨이브 인덱스
+    private int waveIndex = 1; // 현재 웨이브 인덱스
     public Transform Target;
     public TMP_Text waveTimmerText;
     public TMP_Text enemyCountText;
@@ -30,7 +30,7 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        countdown = 10f;
+        countdown = 3f;
     }
     private void Update()
     {
@@ -42,7 +42,6 @@ public class WaveManager : MonoBehaviour
         countdown -= Time.deltaTime;
         waveTimmerText.text = "Next Wave In: " + Mathf.Ceil(countdown).ToString();
         enemyCountText.text = "Enemies Left: " + EnemyCount.ToString();
-        Debug.Log("Enemy Count: " + EnemyCount);
     }
     private void SpawnEnemy()
     {
