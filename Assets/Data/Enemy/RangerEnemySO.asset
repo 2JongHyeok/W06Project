@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemyHP: 5
-  enemySpeed: 35.41
-  bulletPrefab: {fileID: 4923620323294686948, guid: c73c2dfd0fc8d71409b774a38db692be, type: 3}
+  enemySpeed: 4
+  bulletPrefab: {fileID: 6360892650054380025, guid: ef343e70042ee1140871eafb98ce9661, type: 3}
   attackRange: 5
   bulletSpeed: 1
   attackCooldown: 0.5

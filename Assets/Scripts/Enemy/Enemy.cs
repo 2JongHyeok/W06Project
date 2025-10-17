@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class Enemy : MonoBehaviour
     public Transform target;
     public Transform firePoint;
     public bool isAttacking = false;
+
+    
     private void Start()
     {
         target.position = Vector2.zero;
@@ -24,7 +27,8 @@ public class Enemy : MonoBehaviour
         if (isAttacking)
         {
             enemyData.PerformAttack(this);
-        } else
+        }
+        else
         {
             // 단순 이동
             transform.position = Vector2.MoveTowards(
@@ -32,8 +36,8 @@ public class Enemy : MonoBehaviour
                 target.position,
                 enemyData.enemySpeed * Time.deltaTime
             );
-            transform.rotation = Quaternion.LookRotation(Vector3.forward, target.position - transform.position);
         }
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, target.position - transform.position);
         
     }
 
@@ -52,4 +56,16 @@ public class Enemy : MonoBehaviour
             isAttacking = false;
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        (enemyData as KamikazeSO).Explode(this,collision);
+    }
+    // public void OnDrawGizmos()
+    // {
+    //     if (enemyType == EnemyType.Ranger)
+    //     {
+    //         Gizmos.color = Color.red;
+    //         Gizmos.DrawWireSphere(transform.position, (enemyData as RangerEnemySO).attackRange);
+    //     }
+    // }
 }

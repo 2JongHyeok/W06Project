@@ -8,6 +8,7 @@ public enum EnemyType
 
 public abstract class EnemyBaseSO : ScriptableObject
 {
+    [Header("Base Stats")]
     public EnemyType enemyType;
     public int enemyHP;
     public float enemySpeed;
