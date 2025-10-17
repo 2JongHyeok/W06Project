@@ -10190,6 +10190,37 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &6042438744115310206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4567950886710692794}
+  m_Layer: 0
+  m_Name: CargoHook
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4567950886710692794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6042438744115310206}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.55, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7180292076679184082}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6140768105352488312
 GameObject:
   m_ObjectHideFlags: 0
@@ -24737,6 +24768,8 @@ GameObject:
   - component: {fileID: 908878209827147228}
   - component: {fileID: 5363256348143905287}
   - component: {fileID: 9003192783875796088}
+  - component: {fileID: 3733043109894480575}
+  - component: {fileID: 3954204389919689628}
   m_Layer: 0
   m_Name: space_ship
   m_TagString: Spaceship
@@ -24767,6 +24800,7 @@ Transform:
   - {fileID: 8317493956658974401}
   - {fileID: 6678823491220158982}
   - {fileID: 1587002805904655281}
+  - {fileID: 4567950886710692794}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &9148295601314746383
@@ -24908,8 +24942,8 @@ MonoBehaviour:
   engineMaxVolume: 0.5
   boostMaxVolume: 0.8
   gasMaxVolume: 0.5
-  bulletPrefab: {fileID: 0}
-  firePoint: {fileID: 0}
+  bulletPrefab: {fileID: 6168274529600972085, guid: ef5a9192f3c68224ea570c7ae20af42e, type: 3}
+  firePoint: {fileID: 1587002805904655281}
 --- !u!114 &2413852135908817706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24936,7 +24970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrustPower: 200
   movementDrag: 0.5
-  additiveTorque: 2
+  additiveTorque: 3
   angularDrag: 1
 --- !u!114 &5363256348143905287
 MonoBehaviour:
@@ -25001,3 +25035,56 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.2830067, y: 3.2023573}
   m_EdgeRadius: 0
+--- !u!58 &3733043109894480575
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7960328737568620720}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 4
+--- !u!114 &3954204389919689628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7960328737568620720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f231bfb3e0a05f4f9c50cf87196242e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cargoHook: {fileID: 4567950886710692794}
+  maxCargoCount: 5
+  collectionTrigger: {fileID: 3733043109894480575}
+  maxRopeLength: 2
+  linePrefab: {fileID: 5609434226259527820, guid: 3dde5eb822c602a40b9e826ab42a1c10, type: 3}
