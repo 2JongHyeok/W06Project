@@ -20,9 +20,9 @@ public class DurabilityColorMapping
 /// </summary>
 public class TilemapManager : MonoBehaviour
 {
-    [Header("필수 설정")]
-    [Tooltip("내구도를 관리할 모든 타일맵을 여기에 등록하세요.")]
-    public Tilemap[] targetTilemaps; // ✨ CHANGED: 단일 타일맵에서 배열로 변경
+    [Header("수동 설정 (선택 사항)")]
+    [Tooltip("여기에 직접 추가한 타일맵들은 태그와 상관없이 관리 목록에 포함됩니다.")]
+    public Tilemap[] targetTilemaps; // ✨ 유지: 수동으로 추가하는 배열
 
     [Header("일반 타일 색상 설정")]
     [Tooltip("내구도가 높은 순서대로 정렬하지 않아도 괜찮습니다. 자동으로 정렬됩니다.")]
@@ -31,8 +31,9 @@ public class TilemapManager : MonoBehaviour
     [Header("이벤트 채널 구독")]
     public TileDamageEventChannelSO onTileDamageChannel;
 
-    // 모든 타일맵의 내구도 데이터를 하나의 딕셔너리에서 관리합니다.
-    // (타일맵들이 서로 겹치지 않는다는 가정 하에 효율적입니다.)
+    // ✨ 최종적으로 관리될 모든 타일맵 리스트 (수동 + 자동)
+    private List<Tilemap> managedTilemaps = new List<Tilemap>();
+
     private Dictionary<Vector3Int, int> currentDurabilityMap = new Dictionary<Vector3Int, int>();
     private Dictionary<Vector3Int, int> maxDurabilityMap = new Dictionary<Vector3Int, int>();
 
@@ -63,23 +64,44 @@ public class TilemapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 게임 시작 시 등록된 모든 타일맵을 스캔하여 타일의 내구도와 색상을 초기화합니다.
+    /// 수동 및 자동으로 타일맵을 찾아 목록을 만들고, 내구도와 색상을 초기화합니다.
     /// </summary>
     void InitializeDurability()
     {
-        if (targetTilemaps == null || targetTilemaps.Length == 0)
+        // ✨ CORE CHANGE: 관리 리스트를 초기화하고 수동+자동으로 채웁니다.
+        managedTilemaps.Clear();
+
+        // 1. 수동으로 할당된 타일맵들을 먼저 리스트에 추가합니다.
+        if (targetTilemaps != null && targetTilemaps.Length > 0)
         {
-            Debug.LogWarning("관리할 타일맵이 지정되지 않았습니다.");
-            return;
+            managedTilemaps.AddRange(targetTilemaps.Where(t => t != null));
         }
 
-        // 등록된 모든 타일맵을 순회합니다.
-        foreach (var tilemap in targetTilemaps)
+        // 2. "Asteroid" 태그를 가진 모든 타일맵을 찾습니다.
+        Tilemap[] taggedTilemaps = FindObjectsOfType<Tilemap>().Where(t => t.CompareTag("Asteroid")).ToArray();
+        
+        foreach (var taggedTilemap in taggedTilemaps)
+        {
+            // ✨ 3. 아직 관리 리스트에 없다면 (중복 방지) 추가합니다.
+            if (!managedTilemaps.Contains(taggedTilemap))
+            {
+                managedTilemaps.Add(taggedTilemap);
+            }
+        }
+
+        if (managedTilemaps.Count == 0)
+        {
+            Debug.LogWarning("관리할 타일맵이 없거나, 'Asteroid' 태그를 가진 타일맵을 찾을 수 없습니다.");
+            return;
+        }
+        
+        Debug.Log($"총 {managedTilemaps.Count}개의 타일맵을 찾아 초기화를 시작합니다.");
+
+        // 최종적으로 정리된 'managedTilemaps' 리스트를 순회하며 초기화합니다.
+        foreach (var tilemap in managedTilemaps)
         {
             if (tilemap == null) continue;
-
-            // ✨ OPTIMIZATION: 타일맵의 경계를 실제 타일이 있는 영역으로 압축합니다.
-            // 이렇게 하면 비어있는 공간을 검색하는 것을 방지하여 성능이 크게 향상됩니다.
+            
             tilemap.CompressBounds();
 
             foreach (var pos in tilemap.cellBounds.allPositionsWithin)
@@ -88,7 +110,6 @@ public class TilemapManager : MonoBehaviour
 
                 var tileBase = tilemap.GetTile(pos);
                 int maxDurability = 0;
-
                 tilemap.SetTileFlags(pos, TileFlags.None);
 
                 if (tileBase is MineralRuleTile mineralTile)
@@ -102,37 +123,28 @@ public class TilemapManager : MonoBehaviour
                     tilemap.SetColor(pos, GetColorForDurability(maxDurability));
                 }
 
-                if (maxDurability > 0)
+                if (maxDurability > 0 && !maxDurabilityMap.ContainsKey(pos))
                 {
-                    // 딕셔너리에 이미 키가 있는지 확인 (겹치는 타일맵의 경우)
-                    if (!maxDurabilityMap.ContainsKey(pos))
-                    {
-                        maxDurabilityMap[pos] = maxDurability;
-                        currentDurabilityMap[pos] = maxDurability;
-                    }
+                    maxDurabilityMap[pos] = maxDurability;
+                    currentDurabilityMap[pos] = maxDurability;
                 }
             }
         }
     }
-
-    /// <summary>
-    /// 이벤트 채널로부터 데미지 정보를 수신하는 함수입니다.
-    /// </summary>
+    
+    // ... (ReceiveDamage 함수는 변경 없음) ...
     private void ReceiveDamage(TileDamageEvent damageEvent)
     {
         DamageTile(damageEvent.cellPosition, damageEvent.damageAmount);
     }
-
-    /// <summary>
-    /// 특정 위치의 타일에 데미지를 적용하고, 상태를 업데이트합니다.
-    /// </summary>
+    
+    // ... (DamageTile 함수는 변경 없음, GetTilemapAtPosition만 수정) ...
     public void DamageTile(Vector3Int cellPosition, int damage)
     {
         if (!currentDurabilityMap.ContainsKey(cellPosition)) return;
 
-        // ✨ NEW: 해당 위치에 타일을 가지고 있는 타일맵을 찾습니다.
         Tilemap targetTilemap = GetTilemapAtPosition(cellPosition);
-        if (targetTilemap == null) return; // 타일맵을 찾지 못하면 아무것도 하지 않음
+        if (targetTilemap == null) return; 
 
         var tileBeingDamaged = targetTilemap.GetTile(cellPosition);
         int newDurability = currentDurabilityMap[cellPosition] - damage;
@@ -159,13 +171,10 @@ public class TilemapManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 주어진 셀 위치에 타일을 가지고 있는 타일맵을 찾아 반환합니다.
-    /// </summary>
-    /// <returns>타일맵을 찾으면 해당 Tilemap 객체를, 못 찾으면 null을 반환합니다.</returns>
     private Tilemap GetTilemapAtPosition(Vector3Int cellPosition)
     {
-        foreach (var tilemap in targetTilemaps)
+        // ✨ 변경: 최종 관리 리스트에서 타일맵을 찾도록 수정
+        foreach (var tilemap in managedTilemaps)
         {
             if (tilemap != null && tilemap.HasTile(cellPosition))
             {
@@ -175,10 +184,7 @@ public class TilemapManager : MonoBehaviour
         return null;
     }
 
-
-    /// <summary>
-    /// 현재 내구도 수치에 맞는 색상을 찾아 반환합니다.
-    /// </summary>
+    // ... (GetColorForDurability 함수는 변경 없음) ...
     private Color GetColorForDurability(int currentDurability)
     {
         if (colorMappings == null || colorMappings.Length == 0)
