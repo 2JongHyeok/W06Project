@@ -29934,6 +29934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d47412c246eac5f4aa202fc1a6bed283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reverseThrustMultiplier: 0.5
 --- !u!114 &908878209827147228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29948,7 +29949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrustPower: 200
   movementDrag: 0.5
-  additiveTorque: 5
+  additiveTorque: 10
   angularDrag: 1
 --- !u!114 &5363256348143905287
 MonoBehaviour:

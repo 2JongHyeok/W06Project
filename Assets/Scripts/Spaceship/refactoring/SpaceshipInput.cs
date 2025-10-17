@@ -13,6 +13,8 @@ public class SpaceshipInput : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction thrustAction, boostAction, rotateAction, toggleControlAction;
     private InputAction reverseThrustAction;
+    [Tooltip("역추진 시 적용될 힘의 배율 (0.5 = 50%)")]
+    [SerializeField] private float reverseThrustMultiplier = 0.5f;
 
     private void Awake()
     {
@@ -34,7 +36,7 @@ public class SpaceshipInput : MonoBehaviour
         }
         else if (reverseThrustAction.IsPressed())
         {
-            ThrustInput = -1.0f; // S 누르면 후진
+            ThrustInput = -reverseThrustMultiplier;
         }
         else
         {
