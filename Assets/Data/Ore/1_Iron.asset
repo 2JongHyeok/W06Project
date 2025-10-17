@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   oreType: 1
   weight: 1
+  icon: {fileID: 5853646852953163028, guid: 8bb39b4fd93cc8045b8a18c2cbf16dd9, type: 3}
