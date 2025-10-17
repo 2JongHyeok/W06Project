@@ -54,6 +54,7 @@ public class Bullet : MonoBehaviour
                     {
                         cellPosition = cellPos,
                         damageAmount = Weapon.Instance.GetDamage()
+
                     };
                     
                     if (onTileDamageChannel != null)

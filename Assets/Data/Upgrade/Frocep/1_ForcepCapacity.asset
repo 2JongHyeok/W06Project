@@ -16,22 +16,14 @@ MonoBehaviour:
   baseValue: 5
   recipes:
   - levelValue: 0
-    oreType:
+    cost:
     - oreType: 0
-      amount: 1
+      amount: 50
   - levelValue: 0
-    oreType:
-    - oreType: 0
-      amount: 1
+    cost: []
   - levelValue: 0
-    oreType:
-    - oreType: 0
-      amount: 1
+    cost: []
   - levelValue: 0
-    oreType:
-    - oreType: 0
-      amount: 1
+    cost: []
   - levelValue: 0
-    oreType:
-    - oreType: 0
-      amount: 1
+    cost: []
