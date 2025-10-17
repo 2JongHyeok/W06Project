@@ -4391,8 +4391,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7358467089834189285}
   - {fileID: 155267637}
+  - {fileID: 7358467089834189285}
   - {fileID: 2567397899791350479}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8314,7 +8314,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1963503596915677810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8767,10 +8767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryManger: {fileID: 5803141803156037022}
-  forcepSOList:
-  - {fileID: 11400000, guid: 1128abebec998534b919aecdf367f590, type: 2}
-  - {fileID: 11400000, guid: a8674664292c18d4a971ac8304c97182, type: 2}
-  - {fileID: 11400000, guid: d46eb6aab2728eb47b0da20760a4b581, type: 2}
+  forcepSOList: []
   weaponUpSOList:
   - {fileID: 11400000, guid: 3fd29f8fefd1e3f49a1e000653efe755, type: 2}
   - {fileID: 11400000, guid: 659dd5f9650fa0d47b74f6bff785d4db, type: 2}

@@ -16,12 +16,22 @@ MonoBehaviour:
   baseValue: 0.2
   recipes:
   - levelValue: 0.3
-    cost: []
+    cost:
+    - oreType: 0
+      amount: 5
   - levelValue: 0.3
-    cost: []
+    cost:
+    - oreType: 0
+      amount: 5
   - levelValue: 0.3
-    cost: []
+    cost:
+    - oreType: 0
+      amount: 5
   - levelValue: 0.3
-    cost: []
+    cost:
+    - oreType: 0
+      amount: 5
   - levelValue: 0.3
-    cost: []
+    cost:
+    - oreType: 0
+      amount: 5
