@@ -253,6 +253,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryManger: {fileID: 949406248}
+  cameraSwitcher: {fileID: 548559739}
+  dockedShip: {fileID: 1908056905}
+  isSpaceshipMode: 0
 --- !u!4 &24514519
 Transform:
   m_ObjectHideFlags: 0
@@ -715,10 +718,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7180292076679184082, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1645118291}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
 --- !u!4 &268463076 stripped
@@ -1764,7 +1764,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1789,7 +1789,7 @@ Transform:
   m_GameObject: {fileID: 688005876}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.25, y: 0.49, z: -12}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4155,6 +4155,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4923620323294686948, guid: c73c2dfd0fc8d71409b774a38db692be, type: 3}
   firePoint: {fileID: 296047435}
   explosionRadius: 1.5
+  dockingStation: {fileID: 24514518}
 --- !u!212 &1512247141
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4583,7 +4584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Priority:
     Enabled: 1
-    m_Value: 30
+    m_Value: 10
   OutputChannel: 1
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
@@ -4621,11 +4622,11 @@ Transform:
   m_GameObject: {fileID: 1645118288}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: -60}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalPosition: {x: 3.25, y: 0.49, z: -12}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1892018221}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1646736763
 GameObject:
@@ -6922,6 +6923,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6347528354586162424, guid: 1d695ca0ee353a445a239ecaa71a2ad1, type: 3}
   m_PrefabInstance: {fileID: 1788760387}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1908056905 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7960328737568620720, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+  m_PrefabInstance: {fileID: 266651899}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1929678018
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8084,6 +8090,7 @@ SceneRoots:
   - {fileID: 266651899}
   - {fileID: 1190461934}
   - {fileID: 522661555}
+  - {fileID: 1645118291}
   - {fileID: 688005881}
   - {fileID: 1074887585}
   - {fileID: 834730621}
