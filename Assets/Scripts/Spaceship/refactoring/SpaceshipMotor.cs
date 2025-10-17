@@ -29,10 +29,7 @@ public class SpaceshipMotor : MonoBehaviour
 
     public void Move(float thrustInput, float boostMultiplier)
     {
-        if (thrustInput > 0f)
-        {
-            Rb.AddForce(transform.up * thrustPower * thrustInput * boostMultiplier, ForceMode2D.Force);
-        }
+        Rb.AddForce(transform.up * thrustPower * thrustInput * boostMultiplier, ForceMode2D.Force);
     }
 
     public void Rotate(float rotateInput)
