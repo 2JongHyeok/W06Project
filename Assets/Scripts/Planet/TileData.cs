@@ -5,6 +5,6 @@ using UnityEngine.Tilemaps;
 public class MyTileData
 {
     public TileBase tile;       // 원본 타일
-    public int maxHP = 3;       // 최대 체력
+    public int maxHP = 10;       // 최대 체력
     [HideInInspector] public int currentHP;
 }
