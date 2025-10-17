@@ -27,13 +27,13 @@ public class Weapon : MonoBehaviour
     }
     void Update()
     {
+        if (dockingStation.isSpaceshipMode) return;
         MoveWeapon();
         Fire();
     }
 
     private void MoveWeapon()
     {
-        if (dockingStation.isSpaceshipMode) return;
         float rotationDirection = 0f;
 
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
