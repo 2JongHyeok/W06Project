@@ -8,25 +8,48 @@ public class Enemy : MonoBehaviour
     public EnemyType enemyType => enemyData.enemyType;
     public int enemyHP => enemyData.enemyHP;
     public float enemySpeed => enemyData.enemySpeed;
-    public Transform target;
+    [HideInInspector] public Transform target;
     public Transform firePoint;
     public bool isAttacking = false;
 
-    
+    public float attackCooldown;
+    public float attackTimer = 0f;
     private void Start()
     {
-        target.position = Vector2.zero;
-        if (enemyData.enemyType == EnemyType.Ranger)
+        // initialize attackCooldown for Ranger enemies after enemyData is available
+        if (enemyData != null && enemyData.enemyType == EnemyType.Ranger)
         {
-            (enemyData as RangerEnemySO)?.Init();
+            var ranger = enemyData as RangerEnemySO;
+            if (ranger != null)
+            {
+                attackCooldown = ranger.attackCooldown;
+            }
         }
+
+        if (target != null)
+        {
+            target.position = Vector2.zero;
+        }
+    }
+    
+    public void SetTaget(Transform newTarget)
+    {
+        target = newTarget;
     }
 
     private void Update()
     {
-        if (isAttacking)
+        if (isAttacking && enemyData.enemyType == EnemyType.Ranger)
         {
-            enemyData.PerformAttack(this);
+            if (attackTimer <= 0f)
+            {
+                enemyData.PerformAttack(this);
+                attackTimer = attackCooldown;
+            }
+            else
+            {
+                attackTimer -= Time.deltaTime;
+            }
         }
         else
         {
@@ -58,7 +81,10 @@ public class Enemy : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        (enemyData as KamikazeSO).Explode(this,collision);
+        if(enemyType == EnemyType.Kamikaze)
+        {
+            (enemyData as KamikazeSO).Explode(this,collision);
+        }
     }
     // public void OnDrawGizmos()
     // {
