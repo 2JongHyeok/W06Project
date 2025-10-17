@@ -30,10 +30,8 @@ public class EnemyBullet : MonoBehaviour
             // 타일 위치 계산
             Vector3 hitPoint = collision.GetContact(0).point;
             Vector3 correctedHitPoint = hitPoint - ((Vector3)collision.GetContact(0).normal * 0.01f);
-            Vector3Int cellPos = tilemap.WorldToCell(correctedHitPoint);
+            // Vector3Int cellPos = tilemap.WorldToCell(correctedHitPoint);
             Vector3Int cellPos2 = tilemap.WorldToCell(correctedHitPoint);
-            Debug.Log("EnemyBullet hit tile at: " + cellPos);
-            Debug.Log("EnemyBullet hit tile at: " + cellPos2);
             // 매니저 찾기
             Planet manager = FindAnyObjectByType<Planet>();
             manager?.DamageTile(cellPos2, damage);
