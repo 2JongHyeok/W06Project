@@ -14,7 +14,7 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        countdown = timeBetweenWaves;
+        countdown = 10f;
     }
     private void Update()
     {

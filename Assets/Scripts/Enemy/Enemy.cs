@@ -61,7 +61,16 @@ public class Enemy : MonoBehaviour
             );
         }
         transform.rotation = Quaternion.LookRotation(Vector3.forward, target.position - transform.position);
-        
+
+    }
+    
+    public void TakeDamage(int damage)
+    {
+        enemyData.enemyHP -= damage;
+        if (enemyData.enemyHP <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

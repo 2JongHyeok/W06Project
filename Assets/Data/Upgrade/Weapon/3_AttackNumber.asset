@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: 3_AttackNumber
   m_EditorClassIdentifier: 
   upgradeType: 2
-  baseValue: 1
+  baseValue: 0.6
   recipes:
-  - levelValue: 2
+  - levelValue: -0.1
     cost: []
-  - levelValue: 2
+  - levelValue: -0.1
     cost: []
-  - levelValue: 2
+  - levelValue: -0.1
     cost: []
-  - levelValue: 2
+  - levelValue: -0.1
     cost: []
-  - levelValue: 2
+  - levelValue: -0.1
     cost: []
