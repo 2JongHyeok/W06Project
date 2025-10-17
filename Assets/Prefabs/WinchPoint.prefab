@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forcepPrefab: {fileID: 463508874073758382, guid: 6fb59e9e70b40cd408b42ab1ee1e20f7, type: 3}
   ropeSpeed: 3
-  maxRopeLength: 3
+  maxRopeLength: 4
   minRopeLength: 0.1
   inventoryManger: {fileID: 0}
 --- !u!50 &7071620332416480439
