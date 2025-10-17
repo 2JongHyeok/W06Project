@@ -29798,7 +29798,7 @@ MonoBehaviour:
   firePoint: {fileID: 1587002805904655281}
   damage: 5
   fireRate: 0.3
-  explosionRadius: 0.3
+  explosionRadius: 0.6
 --- !u!61 &9003192783875796088
 BoxCollider2D:
   m_ObjectHideFlags: 0
