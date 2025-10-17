@@ -33,7 +33,7 @@ public class ForgeManger : MonoBehaviour
             forcepLevelList[i] = 0;
         }
         
-        Debug.Log(weaponUpSOList[(int)WeaponUpgradeType.AttackDamage].baseValue);
+        
         Weapon.Instance.SetAttackSpeed(weaponUpSOList[(int)WeaponUpgradeType.AttackNumber].baseValue);
         Weapon.Instance.SetDamage((int)weaponUpSOList[(int)WeaponUpgradeType.AttackDamage].baseValue);
         Weapon.Instance.SetExplosionRange(weaponUpSOList[(int)WeaponUpgradeType.AttackRange].baseValue);

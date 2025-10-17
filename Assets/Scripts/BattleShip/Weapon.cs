@@ -13,6 +13,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab; 
     [SerializeField] private Transform firePoint;   // 총알이 발사될 위치
     [SerializeField] private float explosionRadius = 1.5f;    // 폭발 반경
+    [SerializeField] private DockingStation dockingStation;
     private float nextFireTime = 0f;  // 다음 총알을 발사할 수 있는 시간
     void Awake()
     {
@@ -32,6 +33,7 @@ public class Weapon : MonoBehaviour
 
     private void MoveWeapon()
     {
+        if (dockingStation.isSpaceshipMode) return;
         float rotationDirection = 0f;
 
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))

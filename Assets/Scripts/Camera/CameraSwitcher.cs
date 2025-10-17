@@ -36,11 +36,6 @@ public class CameraSwitcher : MonoBehaviour
 
     void Update()
     {
-        // F 키 입력 처리
-        if (Input.GetKeyDown(SwitchKey))
-        {
-            ToggleCameraMode();
-        }
 
         // 줌 처리 (마우스 휠)
         HandleZoom();
