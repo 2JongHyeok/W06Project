@@ -5,9 +5,9 @@ using UnityEngine.Tilemaps;
 public class Enemy : MonoBehaviour
 {
     public EnemyBaseSO enemyData;
-    public EnemyType enemyType => enemyData.enemyType;
-    public int enemyHP => enemyData.enemyHP;
-    public float enemySpeed => enemyData.enemySpeed;
+    public EnemyType enemyType;
+    public int enemyHP;
+    public float enemySpeed;
     [HideInInspector] public Transform target;
     public Transform firePoint;
     public bool isAttacking = false;
@@ -16,6 +16,9 @@ public class Enemy : MonoBehaviour
     public float attackTimer = 0f;
     private void Start()
     {
+        enemyType = enemyData.enemyType;
+        enemyHP = enemyData.enemyHP;
+        enemySpeed = enemyData.enemySpeed;
         // initialize attackCooldown for Ranger enemies after enemyData is available
         if (enemyData != null && enemyData.enemyType == EnemyType.Ranger)
         {
@@ -61,7 +64,17 @@ public class Enemy : MonoBehaviour
             );
         }
         transform.rotation = Quaternion.LookRotation(Vector3.forward, target.position - transform.position);
-        
+
+    }
+    
+    public void TakeDamage(int damage)
+    {
+        enemyHP -= damage;
+        if (enemyHP <= 0)
+        {
+            WaveManager.Instance.EnemyCount--;
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

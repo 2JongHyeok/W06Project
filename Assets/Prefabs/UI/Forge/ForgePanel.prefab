@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.35686275}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -378,6 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968cf6bf76217a84f8876f7675294894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ForgePanel: {fileID: 1879085026932754331}
   UIMainGrid: {fileID: 2353187433798693005}
   UITextGrid: {fileID: 8366589252289813526}
   SubTreePrefab: {fileID: 3563482483020333489, guid: 58c4a16cc3ae52e4c908dbc07da4c86a, type: 3}
