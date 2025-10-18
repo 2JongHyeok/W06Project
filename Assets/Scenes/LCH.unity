@@ -970,6 +970,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 908878209827147228, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+      propertyPath: thrustPower
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 908878209827147228, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+      propertyPath: movementDrag
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7180292076679184082, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.25
@@ -1013,6 +1021,10 @@ PrefabInstance:
     - target: {fileID: 7960328737568620720, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
       propertyPath: m_Name
       value: space_ship
+      objectReference: {fileID: 0}
+    - target: {fileID: 9179623361269614303, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+      propertyPath: m_Mass
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -30,28 +30,18 @@ public class SpaceshipWeapon : MonoBehaviour
         Instance = this;
     }
 
-    void Update()
-    {
-        // 스페이스바를 누르면 미사일을 발사합니다.
-        if (Input.GetKey(KeyCode.Space))
-        {
-            FireMissile();
-        }
-    }
-
-    /// <summary>
+/// <summary>
     /// 발사 속도를 체크하고 미사일을 생성합니다.
+    /// '뇌'로부터 명령을 받았을 때만 호출됩니다.
     /// </summary>
-    void FireMissile()
+    public void FireMissile() // 이제 외부에서 호출할 수 있도록 public으로 변경합니다.
     {
         if (Time.time >= nextFireTime)
         {
-            // 다음 발사 시간 갱신
             nextFireTime = Time.time + fireRate;
 
             if (missilePrefab != null && firePoint != null)
             {
-                // 미사일 프리팹을 firePoint의 위치와 방향으로 생성
                 Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
             }
             else

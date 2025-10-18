@@ -139,7 +139,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 6
+  m_Mass: 0.0001
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoDestroyTime: 300
-  minInitialForce: 0.1
-  maxInitialForce: 1.5
+  minInitialForce: 0.00001
+  maxInitialForce: 0.0001
 --- !u!114 &2092967285584099329
 MonoBehaviour:
   m_ObjectHideFlags: 0
