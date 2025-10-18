@@ -1,15 +1,13 @@
 using UnityEngine;
 public enum WeaponUpgradeType
 {
-    AttackDamage,
-    AttackRange,
-    AttackNumber,
-    CannonSpeed
+    CannonAtkDamage,
+    CannonAtkRange,
+    CannonAtkSpeed,
+    CannonMoveSpeed
 }
 [CreateAssetMenu(fileName = "New Weapon Upgrade", menuName = "ScriptableObjects/AttackUpgrades")]
-public class AttackUpgrade : ScriptableObject
+public class AttackUpgrade : BaseUpgrade
 {
     public WeaponUpgradeType upgradeType;
-    public float baseValue;
-    public LevelRecipe[] recipes;
 }
