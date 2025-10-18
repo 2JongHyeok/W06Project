@@ -14999,7 +14999,7 @@ Transform:
   m_GameObject: {fileID: 6042438744115310206}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.28, z: 0}
+  m_LocalPosition: {x: 0, y: -1.93, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -29906,6 +29906,7 @@ MonoBehaviour:
   ropeSegmentPrefab: {fileID: 1511424944892775995, guid: 8124ae7bfdb537a46b6cc1ee4e6f8ad5, type: 3}
   numberOfSegments: 2
   maxRopeLength: 3
+  skipChecksFramesAfterWarp: 10
 --- !u!114 &6283716779563996143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29922,3 +29923,4 @@ MonoBehaviour:
   bottomBoundary: -80
   leftBoundary: -80
   rightBoundary: 80
+  cinemachineFollowTarget: {fileID: 0}
