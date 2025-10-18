@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34890eaa5094d154eaa62a0882a30883, type: 3}
   m_Name: 1_CannonAtkDamge
   m_EditorClassIdentifier: 
-  upgradeType: 0
   upgradeName: "\uC8FC\uD3EC \uACF5\uACA9\uB825"
-  upgradeDescription: 
+  upgradeDescription: "\uC8FC\uD3EC \uAC15\uD654"
   baseValue: 3
   recipes:
   - levelValue: 1
@@ -37,3 +36,4 @@ MonoBehaviour:
     cost:
     - oreType: 0
       amount: 5
+  upgradeType: 0

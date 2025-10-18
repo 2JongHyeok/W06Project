@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34890eaa5094d154eaa62a0882a30883, type: 3}
   m_Name: 4_CannonSpeed
   m_EditorClassIdentifier: 
-  upgradeType: 3
   upgradeName: "\uC8FC\uD3EC \uD68C\uC804\uC18D\uB3C4"
-  upgradeDescription: 
+  upgradeDescription: "\uC8FC\uD3EC \uAC15\uD654"
   baseValue: 60
   recipes:
   - levelValue: 20
@@ -37,3 +36,4 @@ MonoBehaviour:
     cost:
     - oreType: 0
       amount: 5
+  upgradeType: 3

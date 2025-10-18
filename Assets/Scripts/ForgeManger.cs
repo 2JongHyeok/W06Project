@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ForgeManger : MonoBehaviour
 {
-    [SerializeField] InventoryManger inventoryManger;
+    public InventoryManger inventoryManger;
     public ForcepUpgrade[] forcepSOList;
     public AttackUpgrade[] weaponUpSOList;
     [SerializeField] private ForgeUI forgeUI;
@@ -33,7 +33,7 @@ public class ForgeManger : MonoBehaviour
             forcepLevelList[i] = 0;
         }
 
-
+        forgeUI.ClearUpgradeInfo();
 
         Weapon.Instance.SetDamage((int)weaponUpSOList[(int)WeaponUpgradeType.CannonAtkDamage].baseValue);
         Weapon.Instance.SetAttackSpeed(weaponUpSOList[(int)WeaponUpgradeType.CannonAtkSpeed].baseValue);
@@ -45,6 +45,7 @@ public class ForgeManger : MonoBehaviour
 
     public void UpgradeWeapon(int index)
     {
+        Debug.Log("버튼 감지");
         if (index < 0 || index >= weaponUpSOList.Length) return;
         if (weaponLevelList[index] >= weaponUpSOList[index].recipes.Length) return;
         
@@ -74,12 +75,14 @@ public class ForgeManger : MonoBehaviour
                 Weapon.Instance.AddCannonSpeed(levelValue);
             }
             weaponLevelList[index]++;
+            forgeUI.ClearUpgradeInfo();
         }
         
     }
 
     public void UpgradeForcep(int index)
     {
+        Debug.Log("버튼 감지");
         if (index < 0 || index >= forcepSOList.Length) return;
         if (forcepLevelList[index] >= forcepSOList[index].recipes.Length) return;
         

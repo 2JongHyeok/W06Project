@@ -7,9 +7,7 @@ public enum ForcepUpgradeType
     ForcepMaxSpeed
 }
 [CreateAssetMenu(fileName = "New Forcep Upgrade", menuName = "ScriptableObjects/ForcepUpgrade")]
-public class ForcepUpgrade : ScriptableObject
+public class ForcepUpgrade : BaseUpgrade
 {
     public ForcepUpgradeType upgradeType;
-    public float baseValue;
-    public LevelRecipe[] recipes;
 }

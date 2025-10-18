@@ -7,11 +7,7 @@ public enum WeaponUpgradeType
     CannonMoveSpeed
 }
 [CreateAssetMenu(fileName = "New Weapon Upgrade", menuName = "ScriptableObjects/AttackUpgrades")]
-public class AttackUpgrade : ScriptableObject
+public class AttackUpgrade : BaseUpgrade
 {
     public WeaponUpgradeType upgradeType;
-    public string upgradeName;
-    public string upgradeDescription;
-    public float baseValue;
-    public LevelRecipe[] recipes;
 }
