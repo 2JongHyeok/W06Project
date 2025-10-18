@@ -15,7 +15,7 @@ public class WaveManager : MonoBehaviour
 
     [Header("Wave Settings")]
     public float timeBetweenWaves = 5f;
-    private float countdown = 3f;
+    private float countdown = 10f;
     private int waveIndex = 0;
 
     [Header("UI")]
@@ -44,8 +44,9 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        if(EnemyCount == 0)
+        if(EnemyCount < 0)
         {
+            EnemyCount = 0;
             countdown -= Time.deltaTime;
         }
 

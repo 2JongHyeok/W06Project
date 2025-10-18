@@ -19,15 +19,15 @@ MonoBehaviour:
   - levelValue: -1.5
     cost:
     - oreType: 0
-      amount: 1
+      amount: 3
   - levelValue: -0.7
     cost:
     - oreType: 0
-      amount: 1
+      amount: 3
   - levelValue: -0.45
     cost:
     - oreType: 0
-      amount: 1
+      amount: 3
     - oreType: 0
       amount: 0
     - oreType: 0

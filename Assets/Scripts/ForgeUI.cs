@@ -38,7 +38,7 @@ public class ForgeUI : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F))
+        if(Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleForgePanel();
         }
@@ -74,6 +74,7 @@ public class ForgeUI : MonoBehaviour
     }
     public void SelectUpgrade(BaseUpgrade _Upgrade, InventoryManger _inven, ForgeManger forgeManger)
     {
+        ClearUpgradeInfo(_inven);
         ForgeTitleText.text = _Upgrade.upgradeName;
         ForgeDescText.text = _Upgrade.upgradeDescription;
         int nextLevel;
