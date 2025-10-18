@@ -20,7 +20,7 @@ public class InventoryUI : MonoBehaviour
     {
         OreUIParent.sizeDelta = new Vector2((GridWidth + GridSpacing) * inventoryManger.OreList.Length, OreUIParent.sizeDelta.y);
         OreUIList = new List<OreUI>();
-        foreach (var ore in inventoryManger.OreList)
+        for(int i = 0; i < inventoryManger.OreList.Length; i++ ) 
         {
             GameObject oreUI = Instantiate(OriGirdUIPrefab, OreUIParent);
             oreUI.transform.SetParent(OreUIParent);
@@ -29,6 +29,7 @@ public class InventoryUI : MonoBehaviour
                 oreIcon = oreUI.transform.GetChild(1).GetComponent<Image>(),
                 oreAmountText = oreUI.transform.GetChild(2).GetComponent<TextMeshProUGUI>()
             };
+            oreUI.transform.GetChild(1).GetComponent<Image>().sprite = inventoryManger.orePools[i].icon;
             OreUIList.Add(oreUIComp);
         }
     }

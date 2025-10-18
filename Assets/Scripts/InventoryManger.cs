@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class InventoryManger : MonoBehaviour
 {
-    public InventoryManger Instance { get; private set; }
-    [SerializeField] private OreSO[] orePools;
+    public static InventoryManger Instance { get; private set; }
+    public OreSO[] orePools;
     public int[] OreList;
     [SerializeField] private InventoryUI inventoryUI;
 

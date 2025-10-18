@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
     public int enemyHP;
     public float enemySpeed;
     [HideInInspector] public Transform target;
-    private IObjectPool<GameObject> myPool;
+    public IObjectPool<GameObject> myPool;
     public Transform firePoint;
     public bool isAttacking = false;
 
@@ -78,7 +78,6 @@ public class Enemy : MonoBehaviour
         enemyHP -= damage;
         if (enemyHP <= 0)
         {
-            WaveManager.Instance.EnemyCount--;
             myPool.Release(gameObject);
         }
     }
@@ -100,11 +99,20 @@ public class Enemy : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(enemyType == EnemyType.Kamikaze)
+        if (enemyType == EnemyType.Kamikaze)
         {
-            (enemyData as KamikazeSO).Explode(this,collision);
+            (enemyData as KamikazeSO).Explode(this, collision);
         }
     }
+
+    void OnEnable()
+    {
+        WaveManager.Instance.EnemyCount++;
+    }
+    // void OnDestroy()
+    // {
+    //     WaveManager.Instance.EnemyCount--;
+    // }
     // public void OnDrawGizmos()
     // {
     //     if (enemyType == EnemyType.Ranger)

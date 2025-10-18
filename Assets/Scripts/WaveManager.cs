@@ -44,7 +44,10 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        countdown -= Time.deltaTime;
+        if(EnemyCount == 0)
+        {
+            countdown -= Time.deltaTime;
+        }
 
         if (countdown <= 0f)
         {
@@ -75,7 +78,6 @@ public class WaveManager : MonoBehaviour
         int spawnIndex = Random.Range(0, spawnPoints.Length);
         GameObject prefab = enemyPrefabs[(int)type];
         GameObject enemy = Instantiate(prefab, spawnPoints[spawnIndex].position, spawnPoints[spawnIndex].rotation,transform);
-        EnemyCount++;
         enemy.GetComponent<Enemy>().SetTaget(Target);
         enemy.GetComponent<Enemy>().SetPool(enemyPools[type]); // 자신이 속한 풀 저장
         return enemy;
@@ -88,7 +90,6 @@ public class WaveManager : MonoBehaviour
             spawnPoints[Random.Range(0, spawnPoints.Length)].position,
             Quaternion.identity
         );
-        EnemyCount++;
     }
 
     private void OnReleaseEnemy(GameObject enemy)
@@ -99,8 +100,7 @@ public class WaveManager : MonoBehaviour
 
     private void OnDestroyEnemy(GameObject enemy)
     {
-        Destroy(enemy);
-        EnemyCount--;
+        // EnemyCount--;
     }
 
     private IEnumerator SpawnWave()
