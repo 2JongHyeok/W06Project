@@ -32,12 +32,13 @@ public class ForgeManger : MonoBehaviour
         {
             forcepLevelList[i] = 0;
         }
-        
-        
-        Weapon.Instance.SetAttackSpeed(weaponUpSOList[(int)WeaponUpgradeType.AttackNumber].baseValue);
-        Weapon.Instance.SetDamage((int)weaponUpSOList[(int)WeaponUpgradeType.AttackDamage].baseValue);
-        Weapon.Instance.SetExplosionRange(weaponUpSOList[(int)WeaponUpgradeType.AttackRange].baseValue);
-        Weapon.Instance.SetCannonSpeed(weaponUpSOList[(int)WeaponUpgradeType.CannonSpeed].baseValue);
+
+
+
+        Weapon.Instance.SetDamage((int)weaponUpSOList[(int)WeaponUpgradeType.CannonAtkDamage].baseValue);
+        Weapon.Instance.SetAttackSpeed(weaponUpSOList[(int)WeaponUpgradeType.CannonAtkSpeed].baseValue);
+        Weapon.Instance.SetExplosionRange(weaponUpSOList[(int)WeaponUpgradeType.CannonAtkRange].baseValue);
+        Weapon.Instance.SetCannonSpeed(weaponUpSOList[(int)WeaponUpgradeType.CannonMoveSpeed].baseValue);
         // WinchController.Instance.SetRopeSpeed(forcepSOList[(int)ForcepUpgradeType.ForcepBasicSpeed].baseValue);
         
     }
@@ -56,21 +57,21 @@ public class ForgeManger : MonoBehaviour
             {
                 inventoryManger.RemoveOre(item.oreType, item.amount);
             }
-            if (index == (int)WeaponUpgradeType.AttackDamage)
+            if (index == (int)WeaponUpgradeType.CannonAtkDamage)
             {
                 Weapon.Instance.AddDamage((int)levelValue);
             }
-            else if (index == (int)WeaponUpgradeType.AttackNumber)
+            else if (index == (int)WeaponUpgradeType.CannonAtkSpeed)
             {
                 Weapon.Instance.AddAttackSpeed(levelValue);
             }
-            else if (index == (int)WeaponUpgradeType.AttackRange)
+            else if (index == (int)WeaponUpgradeType.CannonAtkRange)
             {
-                Weapon.Instance.AddExplosionRange((int)levelValue);
+                Weapon.Instance.AddExplosionRange(levelValue);
             }
-            else if (index == (int)WeaponUpgradeType.CannonSpeed)
+            else if (index == (int)WeaponUpgradeType.CannonMoveSpeed)
             {
-                Weapon.Instance.AddCannonSpeed((int)levelValue);
+                Weapon.Instance.AddCannonSpeed(levelValue);
             }
             weaponLevelList[index]++;
         }

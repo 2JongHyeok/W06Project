@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: 4_CannonSpeed
   m_EditorClassIdentifier: 
   upgradeType: 3
+  upgradeName: "\uC8FC\uD3EC \uD68C\uC804\uC18D\uB3C4"
+  upgradeDescription: 
   baseValue: 60
   recipes:
   - levelValue: 20

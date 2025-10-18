@@ -49,7 +49,7 @@ public class ForgeUI : MonoBehaviour
         {
             int weaponIndex = i; // 캡처용 로컬 복사
             GameObject titleText = Instantiate(ForgeTitleTextPrefab, UITextGrid.transform);
-            titleText.GetComponent<TMP_Text>().text = forgeManger.weaponUpSOList[weaponIndex].upgradeType.ToString();
+            titleText.GetComponent<TMP_Text>().text = forgeManger.weaponUpSOList[weaponIndex].upgradeName;
             GameObject subTree = Instantiate(SubTreePrefab, UIMainGrid.transform);
 
             var btnList = new List<Button>();
