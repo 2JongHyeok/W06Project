@@ -26,7 +26,7 @@ public class CameraSwitcher : MonoBehaviour
 
     // Unity의 Input System (InputManager)을 사용할 경우: "F" 키
     private const KeyCode SwitchKey = KeyCode.F;
-
+    [SerializeField] ForgeManger forgeManger;
     void Start()
     {
         // 초기에는 행성 카메라를 활성화합니다.
@@ -36,7 +36,10 @@ public class CameraSwitcher : MonoBehaviour
 
     void Update()
     {
-
+        if(forgeManger.forgeUI.isForge)
+        {
+            return;
+        }
         // 줌 처리 (마우스 휠)
         HandleZoom();
     }

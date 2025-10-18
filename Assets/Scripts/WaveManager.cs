@@ -44,7 +44,7 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        if(EnemyCount < 0)
+        if(EnemyCount <= 0)
         {
             EnemyCount = 0;
             countdown -= Time.deltaTime;

@@ -35,7 +35,7 @@ public class ForgeUI : MonoBehaviour
     public Button ForgeApplyButton;
     public Color32 ActiveColor;
     public Color32 DeactiveColor;
-
+    public bool isForge = false;
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Tab))
@@ -49,6 +49,7 @@ public class ForgeUI : MonoBehaviour
         {
             bool isActive = ForgePanel.activeSelf;
             ForgePanel.SetActive(!isActive);
+            isForge = !isActive;
 
             Time.timeScale = isActive ? 1f : 0f; // 포지 UI 열 때 시간 정지, 닫을 때 시간 재개
         }

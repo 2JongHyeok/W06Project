@@ -8,10 +8,12 @@ public class ForgeManger : MonoBehaviour
     public SpaceshipUpgrade[] spaceshipSOList;
     public AttackUpgrade[] weaponUpSOList;
     public AutoAttackUpgrade[] autoAttackSOList;
-    [SerializeField] private ForgeUI forgeUI;
+    public ForgeUI forgeUI;
     public int[] weaponLevelList;
     public int[] spaceshipLevelList;
     public int[] autoAttackLevelList;
+
+    
 
     private void Start()
     {
