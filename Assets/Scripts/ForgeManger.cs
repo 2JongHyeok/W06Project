@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ForgeManger : MonoBehaviour
 {
-    public GuidedMissileAttack guidedMissileAttack;
+    public TurretActivationManager turretActivationManager;
     public InventoryManger inventoryManger;
     public SpaceshipUpgrade[] spaceshipSOList;
     public AttackUpgrade[] weaponUpSOList;
@@ -49,13 +49,13 @@ public class ForgeManger : MonoBehaviour
         Weapon.Instance.SetCannonSpeed(weaponUpSOList[(int)WeaponUpgradeType.CannonMoveSpeed].baseValue);
 
         SpaceshipMotor.Instance.SetThrustPower(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipSpeed].baseValue);
-        // SpaceshipMotor.Instance.SetDamage(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipMassReduceRate].baseValue);
+        SpaceshipMotor.Instance.SetThrustReductionPerOre(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipMassReduceRate].baseValue);
         SpaceshipWeapon.Instance.SetDamage((int)spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipDamage].baseValue);
         SpaceshipWeapon.Instance.SetExplosionRadius(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipRadius].baseValue);
         SpaceshipWeapon.Instance.SetAttackSpeed(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipAtkSpeed].baseValue);
 
-        // guidedMissileAttack.SetMissileDamage(autoAttackSOList[(int)AutoAttackUpgradeType.AutoAttackDamage].baseValue);
-        // guidedMissileAttack.SetMissileInterval(autoAttackSOList[(int)AutoAttackUpgradeType.AutoAttackInterval].baseValue);
+        turretActivationManager.SetMissileDamage(autoAttackSOList[(int)AutoAttackUpgradeType.AutoAttackDamage].baseValue);
+        turretActivationManager.SetMissileInterval(autoAttackSOList[(int)AutoAttackUpgradeType.AutoAttackInterval].baseValue);
     }
 
     public void UpgradeWeapon(int index)
@@ -116,7 +116,7 @@ public class ForgeManger : MonoBehaviour
             }
             if (index == (int)SpaceshipUpgradeType.SpaceshipMassReduceRate)
             {
-
+                SpaceshipMotor.Instance.AddThrustReductionPerOre(levelValue);
             }
             if (index == (int)SpaceshipUpgradeType.SpaceshipDamage)
             {
@@ -131,6 +131,7 @@ public class ForgeManger : MonoBehaviour
                 SpaceshipWeapon.Instance.AddAttackSpeed(levelValue);
             }
             spaceshipLevelList[index]++;
+            forgeUI.ClearUpgradeInfo();
         }
     }
     
@@ -151,13 +152,15 @@ public class ForgeManger : MonoBehaviour
             }
             if (index == (int)AutoAttackUpgradeType.AutoAttackDamage)
             {
-                guidedMissileAttack.AddMissileDamage(levelValue);
+                Debug.LogWarning("데미지 감지2");
+                turretActivationManager.AddMissileDamage(levelValue);
             }
             if (index == (int)AutoAttackUpgradeType.AutoAttackInterval)
             {
-                guidedMissileAttack.AddMissileInterval(levelValue);
+                turretActivationManager.AddMissileInterval(levelValue);
             }
             autoAttackLevelList[index]++;
+            forgeUI.ClearUpgradeInfo();
         }
     }
 }

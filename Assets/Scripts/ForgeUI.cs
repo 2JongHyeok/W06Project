@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ForgeUI : MonoBehaviour
 {
+    public GameObject SkilGrid;
     public float nodeSize = 100f;
     public float nodeSpacing = 20f;
     public float subTreeSpacing = 50f;
@@ -100,6 +101,7 @@ public class ForgeUI : MonoBehaviour
                         if (_inven.CheckOre(levelRecipe.cost))
                         {
                             int nextLevel = forgeManger.weaponLevelList[(int)(_Upgrade as AttackUpgrade).upgradeType];
+                            Debug.Log(nextLevel);
                             var currentBtn = weaponButtons[(int)(_Upgrade as AttackUpgrade).upgradeType][nextLevel-1];
                             var currnetImg = currentBtn.GetComponent<Image>();
                             currentBtn.interactable = false;
@@ -130,22 +132,29 @@ public class ForgeUI : MonoBehaviour
             levelRecipe = _Upgrade.recipes[nextLevel];
             for (int i = 0; i < _inven.OreList.Length; i++)
             {
-
                 HasGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = _inven.OreList[i].ToString();
+                // CostGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = levelRecipe.cost[i].amount.ToString();
+            }
+
+            for (int i = 0; i < levelRecipe.cost.Length; i++)
+            {
+                // HasGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = _inven.OreList[i].ToString();
                 CostGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = levelRecipe.cost[i].amount.ToString();
             }
             Image img = ForgeApplyButton.GetComponent<Image>();
             ForgeApplyButton.onClick.RemoveAllListeners();
             ForgeApplyButton.onClick.AddListener(() =>
                     {
+                        // 실제 업그레이드 시도
                         forgeManger.UpgradeSpaceship((int)(_Upgrade as SpaceshipUpgrade).upgradeType);
                         if (_inven.CheckOre(levelRecipe.cost))
                         {
                             int nextLevel = forgeManger.spaceshipLevelList[(int)(_Upgrade as SpaceshipUpgrade).upgradeType];
-                            var currentBtn = spaceshipButtons[(int)(_Upgrade as SpaceshipUpgrade).upgradeType][nextLevel];
+                            Debug.Log(nextLevel);
+                            var currentBtn = spaceshipButtons[(int)(_Upgrade as SpaceshipUpgrade).upgradeType][nextLevel-1];
                             var currnetImg = currentBtn.GetComponent<Image>();
-                            currentBtn.interactable = true;
-                            if (currnetImg != null) currnetImg.color = ActiveColor;
+                            currentBtn.interactable = false;
+                            if (currnetImg != null) currnetImg.color = DeactiveColor;
                             if (nextLevel < spaceshipButtons[(int)(_Upgrade as SpaceshipUpgrade).upgradeType].Count)
                             {
                                 var nextBtn = spaceshipButtons[(int)(_Upgrade as SpaceshipUpgrade).upgradeType][nextLevel];
@@ -153,51 +162,7 @@ public class ForgeUI : MonoBehaviour
                                 nextBtn.interactable = true;
                                 if (nextImg != null) nextImg.color = ActiveColor;
                             }
-                        }
-
-                    });
-            if (_inven.CheckOre(levelRecipe.cost))
-            {
-                ForgeApplyButton.interactable = true;
-                if (img != null) img.color = ActiveColor;
-            }
-            else
-            {
-                ForgeApplyButton.interactable = false;
-                if (img != null) img.color = DeactiveColor;
-            }
-        }
-        if(_Upgrade is AutoAttackUpgrade)
-        {
-            nextLevel = forgeManger.autoAttackLevelList[(int)(_Upgrade as AutoAttackUpgrade).upgradeType];
-            levelRecipe = _Upgrade.recipes[nextLevel];
-            for (int i = 0; i < _inven.OreList.Length; i++)
-            {
-
-                HasGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = _inven.OreList[i].ToString();
-                CostGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = levelRecipe.cost[i].amount.ToString();
-            }
-            Image img = ForgeApplyButton.GetComponent<Image>();
-            ForgeApplyButton.onClick.RemoveAllListeners();
-            ForgeApplyButton.onClick.AddListener(() =>
-                    {
-                        forgeManger.UpgradeAutoAttack((int)(_Upgrade as AutoAttackUpgrade).upgradeType);
-                        if (_inven.CheckOre(levelRecipe.cost))
-                        {
-                            int nextLevel = forgeManger.spaceshipLevelList[(int)(_Upgrade as AutoAttackUpgrade).upgradeType];
-                            var currentBtn = autoAttackButtons[(int)(_Upgrade as AutoAttackUpgrade).upgradeType][nextLevel];
-                            var currnetImg = currentBtn.GetComponent<Image>();
-                            currentBtn.interactable = true;
-                            if (currnetImg != null) currnetImg.color = ActiveColor;
-                            if (nextLevel < spaceshipButtons[(int)(_Upgrade as AutoAttackUpgrade).upgradeType].Count)
-                            {
-                                var nextBtn = spaceshipButtons[(int)(_Upgrade as AutoAttackUpgrade).upgradeType][nextLevel];
-                                var nextImg = nextBtn.GetComponent<Image>();
-                                nextBtn.interactable = true;
-                                if (nextImg != null) nextImg.color = ActiveColor;
-                            }
                         } 
-                        
                     });
             if (_inven.CheckOre(levelRecipe.cost))
             {
@@ -208,6 +173,55 @@ public class ForgeUI : MonoBehaviour
                 ForgeApplyButton.interactable = false;
                 if (img != null) img.color = DeactiveColor;
             }
+           
+        }
+        if (_Upgrade is AutoAttackUpgrade)
+        {
+            nextLevel = forgeManger.autoAttackLevelList[(int)(_Upgrade as AutoAttackUpgrade).upgradeType];
+            levelRecipe = _Upgrade.recipes[nextLevel];
+            for (int i = 0; i < _inven.OreList.Length; i++)
+            {
+                HasGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = _inven.OreList[i].ToString();
+                // CostGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = levelRecipe.cost[i].amount.ToString();
+            }
+
+            for (int i = 0; i < levelRecipe.cost.Length; i++)
+            {
+                // HasGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = _inven.OreList[i].ToString();
+                CostGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = levelRecipe.cost[i].amount.ToString();
+            }
+            Image img = ForgeApplyButton.GetComponent<Image>();
+            ForgeApplyButton.onClick.RemoveAllListeners();
+            ForgeApplyButton.onClick.AddListener(() =>
+                    {
+                        // 실제 업그레이드 시도
+                        forgeManger.UpgradeAutoAttack((int)(_Upgrade as AutoAttackUpgrade).upgradeType);
+                        if (_inven.CheckOre(levelRecipe.cost))
+                        {
+                            int nextLevel = forgeManger.autoAttackLevelList[(int)(_Upgrade as AutoAttackUpgrade).upgradeType];
+                            var currentBtn = autoAttackButtons[(int)(_Upgrade as AutoAttackUpgrade).upgradeType][nextLevel-1];
+                            var currnetImg = currentBtn.GetComponent<Image>();
+                            currentBtn.interactable = false;
+                            if (currnetImg != null) currnetImg.color = DeactiveColor;
+                            if (nextLevel < autoAttackButtons[(int)(_Upgrade as AutoAttackUpgrade).upgradeType].Count)
+                            {
+                                var nextBtn = autoAttackButtons[(int)(_Upgrade as AutoAttackUpgrade).upgradeType][nextLevel];
+                                var nextImg = nextBtn.GetComponent<Image>();
+                                nextBtn.interactable = true;
+                                if (nextImg != null) nextImg.color = ActiveColor;
+                            }
+                        } 
+                    });
+            if (_inven.CheckOre(levelRecipe.cost))
+            {
+                ForgeApplyButton.interactable = true;
+                if (img != null) img.color = ActiveColor;
+            } else
+            {
+                ForgeApplyButton.interactable = false;
+                if (img != null) img.color = DeactiveColor;
+            }
+           
         }
     }
     public void CreateForgeUI(ForgeManger forgeManger)
@@ -216,7 +230,9 @@ public class ForgeUI : MonoBehaviour
         weaponButtonDefaultColors.Clear();
         spaceshipButtons.Clear();
         spaceshipButtonDefaultColors.Clear();
-        int MaxSubTreeCount = forgeManger.weaponUpSOList.Length + forgeManger.spaceshipSOList.Length;
+        autoAttackButtons.Clear();
+        autoAttackButtonDefaultColors.Clear();
+        int MaxSubTreeCount = forgeManger.weaponUpSOList.Length + forgeManger.spaceshipSOList.Length + forgeManger.autoAttackSOList.Length;
         Debug.Log("Creating Forge UI with " + MaxSubTreeCount + " subtrees.");
         // Weapons
         for (int i = 0; i < forgeManger.weaponUpSOList.Length; i++)
@@ -281,120 +297,134 @@ public class ForgeUI : MonoBehaviour
             weaponButtons.Add(btnList);
             weaponButtonDefaultColors.Add(colorList);
         }
-
         // Spaceship
         for (int i = 0; i < forgeManger.spaceshipSOList.Length; i++)
         {
             if (MaxNodeCount < forgeManger.spaceshipSOList[i].recipes.Length)
                 MaxNodeCount = forgeManger.spaceshipSOList[i].recipes.Length;
-            int spaceshipIndex = i;
+            int spaceshipIndex = i; // 캡처용 로컬 복사
             GameObject titleText = Instantiate(ForgeTitleTextPrefab, UITextGrid.transform);
-            titleText.GetComponent<TMP_Text>().text = forgeManger.spaceshipSOList[spaceshipIndex].upgradeType.ToString();
+            titleText.GetComponent<TMP_Text>().text = forgeManger.spaceshipSOList[spaceshipIndex].upgradeName;
             GameObject subTree = Instantiate(SubTreePrefab, UIMainGrid.transform);
 
-            var btnList = new List<Button>();
+            var btnList2 = new List<Button>();
             var colorList = new List<Color>();
 
             for (int j = 0; j < forgeManger.spaceshipSOList[spaceshipIndex].recipes.Length; j++)
             {
-                int levelIndex = j;
+                int levelIndex = j; // 캡처용
                 GameObject node = Instantiate(NodePrefab, subTree.transform);
 
+                // 버튼은 노드 자신이나 자식에 있을 수 있으므로 안전하게 검색
                 var btn = node.GetComponent<Button>() ?? node.GetComponentInChildren<Button>();
                 if (btn != null)
                 {
                     btn.onClick.RemoveAllListeners();
 
+                    // 기본 색상 저장 (이미지 색 사용)
                     Image img = btn.GetComponent<Image>();
-                    Color defaultColor = img != null ? img.color : Color.white;
+                    Color defaultColor = img != null ? ActiveColor : ActiveColor;
                     colorList.Add(defaultColor);
-                    btnList.Add(btn);
+                    btnList2.Add(btn);
 
+                    // 초기 활성화: 현재 레벨과 같으면 활성화, 아니면 비활성화
                     bool shouldBeInteractable = (forgeManger.spaceshipLevelList.Length > spaceshipIndex && forgeManger.spaceshipLevelList[spaceshipIndex] == levelIndex);
                     btn.interactable = shouldBeInteractable;
                     if (!shouldBeInteractable && img != null)
-                        img.color = Color.red;
+                        img.color = DeactiveColor;
 
-                    // btn.onClick.AddListener(() =>
-                    // {
-                    //     forgeManger.UpgradeSpaceship(spaceshipIndex);
+                    // 리스너: 클릭 시 매니저 호출 후 UI 업데이트
+                    btn.onClick.AddListener(() =>
+                    {
+                        // 실제 업그레이드 시도
+                        // forgeManger.UpgradeWeapon(spaceshipIndex);
 
-                    //     btn.interactable = false;
-                    //     if (img != null) img.color = Color.red;
+                        // // 비활성화 및 색 변경 (클릭한 버튼)
+                        btn.interactable = false;
+                        if (img != null) img.color = DeactiveColor;
 
-                    //     int nextLevel = forgeManger.spaceshipLevelList[spaceshipIndex];
-                    //     if (nextLevel < btnList.Count)
-                    //     {
-                    //         var nextBtn = btnList[nextLevel];
-                    //         var nextImg = nextBtn.GetComponent<Image>();
-                    //         nextBtn.interactable = true;
-                    //         if (nextImg != null) nextImg.color = colorList[nextLevel];
-                    //     }
-                    // });
-                    SelectUpgrade(forgeManger.spaceshipSOList[spaceshipIndex], forgeManger.inventoryManger, forgeManger);
+                        // 다음 레벨 버튼이 있으면 활성화(데이터 존재 확인)
+                        int nextLevel = forgeManger.spaceshipLevelList[spaceshipIndex];
+                        if (nextLevel < btnList2.Count)
+                        {
+                            var nextBtn = btnList2[nextLevel];
+                            var nextImg = nextBtn.GetComponent<Image>();
+                            nextBtn.interactable = true;
+                            if (nextImg != null) nextImg.color = ActiveColor;
+                        }
+                        SelectUpgrade(forgeManger.spaceshipSOList[spaceshipIndex], forgeManger.inventoryManger, forgeManger);
+                    });
                 }
             }
 
-            spaceshipButtons.Add(btnList);
+            spaceshipButtons.Add(btnList2);
             spaceshipButtonDefaultColors.Add(colorList);
         }
+        //autoAttack
         for (int i = 0; i < forgeManger.autoAttackSOList.Length; i++)
         {
             if (MaxNodeCount < forgeManger.autoAttackSOList[i].recipes.Length)
                 MaxNodeCount = forgeManger.autoAttackSOList[i].recipes.Length;
-            int autoAttackIndex = i;
+            int autoAttackIndex = i; // 캡처용 로컬 복사
             GameObject titleText = Instantiate(ForgeTitleTextPrefab, UITextGrid.transform);
-            titleText.GetComponent<TMP_Text>().text = forgeManger.autoAttackSOList[autoAttackIndex].upgradeType.ToString();
+            titleText.GetComponent<TMP_Text>().text = forgeManger.autoAttackSOList[autoAttackIndex].upgradeName;
             GameObject subTree = Instantiate(SubTreePrefab, UIMainGrid.transform);
 
-            var btnList = new List<Button>();
+            var btnList3 = new List<Button>();
             var colorList = new List<Color>();
 
             for (int j = 0; j < forgeManger.autoAttackSOList[autoAttackIndex].recipes.Length; j++)
             {
-                int levelIndex = j;
+                int levelIndex = j; // 캡처용
                 GameObject node = Instantiate(NodePrefab, subTree.transform);
 
+                // 버튼은 노드 자신이나 자식에 있을 수 있으므로 안전하게 검색
                 var btn = node.GetComponent<Button>() ?? node.GetComponentInChildren<Button>();
                 if (btn != null)
                 {
                     btn.onClick.RemoveAllListeners();
 
+                    // 기본 색상 저장 (이미지 색 사용)
                     Image img = btn.GetComponent<Image>();
-                    Color defaultColor = img != null ? img.color : Color.white;
+                    Color defaultColor = img != null ? ActiveColor : ActiveColor;
                     colorList.Add(defaultColor);
-                    btnList.Add(btn);
+                    btnList3.Add(btn);
 
+                    // 초기 활성화: 현재 레벨과 같으면 활성화, 아니면 비활성화
                     bool shouldBeInteractable = (forgeManger.autoAttackLevelList.Length > autoAttackIndex && forgeManger.autoAttackLevelList[autoAttackIndex] == levelIndex);
                     btn.interactable = shouldBeInteractable;
                     if (!shouldBeInteractable && img != null)
-                        img.color = Color.red;
+                        img.color = DeactiveColor;
 
-                    // btn.onClick.AddListener(() =>
-                    // {
-                    //     forgeManger.UpgradeSpaceship(autoAttackIndex);
+                    // 리스너: 클릭 시 매니저 호출 후 UI 업데이트
+                    btn.onClick.AddListener(() =>
+                    {
+                        // 실제 업그레이드 시도
+                        // forgeManger.UpgradeWeapon(autoAttackIndex);
 
-                    //     btn.interactable = false;
-                    //     if (img != null) img.color = Color.red;
+                        // // 비활성화 및 색 변경 (클릭한 버튼)
+                        btn.interactable = false;
+                        if (img != null) img.color = DeactiveColor;
 
-                    //     int nextLevel = forgeManger.autoAttackLevelList[autoAttackIndex];
-                    //     if (nextLevel < btnList.Count)
-                    //     {
-                    //         var nextBtn = btnList[nextLevel];
-                    //         var nextImg = nextBtn.GetComponent<Image>();
-                    //         nextBtn.interactable = true;
-                    //         if (nextImg != null) nextImg.color = colorList[nextLevel];
-                    //     }
-                    // });
-                    SelectUpgrade(forgeManger.autoAttackSOList[autoAttackIndex], forgeManger.inventoryManger, forgeManger);
+                        // 다음 레벨 버튼이 있으면 활성화(데이터 존재 확인)
+                        int nextLevel = forgeManger.autoAttackLevelList[autoAttackIndex];
+                        if (nextLevel < btnList3.Count)
+                        {
+                            var nextBtn = btnList3[nextLevel];
+                            var nextImg = nextBtn.GetComponent<Image>();
+                            nextBtn.interactable = true;
+                            if (nextImg != null) nextImg.color = ActiveColor;
+                        }
+                        SelectUpgrade(forgeManger.autoAttackSOList[autoAttackIndex], forgeManger.inventoryManger, forgeManger);
+                    });
                 }
             }
 
-            autoAttackButtons.Add(btnList);
+            autoAttackButtons.Add(btnList3);
             autoAttackButtonDefaultColors.Add(colorList);
         }
         
-        UIMainGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(
+        SkilGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(
             (nodeSize + nodeSpacing) * MaxNodeCount,
             (subTreeSpacing + subTreeHeight) * MaxSubTreeCount
         );
