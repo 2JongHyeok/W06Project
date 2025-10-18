@@ -3,17 +3,21 @@ using UnityEngine;
 
 public class ForgeManger : MonoBehaviour
 {
+    public GuidedMissileAttack guidedMissileAttack;
     public InventoryManger inventoryManger;
-    public ForcepUpgrade[] forcepSOList;
+    public SpaceshipUpgrade[] spaceshipSOList;
     public AttackUpgrade[] weaponUpSOList;
+    public AutoAttackUpgrade[] autoAttackSOList;
     [SerializeField] private ForgeUI forgeUI;
     public int[] weaponLevelList;
-    public int[] forcepLevelList;
+    public int[] spaceshipLevelList;
+    public int[] autoAttackLevelList;
 
     private void Start()
     {
         weaponLevelList = new int[weaponUpSOList.Length];
-        forcepLevelList = new int[forcepSOList.Length];
+        spaceshipLevelList = new int[spaceshipSOList.Length];
+        autoAttackLevelList = new int[autoAttackSOList.Length];
 
         // 안전하게 할당: 인스펙터에 할당되어 있지 않다면 같은 GameObject에서 찾기
         if (forgeUI == null)
@@ -28,9 +32,13 @@ public class ForgeManger : MonoBehaviour
         {
             weaponLevelList[i] = 0;
         }
-        for (int i = 0; i < forcepLevelList.Length; i++)
+        for (int i = 0; i < spaceshipLevelList.Length; i++)
         {
-            forcepLevelList[i] = 0;
+            spaceshipLevelList[i] = 0;
+        }
+        for (int i = 0; i < autoAttackLevelList.Length; i++)
+        {
+            autoAttackLevelList[i] = 0;
         }
 
         forgeUI.ClearUpgradeInfo();
@@ -39,8 +47,15 @@ public class ForgeManger : MonoBehaviour
         Weapon.Instance.SetAttackSpeed(weaponUpSOList[(int)WeaponUpgradeType.CannonAtkSpeed].baseValue);
         Weapon.Instance.SetExplosionRange(weaponUpSOList[(int)WeaponUpgradeType.CannonAtkRange].baseValue);
         Weapon.Instance.SetCannonSpeed(weaponUpSOList[(int)WeaponUpgradeType.CannonMoveSpeed].baseValue);
-        // WinchController.Instance.SetRopeSpeed(forcepSOList[(int)ForcepUpgradeType.ForcepBasicSpeed].baseValue);
-        
+
+        SpaceshipMotor.Instance.SetThrustPower(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipSpeed].baseValue);
+        // SpaceshipMotor.Instance.SetDamage(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipMassReduceRate].baseValue);
+        SpaceshipWeapon.Instance.SetDamage((int)spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipDamage].baseValue);
+        SpaceshipWeapon.Instance.SetExplosionRadius(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipRadius].baseValue);
+        SpaceshipWeapon.Instance.SetAttackSpeed(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipAtkSpeed].baseValue);
+
+        // guidedMissileAttack.SetMissileDamage(autoAttackSOList[(int)AutoAttackUpgradeType.AutoAttackDamage].baseValue);
+        // guidedMissileAttack.SetMissileInterval(autoAttackSOList[(int)AutoAttackUpgradeType.AutoAttackInterval].baseValue);
     }
 
     public void UpgradeWeapon(int index)
@@ -79,16 +94,15 @@ public class ForgeManger : MonoBehaviour
         }
         
     }
-
-    public void UpgradeForcep(int index)
+    public void UpgradeSpaceship(int index)
     {
         Debug.Log("버튼 감지");
-        if (index < 0 || index >= forcepSOList.Length) return;
-        if (forcepLevelList[index] >= forcepSOList[index].recipes.Length) return;
-        
-        float levelValue = forcepSOList[index].recipes[forcepLevelList[index]].levelValue;
-        Cost[] cost = forcepSOList[index].recipes[forcepLevelList[index]].cost;
-        Debug.Log("Attempting to upgrade forcep at index " + index + " with levelValue " + levelValue);
+        if (index < 0 || index >= spaceshipSOList.Length) return;
+        if (spaceshipLevelList[index] >= spaceshipSOList[index].recipes.Length) return;
+
+        float levelValue = spaceshipSOList[index].recipes[spaceshipLevelList[index]].levelValue;
+        Cost[] cost = spaceshipSOList[index].recipes[spaceshipLevelList[index]].cost;
+        Debug.Log("Attempting to upgrade spaceship at index " + index + " with levelValue " + levelValue);
         if (inventoryManger.CheckOre(cost))
         {
             foreach (var item in cost)
@@ -96,12 +110,54 @@ public class ForgeManger : MonoBehaviour
                 inventoryManger.RemoveOre(item.oreType, item.amount);
             }
 
-            if (index == (int)ForcepUpgradeType.ForcepBasicSpeed)
+            if (index == (int)SpaceshipUpgradeType.SpaceshipSpeed)
             {
-                WinchController.Instance.AddRopeSpeed(levelValue);
+                SpaceshipMotor.Instance.AddThrustPower(levelValue);
             }
-            forcepLevelList[index]++;
+            if (index == (int)SpaceshipUpgradeType.SpaceshipMassReduceRate)
+            {
+
+            }
+            if (index == (int)SpaceshipUpgradeType.SpaceshipDamage)
+            {
+                SpaceshipWeapon.Instance.AddDamage((int)levelValue);
+            }
+            if (index == (int)SpaceshipUpgradeType.SpaceshipRadius)
+            {
+                SpaceshipWeapon.Instance.AddExplosionRadius(levelValue);
+            }
+            if (index == (int)SpaceshipUpgradeType.SpaceshipAtkSpeed)
+            {
+                SpaceshipWeapon.Instance.AddAttackSpeed(levelValue);
+            }
+            spaceshipLevelList[index]++;
         }
+    }
+    
+    public void UpgradeAutoAttack(int index)
+    {
+        Debug.Log("버튼 감지");
+        if (index < 0 || index >= autoAttackSOList.Length) return;
+        if (autoAttackLevelList[index] >= autoAttackSOList[index].recipes.Length) return;
         
+        float levelValue = autoAttackSOList[index].recipes[autoAttackLevelList[index]].levelValue;
+        Cost[] cost = autoAttackSOList[index].recipes[autoAttackLevelList[index]].cost;
+        Debug.Log("Attempting to upgrade autoAttack at index " + index + " with levelValue " + levelValue);
+        if (inventoryManger.CheckOre(cost))
+        {
+            foreach (var item in cost)
+            {
+                inventoryManger.RemoveOre(item.oreType, item.amount);
+            }
+            if (index == (int)AutoAttackUpgradeType.AutoAttackDamage)
+            {
+                guidedMissileAttack.AddMissileDamage(levelValue);
+            }
+            if (index == (int)AutoAttackUpgradeType.AutoAttackInterval)
+            {
+                guidedMissileAttack.AddMissileInterval(levelValue);
+            }
+            autoAttackLevelList[index]++;
+        }
     }
 }
