@@ -52,7 +52,6 @@ public class SpaceshipCargoSystem : MonoBehaviour
         UpdateAndCheckConnections();
     }
 
-    // (CollectNearestOre 함수는 변경 없음)
     private void CollectNearestOre()
     {
         if (collectedOres.Count >= maxCargoCount) return;
@@ -62,45 +61,62 @@ public class SpaceshipCargoSystem : MonoBehaviour
         GameObject nearestOre = potentialOres
             .OrderBy(ore => Vector2.Distance(transform.position, ore.transform.position))
             .FirstOrDefault();
-
         if (nearestOre == null) return;
         potentialOres.Remove(nearestOre);
 
-        // --- 바로 이 부분이 사건의 해결책이오, 왓슨! ---
         List<GameObject> ropeSegments = new List<GameObject>();
-
-        // 1. 연결 대상은 '우주선의 심장', 즉 this.rb가 되어야만 하오.
         Rigidbody2D previousSegmentRB = this.rb;
 
         Vector2 hookPos = cargoHook.position;
-        Vector2 orePos = nearestOre.transform.position;
+        Vector2 orePos  = nearestOre.transform.position;
         float totalDistance = Vector2.Distance(hookPos, orePos);
         Vector2 direction = (orePos - hookPos).normalized;
         float segmentLength = totalDistance / (numberOfSegments + 1);
 
+        // 우주선 로컬에서 본 카고 훅 좌표(자식이 아니어도 안전)
+        Vector2 shipLocalHook = rb.transform.InverseTransformPoint(cargoHook.position);
+
         for (int i = 0; i < numberOfSegments; i++)
         {
-            Vector2 spawnPos = hookPos + direction * segmentLength * (i + 1);
+            // ⬇︎ 첫 세그먼트를 훅 위치에 스폰
+            Vector2 spawnPos = hookPos + direction * segmentLength * i;
+
             GameObject segmentObj = Instantiate(ropeSegmentPrefab, spawnPos, Quaternion.identity);
             ropeSegments.Add(segmentObj);
+
+            // 세그먼트가 꼭 RB2D/Hinge를 갖도록 보강
+            var segRB = segmentObj.GetComponent<Rigidbody2D>();
+            if (segRB == null) segRB = segmentObj.AddComponent<Rigidbody2D>();
+
             HingeJoint2D joint = segmentObj.GetComponent<HingeJoint2D>();
-            
-            // 2. 모든 마디는 우주선의 '심장'에 연결됩니다.
+            if (joint == null) joint = segmentObj.AddComponent<HingeJoint2D>();
+
             joint.connectedBody = previousSegmentRB;
 
-            // 3. 하지만, 가장 첫 번째 마디(i=0)만은 예외적으로,
-            //    그 연결점을 '심장'의 중심이 아닌 '카고 훅의 로컬 좌표'로 지정합니다!
             if (i == 0)
             {
-                // 이것이 바로 '꼬리뼈'를 조준하는 한 발의 총알이오, 왓슨.
-                joint.connectedAnchor = cargoHook.localPosition;
+                // ⬇︎ 이것 때문에 "첫 마디가 뻣뻣한 고정처럼" 보였을 가능성이 큼
+                joint.autoConfigureConnectedAnchor = false;
+                joint.connectedAnchor = shipLocalHook; // 우주선 RB 로컬 기준의 훅 위치
+                // 필요시: joint.enableCollision = true; // 로프끼리 충돌 원하면
+            }
+            else
+            {
+                joint.autoConfigureConnectedAnchor = true;
             }
 
-            previousSegmentRB = segmentObj.GetComponent<Rigidbody2D>();
+            previousSegmentRB = segRB;
         }
 
-        HingeJoint2D oreJoint = nearestOre.AddComponent<HingeJoint2D>();
+        // 광물에 힌지 연결 (필요시 RB 보강)
+        var oreRB = nearestOre.GetComponent<Rigidbody2D>();
+        if (oreRB == null) oreRB = nearestOre.AddComponent<Rigidbody2D>();
+
+        HingeJoint2D oreJoint = nearestOre.GetComponent<HingeJoint2D>();
+        if (oreJoint == null) oreJoint = nearestOre.AddComponent<HingeJoint2D>();
         oreJoint.connectedBody = previousSegmentRB;
+        oreJoint.autoConfigureConnectedAnchor = true;
+
         GameObject lineObj = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
         LineRenderer line = lineObj.GetComponent<LineRenderer>();
         collectedOres.Add(new CollectedOreInfo(nearestOre, line, ropeSegments));
@@ -114,42 +130,36 @@ public class SpaceshipCargoSystem : MonoBehaviour
     // --- 이 함수가 크게 변경되었습니다! ---
     private void UpdateAndCheckConnections()
     {
-        // 리스트에서 아이템을 제거할 때 에러가 나지 않도록 역순으로 순회합니다.
         for (int i = collectedOres.Count - 1; i >= 0; i--)
         {
             CollectedOreInfo oreInfo = collectedOres[i];
 
-            // 광물이 중간에 파괴되었는지 먼저 확인
             if (oreInfo.OreObject == null)
             {
                 BreakConnection(oreInfo);
-                continue; // 다음 아이템으로 넘어감
+                continue;
             }
 
-            // 1. 거리 체크 로직
             float distance = Vector2.Distance(cargoHook.position, oreInfo.OreObject.transform.position);
             if (distance > maxRopeLength)
             {
                 Debug.Log("거리가 너무 멀어져 밧줄이 끊어집니다!");
                 BreakConnection(oreInfo);
-                continue; // 연결을 끊었으니 다음 아이템으로 넘어감
+                continue;
             }
 
-            // 2. 라인 렌더러 위치 업데이트 (연결이 유효할 때만 실행)
             var line = oreInfo.Line;
             var segments = oreInfo.RopeSegments;
 
-            line.positionCount = segments.Count + 2;
-            line.SetPosition(0, cargoHook.position);
-            for (int j = 0; j < segments.Count; j++)
-            {
-                // 마디가 파괴되었을 경우를 대비한 안전장치
-                if (segments[j] != null)
-                {
-                    line.SetPosition(j + 1, segments[j].transform.position);
-                }
-            }
-            line.SetPosition(segments.Count + 1, oreInfo.OreObject.transform.position);
+            // 살아있는 세그먼트만 수집
+            var alive = segments.Where(s => s != null).ToList();
+
+            // ⬇︎ 훅 포인트 제외: 세그먼트들 + 마지막에 광물
+            line.positionCount = alive.Count + 1;
+            for (int j = 0; j < alive.Count; j++)
+                line.SetPosition(j, alive[j].transform.position);
+
+            line.SetPosition(alive.Count, oreInfo.OreObject.transform.position);
         }
     }
 
