@@ -64,23 +64,35 @@ public class SpaceshipCargoSystem : MonoBehaviour
             .FirstOrDefault();
 
         if (nearestOre == null) return;
-
         potentialOres.Remove(nearestOre);
 
+        // --- 바로 이 부분이 사건의 해결책이오, 왓슨! ---
         List<GameObject> ropeSegments = new List<GameObject>();
+
+        // 1. 연결 대상은 '우주선의 심장', 즉 this.rb가 되어야만 하오.
         Rigidbody2D previousSegmentRB = this.rb;
-        Vector2 spawnPos = cargoHook.position;
+
+        Vector2 hookPos = cargoHook.position;
+        Vector2 orePos = nearestOre.transform.position;
+        float totalDistance = Vector2.Distance(hookPos, orePos);
+        Vector2 direction = (orePos - hookPos).normalized;
+        float segmentLength = totalDistance / (numberOfSegments + 1);
 
         for (int i = 0; i < numberOfSegments; i++)
         {
+            Vector2 spawnPos = hookPos + direction * segmentLength * (i + 1);
             GameObject segmentObj = Instantiate(ropeSegmentPrefab, spawnPos, Quaternion.identity);
             ropeSegments.Add(segmentObj);
-
             HingeJoint2D joint = segmentObj.GetComponent<HingeJoint2D>();
+            
+            // 2. 모든 마디는 우주선의 '심장'에 연결됩니다.
             joint.connectedBody = previousSegmentRB;
 
+            // 3. 하지만, 가장 첫 번째 마디(i=0)만은 예외적으로,
+            //    그 연결점을 '심장'의 중심이 아닌 '카고 훅의 로컬 좌표'로 지정합니다!
             if (i == 0)
             {
+                // 이것이 바로 '꼬리뼈'를 조준하는 한 발의 총알이오, 왓슨.
                 joint.connectedAnchor = cargoHook.localPosition;
             }
 
@@ -89,13 +101,10 @@ public class SpaceshipCargoSystem : MonoBehaviour
 
         HingeJoint2D oreJoint = nearestOre.AddComponent<HingeJoint2D>();
         oreJoint.connectedBody = previousSegmentRB;
-
         GameObject lineObj = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
         LineRenderer line = lineObj.GetComponent<LineRenderer>();
-
         collectedOres.Add(new CollectedOreInfo(nearestOre, line, ropeSegments));
     }
-
     private void DropLastCollectedOre()
     {
         if (collectedOres.Count == 0) return;

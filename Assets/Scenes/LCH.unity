@@ -970,13 +970,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 908878209827147228, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
-      propertyPath: thrustPower
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 908878209827147228, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
-      propertyPath: movementDrag
-      value: 2
+    - target: {fileID: 3954204389919689628, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+      propertyPath: cargoHook
+      value: 
+      objectReference: {fileID: 501236414}
+    - target: {fileID: 4567950886710692794, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.28
       objectReference: {fileID: 0}
     - target: {fileID: 7180292076679184082, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1021,10 +1021,6 @@ PrefabInstance:
     - target: {fileID: 7960328737568620720, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
       propertyPath: m_Name
       value: space_ship
-      objectReference: {fileID: 0}
-    - target: {fileID: 9179623361269614303, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
-      propertyPath: m_Mass
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1570,6 +1566,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8230427907550959550, guid: 4ff7a47ece433c04e84262f5d82ad5ce, type: 3}
   m_PrefabInstance: {fileID: 156171429}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &501236414 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4567950886710692794, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+  m_PrefabInstance: {fileID: 266651899}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &521529210
 PrefabInstance:

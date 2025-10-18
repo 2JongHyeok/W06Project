@@ -29839,8 +29839,8 @@ MonoBehaviour:
   missilePrefab: {fileID: 6168274529600972085, guid: ef5a9192f3c68224ea570c7ae20af42e, type: 3}
   firePoint: {fileID: 1587002805904655281}
   damage: 5
-  fireRate: 0.4
-  explosionRadius: 0.6
+  fireRate: 1
+  explosionRadius: 0.7
 --- !u!61 &9003192783875796088
 BoxCollider2D:
   m_ObjectHideFlags: 0
