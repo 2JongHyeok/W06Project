@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.Tilemaps;
 
 public class Enemy : MonoBehaviour
@@ -9,6 +10,7 @@ public class Enemy : MonoBehaviour
     public int enemyHP;
     public float enemySpeed;
     [HideInInspector] public Transform target;
+    private IObjectPool<GameObject> myPool;
     public Transform firePoint;
     public bool isAttacking = false;
 
@@ -66,14 +68,17 @@ public class Enemy : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(Vector3.forward, target.position - transform.position);
 
     }
-    
+    public void SetPool(IObjectPool<GameObject> pool)
+    {
+        myPool = pool;
+    }
     public void TakeDamage(int damage)
     {
         enemyHP -= damage;
         if (enemyHP <= 0)
         {
             WaveManager.Instance.EnemyCount--;
-            Destroy(gameObject);
+            myPool.Release(gameObject);
         }
     }
 
