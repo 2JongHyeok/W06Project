@@ -3,6 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 우주선의 미사일 발사를 관리하고 업그레이드 가능한 모든 수치를 담당합니다.
 /// </summary>
+[RequireComponent(typeof(Rigidbody2D))]
 public class SpaceshipWeapon : MonoBehaviour
 {
     // 업그레이드 관리를 위한 싱글톤 인스턴스
@@ -18,6 +19,7 @@ public class SpaceshipWeapon : MonoBehaviour
     [SerializeField] private float explosionRadius = 2.0f;
 
     private float nextFireTime = 0f;
+    private Rigidbody2D shipRb;
 
     void Awake()
     {
@@ -28,6 +30,10 @@ public class SpaceshipWeapon : MonoBehaviour
             return;
         }
         Instance = this;
+
+        shipRb = GetComponent<Rigidbody2D>();
+
+
     }
 
 /// <summary>
@@ -42,7 +48,16 @@ public class SpaceshipWeapon : MonoBehaviour
 
             if (missilePrefab != null && firePoint != null)
             {
-                Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
+                GameObject missileObj = Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
+                // 2. 생성된 미사일에서 SpaceshipMissile 스크립트를 가져옵니다.
+                SpaceshipMissile missileScript = missileObj.GetComponent<SpaceshipMissile>();
+
+                // 3. 스크립트를 찾았다면, 우주선의 현재 속도를 넘겨주며 초기화(Initialize)합니다.
+                if (missileScript != null)
+                {
+                    missileScript.Initialize(shipRb.linearVelocity);
+                }
+
             }
             else
             {

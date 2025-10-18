@@ -255,10 +255,8 @@ MonoBehaviour:
   inventoryManger: {fileID: 5803141803156037022}
   cameraSwitcher: {fileID: 1778712951}
   dockedShip: {fileID: 1908056905}
-  isSpaceshipMode: 0
-  planetCenter: {fileID: 24514519}
   departureCircleRadius: 4
-  shipForwardIsUp: 1
+  isSpaceshipMode: 0
 --- !u!4 &24514519
 Transform:
   m_ObjectHideFlags: 0
