@@ -24,7 +24,7 @@ MonoBehaviour:
     cost:
     - oreType: 0
       amount: 1
-  - levelValue: 0.45
+  - levelValue: -0.45
     cost:
     - oreType: 0
       amount: 1

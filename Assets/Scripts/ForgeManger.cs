@@ -41,7 +41,7 @@ public class ForgeManger : MonoBehaviour
             autoAttackLevelList[i] = 0;
         }
 
-        forgeUI.ClearUpgradeInfo();
+        forgeUI.ClearUpgradeInfo(inventoryManger);
 
         Weapon.Instance.SetDamage((int)weaponUpSOList[(int)WeaponUpgradeType.CannonAtkDamage].baseValue);
         Weapon.Instance.SetAttackSpeed(weaponUpSOList[(int)WeaponUpgradeType.CannonAtkSpeed].baseValue);
@@ -55,7 +55,7 @@ public class ForgeManger : MonoBehaviour
         SpaceshipWeapon.Instance.SetAttackSpeed(spaceshipSOList[(int)SpaceshipUpgradeType.SpaceshipAtkSpeed].baseValue);
 
         turretActivationManager.SetMissileDamage(autoAttackSOList[(int)AutoAttackUpgradeType.AutoAttackDamage].baseValue);
-        turretActivationManager.SetMissileInterval(autoAttackSOList[(int)AutoAttackUpgradeType.AutoAttackInterval].baseValue);
+        // turretActivationManager.SetMissileInterval(autoAttackSOList[(int)AutoAttackUpgradeType.AutoAttackInterval].baseValue);
     }
 
     public void UpgradeWeapon(int index)
@@ -88,7 +88,7 @@ public class ForgeManger : MonoBehaviour
                 Weapon.Instance.AddCannonSpeed(levelValue);
             }
             weaponLevelList[index]++;
-            forgeUI.ClearUpgradeInfo();
+            forgeUI.ClearUpgradeInfo(inventoryManger);
         }
         
     }
@@ -127,7 +127,7 @@ public class ForgeManger : MonoBehaviour
                 SpaceshipWeapon.Instance.AddAttackSpeed(levelValue);
             }
             spaceshipLevelList[index]++;
-            forgeUI.ClearUpgradeInfo();
+            forgeUI.ClearUpgradeInfo(inventoryManger);
         }
     }
     
@@ -154,7 +154,7 @@ public class ForgeManger : MonoBehaviour
                 turretActivationManager.AddMissileInterval(levelValue);
             }
             autoAttackLevelList[index]++;
-            forgeUI.ClearUpgradeInfo();
+            forgeUI.ClearUpgradeInfo(inventoryManger);
         }
     }
 }

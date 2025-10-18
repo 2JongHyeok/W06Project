@@ -53,14 +53,15 @@ public class ForgeUI : MonoBehaviour
             Time.timeScale = isActive ? 1f : 0f; // 포지 UI 열 때 시간 정지, 닫을 때 시간 재개
         }
     }
-    public void ClearUpgradeInfo()
+    public void ClearUpgradeInfo(InventoryManger _inven)
     {
+        _inven.AddOre(OreType.Coal, 0);
         ForgeTitleText.text = "";
         ForgeDescText.text = "";
         for (int i = 0; i < HasGrid.transform.childCount; i++)
         {
-        // HasGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = _inven.OreList[i].ToString();
-        CostGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = "0";
+            // HasGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = _inven.OreList[i].ToString();
+            HasGrid.transform.GetChild(i).GetComponent<TMP_Text>().text = _inven.OreList[i].ToString();
         }
         for (int i = 0; i < CostGrid.transform.childCount; i++)
         {
@@ -425,7 +426,7 @@ public class ForgeUI : MonoBehaviour
         }
         
         SkilGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(
-            (nodeSize + nodeSpacing) * MaxNodeCount,
+            1344,
             (subTreeSpacing + subTreeHeight) * MaxSubTreeCount
         );
     }
