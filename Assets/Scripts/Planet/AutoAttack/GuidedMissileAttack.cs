@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class GuidedMissileAttack : IAttackStrategy
 {
-    private readonly float baseDamage;
-    private readonly float interval;
-    private readonly GameObject missilePrefab;
+    private  float baseDamage;
+    private  float interval;
+    private  GameObject missilePrefab;
     private Coroutine attackCoroutine;
 
     public GuidedMissileAttack(GameObject missilePrefab, float baseDamage = 20f, float interval = 3f)
@@ -32,7 +32,6 @@ public class GuidedMissileAttack : IAttackStrategy
     public void Attack(Transform turretTransform, Transform targetEnemy)
     {
         if (!targetEnemy || !missilePrefab) return;
-
         var go = GameObject.Instantiate(missilePrefab, turretTransform.position, turretTransform.rotation);
         var missile = go.GetComponent<GuidedMissile>();
         if (missile == null) return;
@@ -65,4 +64,13 @@ public class GuidedMissileAttack : IAttackStrategy
             yield return wait;
         }
     }
+
+    #region Getter Setter
+    public float GetMissileDamage() { return baseDamage; }
+    public void SetMissileDamage(float val) { baseDamage = val; }
+    public void AddMissileDamage(float val) { baseDamage += val; }
+    public float GetMissileInterval() { return interval; }
+    public void SetMissileInterval(float val) {  interval = val; }
+    public  void AddMissileInterval(float val) { interval += val; }
+    #endregion
 }
