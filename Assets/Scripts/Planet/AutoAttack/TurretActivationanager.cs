@@ -18,10 +18,13 @@ public class TurretActivationManager : MonoBehaviour
     public GameObject bulletPrefab;
     public GameObject laserPrefab;
 
+
     // 공격 전략 인스턴스 (메모리 효율을 위해 한 번만 생성)
-    private IAttackStrategy missileStrategy;
+    private GuidedMissileAttack missileStrategy;
     private IAttackStrategy bulletStrategy;
     private IAttackStrategy laserStrategy;
+
+
 
     void Awake()
     {
@@ -32,7 +35,15 @@ public class TurretActivationManager : MonoBehaviour
 
         Debug.Log("공격 전략 준비 완료. Z, X, C 키를 눌러 포탑을 활성화하세요.");
     }
+    public float GetMissileDamage() => missileStrategy.baseDamage;
+    public void SetMissileDamage(float v) => missileStrategy.baseDamage = v;
 
+    public float GetMissileInterval() => missileStrategy.interval;
+    public void SetMissileInterval(float v) => missileStrategy.interval = v;
+
+    // 필요시 증감도 지원
+    public void AddMissileDamage(float delta) => missileStrategy.baseDamage += delta;
+    public void AddMissileInterval(float delta) => missileStrategy.interval += delta;
     void Update()
     {
         // === 1. Z 키 입력: 유도탄 포탑 활성화 ===

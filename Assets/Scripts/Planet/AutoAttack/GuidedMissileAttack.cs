@@ -3,18 +3,34 @@ using UnityEngine;
 
 public class GuidedMissileAttack : IAttackStrategy
 {
-    private  float baseDamage;
-    private  float interval;
+    public   float baseDamage;
+    public float interval;
     private  GameObject missilePrefab;
     private Coroutine attackCoroutine;
-
+    private WaitForSeconds cachedWait;
+    private bool waitDirty = true; // interval이 바뀌면 true
     public GuidedMissileAttack(GameObject missilePrefab, float baseDamage = 20f, float interval = 3f)
     {
         this.missilePrefab = missilePrefab;
         this.baseDamage = baseDamage;
         this.interval = interval;
+        waitDirty = true;
+    }
+    public float Damage
+    {
+        get => baseDamage;
+        set => baseDamage = Mathf.Max(0f, value);
     }
 
+    public float Interval
+    {
+        get => interval;
+        set
+        {
+            interval = Mathf.Max(0.01f, value);
+            waitDirty = true; // 다음 루프부터 새로운 간격 반영
+        }
+    }
     public void StartAttack(MonoBehaviour host, Transform turretTransform, string _)
     {
         if (attackCoroutine != null) return;
@@ -61,16 +77,21 @@ public class GuidedMissileAttack : IAttackStrategy
                 SmoothLookAt2D(turretTransform, target, 360f, -90f);
                 Attack(turretTransform, target);
             }
-            yield return wait;
+            if (waitDirty)
+            {
+                cachedWait = new WaitForSeconds(interval);
+                waitDirty = false;
+            }
+            yield return cachedWait;
         }
     }
 
     #region Getter Setter
-    public float GetMissileDamage() { return baseDamage; }
-    public void SetMissileDamage(float val) { baseDamage = val; }
-    public void AddMissileDamage(float val) { baseDamage += val; }
-    public float GetMissileInterval() { return interval; }
-    public void SetMissileInterval(float val) {  interval = val; }
-    public  void AddMissileInterval(float val) { interval += val; }
+    public float GetMissileDamage() => Damage;
+    public void SetMissileDamage(float val) => Damage = val;
+    public void AddMissileDamage(float val) => Damage += val;
+    public float GetMissileInterval() => Interval;
+    public void SetMissileInterval(float val) => Interval = val;
+    public void AddMissileInterval(float val) => Interval += val;
     #endregion
 }
