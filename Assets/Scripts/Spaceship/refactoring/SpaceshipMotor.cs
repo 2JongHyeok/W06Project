@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class SpaceshipMotor : MonoBehaviour
 {
+    public static SpaceshipMotor Instance { get; private set; }
     [Header("Thrust Settings")]
     [SerializeField] private float thrustPower = 2000f;
 
@@ -32,14 +33,20 @@ public class SpaceshipMotor : MonoBehaviour
     [SerializeField] private float angularDrag = 1f;
 
 
-    [Range(0f, 20f)] [SerializeField] private float stoppingTorque = 5f;
-    [Range(0.9f, 1f)] [SerializeField] private float rotationalGlideReduction = 0.95f;
+    [Range(0f, 20f)][SerializeField] private float stoppingTorque = 5f;
+    [Range(0.9f, 1f)][SerializeField] private float rotationalGlideReduction = 0.95f;
     [SerializeField] private float angularStopThreshold = 0.1f;
 
     public Rigidbody2D Rb { get; private set; }
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
         Rb = GetComponent<Rigidbody2D>();
         Rb.gravityScale = 0;
 
@@ -117,5 +124,45 @@ public class SpaceshipMotor : MonoBehaviour
             }
         }
     }
+// --- 바로 이 부분이 정비사들을 위한 '접근 통로'요, 왓슨 ---
+    #region Getter & Setter (업그레이드용)
+
+    // --- 직선 운동 관련 ---
+    public float GetThrustPower() { return thrustPower; }
+    public void SetThrustPower(float value) { thrustPower = value; }
+    public void AddThrustPower(float amount) { thrustPower += amount; }
+
+    public float GetMovementDrag() { return movementDrag; }
+    public void SetMovementDrag(float value) { movementDrag = value; }
+    public void AddMovementDrag(float amount) { movementDrag += amount; }
+
+    public float GetStoppingPower() { return stoppingPower; }
+    public void SetStoppingPower(float value) { stoppingPower = value; }
+    public void AddStoppingPower(float amount) { stoppingPower += amount; }
+
+    public float GetGlideReduction() { return glideReduction; }
+    public void SetGlideReduction(float value) { glideReduction = Mathf.Clamp(value, 0.9f, 1f); }
+    public void AddGlideReduction(float amount) { glideReduction = Mathf.Clamp(glideReduction + amount, 0.9f, 1f); }
+
+
+    // --- 회전 운동 관련 ---
+    public float GetAdditiveTorque() { return additiveTorque; }
+    public void SetAdditiveTorque(float value) { additiveTorque = value; }
+    public void AddAdditiveTorque(float amount) { additiveTorque += amount; }
+
+    public float GetAngularDrag() { return angularDrag; }
+    public void SetAngularDrag(float value) { angularDrag = value; }
+    public void AddAngularDrag(float amount) { angularDrag += amount; }
+
+    public float GetStoppingTorque() { return stoppingTorque; }
+    public void SetStoppingTorque(float value) { stoppingTorque = value; }
+    public void AddStoppingTorque(float amount) { stoppingTorque += amount; }
+
+    public float GetRotationalGlideReduction() { return rotationalGlideReduction; }
+    public void SetRotationalGlideReduction(float value) { rotationalGlideReduction = Mathf.Clamp(value, 0.9f, 1f); }
+    public void AddRotationalGlideReduction(float amount) { rotationalGlideReduction = Mathf.Clamp(rotationalGlideReduction + amount, 0.9f, 1f); }
+
+    #endregion
+
 
 }
