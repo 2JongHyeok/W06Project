@@ -14,16 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: "\uC6B0\uC8FC\uC120 \uC790\uC6D0 \uBB34\uAC8C"
   upgradeDescription: "\uC6B0\uC8FC\uC120 \uC790\uC6D0 \uBB34\uAC8C \uAC10\uC18C"
-  baseValue: 0
+  baseValue: 3
   recipes:
-  - levelValue: 0
-    cost: []
-  - levelValue: 0
-    cost: []
-  - levelValue: 0
-    cost: []
-  - levelValue: 0
-    cost: []
-  - levelValue: 0
-    cost: []
+  - levelValue: -1.5
+    cost:
+    - oreType: 0
+      amount: 1
+  - levelValue: -0.7
+    cost:
+    - oreType: 0
+      amount: 1
+  - levelValue: 0.45
+    cost:
+    - oreType: 0
+      amount: 1
   upgradeType: 1
