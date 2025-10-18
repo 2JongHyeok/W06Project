@@ -79,31 +79,43 @@ public class SpaceshipMotor : MonoBehaviour
     }
 
 
-    // Move 함수는 이제 오직 '가속'만을 담당합니다.
+// Move 함수는 이제 오직 '가속'만을 담당합니다.
     public void Move(float thrustInput, float boostMultiplier)
     {
-        float effectiveThrust = thrustPower;
-
-        // 2. 카고 시스템이 연결되어 있다면, 무게 패널티를 계산합니다.
-        if (cargoSystem != null)
+        if (Mathf.Abs(thrustInput) > 0.01f)
         {
-            int oreCount = cargoSystem.GetCollectedOreCount();
-            // 3. 총 감소율(%)을 계산합니다. (예: 2개 * 5% = 10%)
-            float totalReductionPercent = oreCount * thrustReductionPerOre;
-            // 4. 실제 적용할 추력 배율을 계산합니다. (예: 1.0f - 0.10f = 0.9f)
-            float thrustMultiplier = 1.0f - (totalReductionPercent / 100.0f);
+            // --- 여기가 핵심 수정 부분 ---
+            
+            // 1. 기본 추력에서 시작합니다.
+            float effectiveThrust = thrustPower;
 
-            // 5. 추력이 0 미만이 되지 않도록 최소값을 0으로 제한합니다.
-            thrustMultiplier = Mathf.Max(0f, thrustMultiplier);
+            // 2. 카고 시스템이 연결되어 있다면, 무게 패널티를 계산합니다.
+            if (cargoSystem != null)
+            {
+                int oreCount = cargoSystem.GetCollectedOreCount();
+                
+                // ★ 여기가 바로 새롭게 변경된 비선형 패널티 계산식입니다 ★
+                // 1+2+3+...+N = N * (N+1) / 2 공식을 사용합니다.
+                // 예: 3개일 경우 -> 3 * 4 / 2 = 6. 즉, 6개 분량의 패널티를 받습니다.
+                int penaltyWeight = oreCount * (oreCount + 1) / 2;
+                
+                // 3. 총 감소율(%)을 계산합니다. (예: 3개, 개당 5% -> 6 * 5% = 30%)
+                float totalReductionPercent = penaltyWeight * thrustReductionPerOre;
 
-            // 6. 최종 유효 추력을 계산합니다.
-            effectiveThrust *= thrustMultiplier;
+                // 4. 실제 적용할 추력 배율을 계산합니다. (예: 1.0f - 0.30f = 0.7f)
+                float thrustMultiplier = 1.0f - (totalReductionPercent / 100.0f);
+                
+                // 5. 추력이 0 미만이 되지 않도록 최소값을 0으로 제한합니다.
+                thrustMultiplier = Mathf.Max(0f, thrustMultiplier);
+                
+                // 6. 최종 유효 추력을 계산합니다.
+                effectiveThrust *= thrustMultiplier;
+            }
+            
+            // 7. 계산된 최종 추력을 힘으로 가합니다.
+            Rb.AddForce(transform.up * effectiveThrust * thrustInput * boostMultiplier, ForceMode2D.Force);
         }
-
-        // 7. 계산된 최종 추력을 힘으로 가합니다.
-        Rb.AddForce(transform.up * effectiveThrust * thrustInput * boostMultiplier, ForceMode2D.Force);
     }
-
     // Rotate 함수는 변경할 필요가 없습니다.
     public void Rotate(float rotateInput)
     {
