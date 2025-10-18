@@ -52,7 +52,7 @@ public class DockingStation : MonoBehaviour
     private void Update()
     {
         // 1) 우주선 모드 ON (원본 로직 그대로, isSpaceshipInRange 조건 없음)
-        if (Input.GetKeyDown(KeyCode.E) && !isSpaceshipMode)
+        if (Input.GetKeyDown(KeyCode.F) && !isSpaceshipMode)
         {
             if (!dockedShip)
             {
@@ -71,7 +71,7 @@ public class DockingStation : MonoBehaviour
         }
 
         // 2) 우주선 모드 OFF + 하역 (원본 로직 그대로)
-        if (isSpaceshipInRange && Input.GetKeyDown(KeyCode.E) && isSpaceshipMode)
+        if (isSpaceshipInRange && Input.GetKeyDown(KeyCode.F) && isSpaceshipMode)
         {
             cameraSwitcher?.ToggleCameraMode();
             isSpaceshipMode = false;
