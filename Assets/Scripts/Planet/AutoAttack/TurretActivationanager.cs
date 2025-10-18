@@ -18,10 +18,13 @@ public class TurretActivationManager : MonoBehaviour
     public GameObject bulletPrefab;
     public GameObject laserPrefab;
 
+
     // 공격 전략 인스턴스 (메모리 효율을 위해 한 번만 생성)
-    private IAttackStrategy missileStrategy;
+    private GuidedMissileAttack missileStrategy;
     private IAttackStrategy bulletStrategy;
     private IAttackStrategy laserStrategy;
+
+
 
     void Awake()
     {
@@ -32,58 +35,59 @@ public class TurretActivationManager : MonoBehaviour
 
         Debug.Log("공격 전략 준비 완료. Z, X, C 키를 눌러 포탑을 활성화하세요.");
     }
+    public float GetMissileDamage() => missileStrategy.baseDamage;
+    public void SetMissileDamage(float v) => missileStrategy.baseDamage = v;
 
+    public float GetMissileInterval() => missileStrategy.interval;
+    public void SetMissileInterval(float v) => missileStrategy.interval = v;
+
+    // 필요시 증감도 지원
+    public void AddMissileDamage(float delta)
+    {
+        Debug.Log("미사일 데미지 찍힘");
+        missileStrategy.baseDamage += delta;
+    } 
+    public void AddMissileInterval(float delta) => missileStrategy.interval += delta;
+    public void AddMissileTurret() => guidedMissileTurret.ActivateTurret(missileStrategy);
     void Update()
     {
-        // === 1. Z 키 입력: 유도탄 포탑 활성화 ===
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            if (guidedMissileTurret != null)
-            {
-                guidedMissileTurret.ActivateTurret(missileStrategy);
-                Debug.Log("[Z] 유도탄 포탑이 활성화되었습니다.");
-            }
-            else
-            {
-                Debug.LogError("[Z] 유도탄 포탑이 할당되지 않았습니다!");
-            }
-        }
+        
 
         // === 2. X 키 입력: 총알 포탑 활성화 ===
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            if (bulletTurret != null)
-            {
-                bulletTurret.ActivateTurret(bulletStrategy);
-                Debug.Log("[X] 총알 포탑이 활성화되었습니다.");
-            }
-            else
-            {
-                Debug.LogError("[X] 총알 포탑이 할당되지 않았습니다!");
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.X))
+        //{
+        //    if (bulletTurret != null)
+        //    {
+        //        bulletTurret.ActivateTurret(bulletStrategy);
+        //        Debug.Log("[X] 총알 포탑이 활성화되었습니다.");
+        //    }
+        //    else
+        //    {
+        //        Debug.LogError("[X] 총알 포탑이 할당되지 않았습니다!");
+        //    }
+        //}
 
-        // === 3. C 키 입력: 레이저 포탑 활성화 ===
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (laserTurret != null)
-            {
-                laserTurret.ActivateTurret(laserStrategy);
-                Debug.Log("[C] 레이저 포탑이 활성화되었습니다.");
-            }
-            else
-            {
-                Debug.LogError("[C] 레이저 포탑이 할당되지 않았습니다!");
-            }
-        }
+        //// === 3. C 키 입력: 레이저 포탑 활성화 ===
+        //if (Input.GetKeyDown(KeyCode.C))
+        //{
+        //    if (laserTurret != null)
+        //    {
+        //        laserTurret.ActivateTurret(laserStrategy);
+        //        Debug.Log("[C] 레이저 포탑이 활성화되었습니다.");
+        //    }
+        //    else
+        //    {
+        //        Debug.LogError("[C] 레이저 포탑이 할당되지 않았습니다!");
+        //    }
+        //}
 
-        // (선택 사항) P 키를 눌러 모든 포탑을 비활성화
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            guidedMissileTurret?.DeactivateTurret();
-            bulletTurret?.DeactivateTurret();
-            laserTurret?.DeactivateTurret();
-            Debug.Log("모든 포탑이 비활성화되었습니다.");
-        }
+        //// (선택 사항) P 키를 눌러 모든 포탑을 비활성화
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    guidedMissileTurret?.DeactivateTurret();
+        //    bulletTurret?.DeactivateTurret();
+        //    laserTurret?.DeactivateTurret();
+        //    Debug.Log("모든 포탑이 비활성화되었습니다.");
+        //}
     }
 }
