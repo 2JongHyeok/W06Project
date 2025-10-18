@@ -256,6 +256,9 @@ MonoBehaviour:
   cameraSwitcher: {fileID: 1778712951}
   dockedShip: {fileID: 1908056905}
   isSpaceshipMode: 0
+  planetCenter: {fileID: 24514519}
+  departureCircleRadius: 4
+  shipForwardIsUp: 1
 --- !u!4 &24514519
 Transform:
   m_ObjectHideFlags: 0
@@ -5072,6 +5075,7 @@ MonoBehaviour:
   firePoint: {fileID: 296047435}
   explosionRadius: 1.5
   dockingStation: {fileID: 24514518}
+  accelTime: 1
 --- !u!212 &1512247141
 SpriteRenderer:
   m_ObjectHideFlags: 0
