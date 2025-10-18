@@ -16,13 +16,20 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float explosionRadius = 1.5f;
     [SerializeField] private DockingStation dockingStation;
 
+    [Header("Sprite Changes")]  // 외형 변경용
+    public SpriteRenderer targetRenderer;   // 없으면 GetComponent로 검색
+    public Sprite[] skins;                  // 교체할 스프라이트들
+    private int index = -1;
+
     // === 가속 관련 ===
     [Header("Rotation Acceleration")]
     [SerializeField] private float accelTime = 1f; // 목표 속도까지 걸리는 시간(초)
     private float accelTimer = 0f;                 // 키 홀드 시간
     private float lastDirection = 0f;              // 이전 프레임의 방향(부호만 의미)
-
     private float nextFireTime = 0f;
+    [Range(1, 3)] public int maxBullets = 3;
+    public float spacing = 1.0f;    // 총알 사이의 거리
+    private int level = 1;
 
     void Awake()
     {
@@ -32,6 +39,7 @@ public class Weapon : MonoBehaviour
             return;
         }
         Instance = this;
+        if (!targetRenderer) targetRenderer = GetComponentInChildren<SpriteRenderer>(true);
     }
 
     void Update()
@@ -81,18 +89,47 @@ public class Weapon : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && Time.time >= nextFireTime)
         {
             nextFireTime = Time.time + fireRate;
-            if (bulletPrefab != null && firePoint != null)
-            {
-                Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-            }
-            else
-            {
-                Debug.LogWarning("Bullet Prefab 또는 Fire Point가 설정되지 않았습니다.");
-            }
+            FireBullet();
         }
     }
 
+    private void FireBullet()
+    {
+        nextFireTime = Time.time + fireRate;
+        if (!bulletPrefab || !firePoint)
+        {
+            Debug.LogWarning("Bullet Prefab 또는 Fire Point가 설정되지 않았습니다.");
+            return;
+        }
+
+        int count = Mathf.Clamp(level, 1, maxBullets);
+        for (int i = 0; i < count; i++)
+        {
+            float offset = (i - (count - 1) * 0.5f) * spacing;
+            Vector3 spawnPos = firePoint.position + firePoint.right * offset;
+            Instantiate(bulletPrefab, spawnPos, firePoint.rotation);
+        }
+
+    }
+
+    #region Function Use At Other Script
+    public void ChangeSprite()  // 스프라이트 이미지 바꾸는 함수.
+    {
+        if (skins != null && skins.Length > 0)
+        {
+            index = (index + 1) % skins.Length;
+            targetRenderer.sprite = skins[index];
+        }
+    }
+    public void UpgradeTurretBulletCount()
+    {
+        level++;
+    }
+    #endregion
+
     #region Getter Setter
+
+
     public int GetDamage() { return damage; }
     public void SetDamage(int val) { damage = val; }
     public void AddDamage(int val) { damage += val; }
