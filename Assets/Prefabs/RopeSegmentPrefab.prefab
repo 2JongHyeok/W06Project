@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 327417439660400785}
   - component: {fileID: 391515299780940317}
   - component: {fileID: 7099869641904591995}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: RopeSegmentPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 0.005
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1

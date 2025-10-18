@@ -39,6 +39,7 @@ public class SpaceshipController : MonoBehaviour
     // 제어할 컴포넌트들
     private SpaceshipInput shipInput;
     private SpaceshipMotor shipMotor;
+    private SpaceshipWeapon shipWeapon;
 
     private bool canControl = true;
     private float currentBoostMultiplier = 1f;
@@ -47,6 +48,7 @@ public class SpaceshipController : MonoBehaviour
     {
         shipInput = GetComponent<SpaceshipInput>();
         shipMotor = GetComponent<SpaceshipMotor>();
+        shipWeapon = GetComponent<SpaceshipWeapon>();
     }
 
     private void Start()
@@ -87,6 +89,8 @@ public class SpaceshipController : MonoBehaviour
         // 물리 업데이트 (연료 체크 없음)
         shipMotor.Move(shipInput.ThrustInput, currentBoostMultiplier);
         shipMotor.Rotate(shipInput.RotateInput);
+        shipMotor.ApplyActiveDeceleration(shipInput.ThrustInput);
+        shipMotor.ApplyActiveRotationalDeceleration(shipInput.RotateInput);
     }
     
     private void UpdateEffects(bool isThrusting, bool isBoosting, float rotateInput)
@@ -125,26 +129,15 @@ public class SpaceshipController : MonoBehaviour
     }
     void HandleShooting()
     {
-        // 예시: 스페이스바 또는 마우스 왼쪽 버튼을 눌렀을 때 발사
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        // 누르고 있는 동안 계속 발사를 '시도'합니다.
+        if (canControl && Input.GetKey(KeyCode.Space))
         {
-            Fire();
+            // 실제 발사 가능 여부는 '손'이 결정합니다. 뇌는 명령만 내릴 뿐.
+            if (shipWeapon != null)
+            {
+                shipWeapon.FireMissile();
+            }
         }
     }
 
-    // ✨ 4. 실제 발사 함수 새로 추가
-    void Fire()
-    {
-        // 총알 프리팹과 총구가 제대로 설정되었는지 확인
-        if (bulletPrefab != null && firePoint != null)
-        {
-            // FirePoint의 위치와 회전값으로 총알을 생성
-            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        }
-        else
-        {
-            // 설정이 안 되어있을 경우 경고 메시지 출력
-            Debug.LogWarning("Bullet Prefab 또는 Fire Point가 설정되지 않았습니다!");
-        }
-    }
 }
