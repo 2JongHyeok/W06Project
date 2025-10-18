@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class Core : MonoBehaviour
     public int maxHP = 100;
     private int currentHP;
     public TMP_Text CoreHpText;
+    [SerializeField] private InventoryManger inventoryManger;
 
     private void Awake()
     {
@@ -31,5 +33,17 @@ public class Core : MonoBehaviour
         Destroy(gameObject);
         Debug.Log("GameOver");
         // 이후에 GameOver 연출이나 Scene 전환 로직을 여기에 추가 가능
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if ( inventoryManger != null)
+        {
+            if(collision.gameObject.TryGetComponent<Ore>(out var ore))
+            {
+                inventoryManger.AddOre(ore.oreType, ore.amount);
+                Destroy(collision.gameObject);
+            }
+        }
     }
 }
