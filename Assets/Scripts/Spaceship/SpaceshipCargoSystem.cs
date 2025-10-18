@@ -272,6 +272,11 @@ public class SpaceshipCargoSystem : MonoBehaviour
         // 5. 모든 짐을 내렸으니, 수집 목록을 깨끗하게 비운다.
         collectedOres.Clear();
     }
+    // 다른 스크립트에서 현재 수집한 광물 개수를 물어볼 수 있도록 통로를 열어줍니다.
+    public int GetCollectedOreCount()
+    {
+        return collectedOres.Count;
+    }
 
     private void HandleWorldWarped(Vector3 delta)
     {
@@ -283,14 +288,14 @@ public class SpaceshipCargoSystem : MonoBehaviour
                 if (seg == null) continue;
                 var srb = seg.GetComponent<Rigidbody2D>();
                 if (srb) srb.position += (Vector2)delta;
-                else     seg.transform.position += delta;
+                else seg.transform.position += delta;
             }
 
             if (oreInfo.OreObject != null)
             {
                 var orb = oreInfo.OreObject.GetComponent<Rigidbody2D>();
                 if (orb) orb.position += (Vector2)delta;
-                else     oreInfo.OreObject.transform.position += delta;
+                else oreInfo.OreObject.transform.position += delta;
             }
         }
 

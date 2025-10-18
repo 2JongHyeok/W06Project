@@ -5,6 +5,13 @@ using UnityEngine;
 public class SpaceshipMotor : MonoBehaviour
 {
     public static SpaceshipMotor Instance { get; private set; }
+
+    private SpaceshipCargoSystem cargoSystem;
+
+    [Header("Cargo Weight Penalty")]
+    [Tooltip("광물 1개당 추력이 몇 퍼센트(%) 감소할지 설정합니다. (예: 5 입력 시 5%)")]
+    [SerializeField] private float thrustReductionPerOre = 5f;
+
     [Header("Thrust Settings")]
     [SerializeField] private float thrustPower = 2000f;
 
@@ -46,7 +53,14 @@ public class SpaceshipMotor : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
+
+        cargoSystem = GetComponent<SpaceshipCargoSystem>();
+        if (cargoSystem == null)
+        {
+            Debug.LogWarning("SpaceshipMotor가 SpaceshipCargoSystem을 찾지 못했습니다. 무게 패널티가 적용되지 않습니다.");
+        }
         Rb = GetComponent<Rigidbody2D>();
         Rb.gravityScale = 0;
 
@@ -68,10 +82,26 @@ public class SpaceshipMotor : MonoBehaviour
     // Move 함수는 이제 오직 '가속'만을 담당합니다.
     public void Move(float thrustInput, float boostMultiplier)
     {
-        if (Mathf.Abs(thrustInput) > 0.01f)
+        float effectiveThrust = thrustPower;
+
+        // 2. 카고 시스템이 연결되어 있다면, 무게 패널티를 계산합니다.
+        if (cargoSystem != null)
         {
-            Rb.AddForce(transform.up * thrustPower * thrustInput * boostMultiplier, ForceMode2D.Force);
+            int oreCount = cargoSystem.GetCollectedOreCount();
+            // 3. 총 감소율(%)을 계산합니다. (예: 2개 * 5% = 10%)
+            float totalReductionPercent = oreCount * thrustReductionPerOre;
+            // 4. 실제 적용할 추력 배율을 계산합니다. (예: 1.0f - 0.10f = 0.9f)
+            float thrustMultiplier = 1.0f - (totalReductionPercent / 100.0f);
+
+            // 5. 추력이 0 미만이 되지 않도록 최소값을 0으로 제한합니다.
+            thrustMultiplier = Mathf.Max(0f, thrustMultiplier);
+
+            // 6. 최종 유효 추력을 계산합니다.
+            effectiveThrust *= thrustMultiplier;
         }
+
+        // 7. 계산된 최종 추력을 힘으로 가합니다.
+        Rb.AddForce(transform.up * effectiveThrust * thrustInput * boostMultiplier, ForceMode2D.Force);
     }
 
     // Rotate 함수는 변경할 필요가 없습니다.
@@ -124,7 +154,7 @@ public class SpaceshipMotor : MonoBehaviour
             }
         }
     }
-// --- 바로 이 부분이 정비사들을 위한 '접근 통로'요, 왓슨 ---
+    // --- 바로 이 부분이 정비사들을 위한 '접근 통로'요, 왓슨 ---
     #region Getter & Setter (업그레이드용)
 
     // --- 직선 운동 관련 ---
@@ -161,6 +191,12 @@ public class SpaceshipMotor : MonoBehaviour
     public float GetRotationalGlideReduction() { return rotationalGlideReduction; }
     public void SetRotationalGlideReduction(float value) { rotationalGlideReduction = Mathf.Clamp(value, 0.9f, 1f); }
     public void AddRotationalGlideReduction(float amount) { rotationalGlideReduction = Mathf.Clamp(rotationalGlideReduction + amount, 0.9f, 1f); }
+
+
+// ★ 추가: 광물당 추력 감소율 업그레이드를 위한 Getter & Setter
+    public float GetThrustReductionPerOre() { return thrustReductionPerOre; }
+    public void SetThrustReductionPerOre(float value) { thrustReductionPerOre = Mathf.Max(0f, value); } // 0% 미만으로 내려가지 않도록 보정
+    public void AddThrustReductionPerOre(float amount) { SetThrustReductionPerOre(thrustReductionPerOre + amount); }
 
     #endregion
 
