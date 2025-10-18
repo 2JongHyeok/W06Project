@@ -13,12 +13,26 @@ public class SpaceshipMissile : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.linearVelocity = transform.up * speed;
+    }
+
+    void Start()
+    {
         Destroy(gameObject, lifeTime);
     }
+
+    /// <summary>
+    /// SpaceshipWeapon이 미사일을 생성한 직후 호출하여 초기 속도를 설정해주는 함수입니다.
+    /// </summary>
+    /// <param name="shipVelocity">미사일이 발사되는 순간의 우주선 속도</param>
+    public void Initialize(Vector2 shipVelocity)
+    {
+        // ★ 핵심: 우주선의 현재 속도 + 미사일 자체의 발사 속도 = 최종 초기 속도
+        rb.linearVelocity = shipVelocity + (Vector2)transform.up * speed;
+    }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -29,19 +43,19 @@ public class SpaceshipMissile : MonoBehaviour
         if (targetAsteroid != null)
         {
             Vector3 explosionCenterWorld = collision.GetContact(0).point;
-            
+
             // 데미지를 입힐 타일맵은 이제 충돌한 소행성이 직접 알려줍니다.
             Tilemap targetTilemap = targetAsteroid.myTilemap;
-            
+
             targetTilemap.CompressBounds();
             BoundsInt bounds = targetTilemap.cellBounds;
-            
+
             foreach (var cellPos in bounds.allPositionsWithin)
             {
                 if (!targetTilemap.HasTile(cellPos)) continue;
-                
+
                 Vector3 cellCenterWorld = targetTilemap.GetCellCenterWorld(cellPos);
-                
+
                 // 폭발 범위 내에 있는지 확인
                 if (Vector3.Distance(cellCenterWorld, explosionCenterWorld) <= SpaceshipWeapon.Instance.GetExplosionRadius())
                 {
@@ -49,8 +63,14 @@ public class SpaceshipMissile : MonoBehaviour
                     targetAsteroid.ApplyDamage(cellPos, SpaceshipWeapon.Instance.GetDamage());
                 }
             }
-            
-            Destroy(gameObject); // 폭발 후 미사일 파괴
+            // 그림자 업데이트 요청 로직 변경
+            Vector3Int explosionCenterCell = targetTilemap.WorldToCell(explosionCenterWorld);
+            float explosionRadius = SpaceshipWeapon.Instance.GetExplosionRadius();
+
+            // 월드 단위의 float 반경을 그대로 전달합니다.
+            TilemapShadowGenerator.Instance.UpdateShadowsAround(explosionCenterCell, explosionRadius);
+
+            Destroy(gameObject);
         }
     }
 }
