@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5195007209802746417}
   - component: {fileID: 3017608130630208340}
   - component: {fileID: 6009415926736306413}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ReversethrusterParticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4843,7 +4843,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5063682309985950868}
   - component: {fileID: 442708506751227059}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: arrowsprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4930,7 +4930,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8317493956658974401}
   - component: {fileID: 2790577880462106669}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: gasThruster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5059,7 +5059,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7779221237754496034}
   - component: {fileID: 2012274897314950108}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: engineSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5189,7 +5189,7 @@ GameObject:
   - component: {fileID: 6109731791870418769}
   - component: {fileID: 3479647788218860603}
   - component: {fileID: 4397804802638857869}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BoostParticle (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10022,7 +10022,7 @@ GameObject:
   - component: {fileID: 53190788925682519}
   - component: {fileID: 3169440467224192093}
   - component: {fileID: 7366496753625201695}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: thrusterParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14854,7 +14854,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1713604278990672236}
   - component: {fileID: 7671800590944222072}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BoostSound (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14982,6 +14982,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4567950886710692794}
+  - component: {fileID: 5645428427760816088}
   m_Layer: 0
   m_Name: CargoHook
   m_TagString: Untagged
@@ -15004,6 +15005,42 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7180292076679184082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &5645428427760816088
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6042438744115310206}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 1.9}
+  m_Radius: 5
 --- !u!1 &6140768105352488312
 GameObject:
   m_ObjectHideFlags: 0
@@ -15015,7 +15052,7 @@ GameObject:
   - component: {fileID: 4755258476992273223}
   - component: {fileID: 7405053946683596369}
   - component: {fileID: 248383446139984999}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: leftThrusterParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19847,7 +19884,7 @@ GameObject:
   m_Component:
   - component: {fileID: 216598219932665640}
   - component: {fileID: 8649852914500898234}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TargetIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19900,7 +19937,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1587002805904655281}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19933,7 +19970,7 @@ GameObject:
   - component: {fileID: 4002911770478469246}
   - component: {fileID: 3521509932480347430}
   - component: {fileID: 7515238568555997774}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: rightThrusterParticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24766,7 +24803,7 @@ GameObject:
   - component: {fileID: 7106678541252014716}
   - component: {fileID: 5069971719547671456}
   - component: {fileID: 6456756004280527997}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BoostParticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29604,10 +29641,9 @@ GameObject:
   - component: {fileID: 908878209827147228}
   - component: {fileID: 5363256348143905287}
   - component: {fileID: 9003192783875796088}
-  - component: {fileID: 3733043109894480575}
   - component: {fileID: 3954204389919689628}
   - component: {fileID: 6283716779563996143}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: space_ship
   m_TagString: Spaceship
   m_Icon: {fileID: 0}
@@ -29708,7 +29744,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 100
+  m_Mass: 1000
   m_LinearDamping: 0.5
   m_AngularDamping: 0.5
   m_GravityScale: 0
@@ -29778,9 +29814,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f6c85ddc559d9247ab917066d8e4a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thrustPower: 200
+  thrustPower: 2000
   movementDrag: 0.5
-  additiveTorque: 10
+  additiveTorque: 100
   angularDrag: 1
 --- !u!114 &5363256348143905287
 MonoBehaviour:
@@ -29845,42 +29881,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.2830067, y: 3.2023573}
   m_EdgeRadius: 0
---- !u!58 &3733043109894480575
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7960328737568620720}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 4
 --- !u!114 &3954204389919689628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29894,11 +29894,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cargoHook: {fileID: 4567950886710692794}
-  maxCargoCount: 30
-  collectionTrigger: {fileID: 3733043109894480575}
+  maxCargoCount: 100
+  collectionTrigger: {fileID: 5645428427760816088}
   linePrefab: {fileID: 5609434226259527820, guid: 3dde5eb822c602a40b9e826ab42a1c10, type: 3}
   ropeSegmentPrefab: {fileID: 1511424944892775995, guid: 8124ae7bfdb537a46b6cc1ee4e6f8ad5, type: 3}
-  numberOfSegments: 10
+  numberOfSegments: 2
   maxRopeLength: 3
 --- !u!114 &6283716779563996143
 MonoBehaviour:
