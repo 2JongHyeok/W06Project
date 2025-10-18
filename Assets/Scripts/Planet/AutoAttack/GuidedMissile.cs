@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public interface IDamageable
@@ -14,6 +15,12 @@ public class GuidedMissile : Projectile
     [Tooltip("초당 회전 속도(도/초)")]
     public float turnRateDegPerSec = 360f;
 
+    [Header("타겟 탐색")]
+    [Tooltip("타겟 스캔 반경")]
+    public float searchRadius = 30f;
+    [Tooltip("타겟 재탐색 주기(초)")]
+    public float retargetInterval = 0.25f;
+
     [Header("타겟 상실 시 처리")]
     public bool keepStraightWhenLost = true;
     public float selfDestructAfterLost = 1.5f;
@@ -24,78 +31,84 @@ public class GuidedMissile : Projectile
     [Tooltip("태그 필터(비워두면 무시)")]
     public string targetTag = "Enemy";
     [SerializeField] private ExplosionPulse2D explosionPrefab;
+    private readonly List<Collider2D> scanResults = new List<Collider2D>(64);
+    private ContactFilter2D contactFilter;
     private Transform target;
-    private AutoTurret parentTurret;
     private Rigidbody2D rb;
-    // 중복 폭발 방지용: 히트로 이미 폭발했으면 OnDestroy에서 다시 만들지 않음
     private bool spawnExplosionOnDestroy;
 
     private float currentSpeed;
     private float lostTimer;
+    private float retargetTimer;
 
     // --- 히트 처리용 ---
-    private bool hasHit;                 // 중복 타격 방지s
-    private float cachedDamage;          // Init으로 전달된 데미지 캐시
+    private bool hasHit;
+    private float cachedDamage;
+
+    // 스캔 버퍼(GC 방지용). 동시 다발 사용에 충분한 크기로 조정.
+    private static readonly Collider2D[] scanBuf = new Collider2D[64];
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>(); // 존재 전제
+        rb = GetComponent<Rigidbody2D>();
         currentSpeed = initialSpeed;
         lostTimer = 0f;
         hasHit = false;
         spawnExplosionOnDestroy = true;
+        retargetTimer = 0f;
+        Vector3 currentPosition = transform.position;
 
+        // 2. 현재 위치의 X와 Y 값은 그대로 두고, Z 값만 -3으로 변경합니다.
+        currentPosition.z = -3f;
+
+        // 3. 변경된 위치를 오브젝트에 다시 적용합니다.
+        transform.position = currentPosition;
         // 수명 타이머: 10초 뒤 파괴 → OnDestroy에서 폭발 이펙트 재생
         Destroy(gameObject, 10f);
     }
 
-    // 공격 전략에서 호출: missile.SetTarget(...); missile.Init(damage, shooter);
-    public void SetTarget(Transform newTarget, AutoTurret turret)
+    // 기존 API 유지: 외부에서 주는 타겟은 '초기 잠금' 정도로만 사용
+    public void SetTarget(Transform newTarget, AutoTurret _)
     {
         target = newTarget;
-        parentTurret = turret;
         currentSpeed = initialSpeed;
         lostTimer = 0f;
     }
 
-    // Projectile.Init(baseDamage, shooterTransform)를 가정
-    // (부모 메서드가 virtual이 아닐 수 있어 new로 감춤)
+    // Projectile.Init(baseDamage, shooterTransform) 가정
     public new void Init(float baseDamage, Transform shooter)
     {
         base.Init(baseDamage, shooter);
         cachedDamage = baseDamage;
         this.shooter = shooter;
+
+        // 스폰 순간에도 한 번 스캔해서 가까운 타겟을 바로 잡는다
+        AcquireNearestTarget();
     }
 
     private void FixedUpdate()
     {
         if (hasHit) return;
 
-        // 타겟 확인 & 필요 시 재탐색
+        // 주기적 재탐색(타겟이 죽었거나 멀어졌을 때 갱신)
+        retargetTimer -= Time.fixedDeltaTime;
+        if (target == null || retargetTimer <= 0f)
+        {
+            // 현재 타겟이 너무 멀어졌거나 사라졌으면 재탐색
+            AcquireNearestTarget();
+            retargetTimer = retargetInterval;
+        }
+
         if (target == null)
         {
-            if (parentTurret != null)
-            {
-                parentTurret.ForceTargetUpdate();
-                target = parentTurret.GetCurrentTarget();
-            }
-
-            if (target == null)
-            {
-                HandleNoTarget(Time.fixedDeltaTime);
-                return;
-            }
-            else
-            {
-                currentSpeed = initialSpeed;
-                lostTimer = 0f;
-            }
+            HandleNoTarget(Time.fixedDeltaTime);
+            return;
         }
 
         // 가속
         currentSpeed = Mathf.Min(currentSpeed + acceleration * Time.fixedDeltaTime, maxSpeed);
 
-        // 2D 회전(Z축만, up이 총구 → -90도 보정)
+        // 회전(Z축, up 방향이 진행방향)
         Vector2 dir = ((Vector2)target.position - (Vector2)transform.position).normalized;
         float desiredZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
         float nextZ = Mathf.MoveTowardsAngle(rb.rotation, desiredZ, turnRateDegPerSec * Time.fixedDeltaTime);
@@ -121,9 +134,67 @@ public class GuidedMissile : Projectile
         {
             lostTimer += dt;
             if (lostTimer >= selfDestructAfterLost)
-            {
                 Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    /// 미사일 ‘자신’ 기준으로 가장 가까운 적을 스캔하여 target 잠금.
+    /// damageLayers/targetTag/아군 무시 필터 적용.
+    /// </summary>
+    private void AcquireNearestTarget()
+    {
+        // 1) 오버랩 결과 수집 (할당 없음: 재사용 List)
+        scanResults.Clear();
+        int count = Physics2D.OverlapCircle(
+            (Vector2)transform.position,
+            searchRadius,
+            contactFilter,
+            scanResults
+        );
+
+        // 2) 최단거리 타깃 선택
+        Transform best = null;
+        float bestSqr = float.PositiveInfinity;
+        Vector2 selfPos = transform.position;
+
+        for (int i = 0; i < count; i++)
+        {
+            var col = scanResults[i];
+            if (!col) continue;
+
+            // (1) 발사자/아군 무시
+            if (shooter && col.transform.IsChildOf(shooter))
+                continue;
+
+            // (2) 태그 필터
+            if (!string.IsNullOrEmpty(targetTag) && !col.CompareTag(targetTag))
+                continue;
+
+            // (3) Enemy 컴포넌트(자식 콜라이더 대비 부모까지)
+            var enemy = col.GetComponentInParent<Enemy>();
+            if (enemy == null) continue;
+            // 필요하면 enemy 생존 여부 체크
+            // if (!enemy.IsAlive) continue;
+
+            float sqr = ((Vector2)enemy.transform.position - selfPos).sqrMagnitude;
+            if (sqr < bestSqr)
+            {
+                bestSqr = sqr;
+                best = enemy.transform;
             }
+        }
+
+        target = best;
+        if (target == null)
+        {
+            // 못 찾으면 로스트 로직 유지
+            // (즉시 파괴하려면 여기서 Destroy(gameObject); 가능)
+        }
+        else
+        {
+            // 새 타깃 확보 시 로스트 초기화
+            lostTimer = 0f;
         }
     }
 
@@ -131,18 +202,18 @@ public class GuidedMissile : Projectile
     {
         if (hasHit) return;
 
-        // 1) 발사자/아군 무시(자기 자신 또는 부모 체인)
+        // 1) 발사자/아군 무시
         if (shooter != null && other.transform.IsChildOf(shooter))
             return;
 
-        // 2) 레이어 필터(설정되어 있으면 통과만)
+        // 2) 레이어 필터
         if (damageLayers.value != 0)
         {
             if ((damageLayers.value & (1 << other.gameObject.layer)) == 0)
                 return;
         }
 
-        // 3) 태그 필터(설정되어 있으면 통과만)
+        // 3) 태그 필터
         if (!string.IsNullOrEmpty(targetTag) && !other.CompareTag(targetTag))
             return;
 
@@ -151,26 +222,22 @@ public class GuidedMissile : Projectile
         {
             int dmg = Mathf.RoundToInt(cachedDamage);
             enemy.TakeDamage(dmg);
-            // 히트 시 즉시 폭발 재생
-            SpawnExplosion(transform.position);
 
-            // OnDestroy에서 또 만들지 않도록 차단
+            SpawnExplosion(transform.position);
             spawnExplosionOnDestroy = false;
             hasHit = true;
-            Destroy(gameObject); // 풀 쓰면 Release로 교체
+            Destroy(gameObject);
             return;
         }
     }
 
     private void OnDestroy()
     {
-        // Editor Stop/씬 언로드 시 무분별한 생성 방지(선택)
         if (!Application.isPlaying) return;
-
-        // 수명 종료로 파괴된 경우에만 폭발(히트로 이미 만들었으면 false)
         if (spawnExplosionOnDestroy)
             SpawnExplosion(transform.position);
     }
+
     private void SpawnExplosion(Vector3 pos)
     {
         if (explosionPrefab != null)
@@ -179,4 +246,13 @@ public class GuidedMissile : Projectile
             fx.Play(pos);
         }
     }
+
+#if UNITY_EDITOR
+    // 에디터에서 탐색 반경 시각화
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1, 1, 1, 0.25f);
+        Gizmos.DrawWireSphere(transform.position, searchRadius);
+    }
+#endif
 }
