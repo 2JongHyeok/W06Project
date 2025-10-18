@@ -19,5 +19,5 @@ MonoBehaviour:
   - levelValue: 5
     cost:
     - oreType: 0
-      amount: 1
+      amount: 3
   upgradeType: 0
