@@ -63,15 +63,18 @@ public class SpaceshipMissile : MonoBehaviour
                     targetAsteroid.ApplyDamage(cellPos, SpaceshipWeapon.Instance.GetDamage());
                 }
             }
-            // 그림자 업데이트 요청 로직 변경
-            Vector3Int explosionCenterCell = targetTilemap.WorldToCell(explosionCenterWorld);
-            float explosionRadius = SpaceshipWeapon.Instance.GetExplosionRadius();
+            if (TilemapShadowGenerator.Instance != null)
+            {
+                        Vector3Int explosionCenterCell = targetAsteroid.myTilemap.WorldToCell(collision.GetContact(0).point);
+                        float explosionRadius = SpaceshipWeapon.Instance.GetExplosionRadius();
 
-            // 월드 단위의 float 반경을 그대로 전달합니다.
-            TilemapShadowGenerator.Instance.UpdateShadowsAround(explosionCenterCell, explosionRadius);
+                        // 월드 단위의 float 반경을 그대로 전달합니다.
+                        TilemapShadowGenerator.Instance.UpdateShadowsAround(explosionCenterCell, explosionRadius);
 
+            }
             Destroy(gameObject);
+
+            }
         }
     }
-}
 
