@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: "\uC6B0\uC8FC\uC120 \uC18D\uB3C4"
   upgradeDescription: "\uC6B0\uC8FC\uC120 \uC18D\uB3C4 \uC99D\uAC00"
-  baseValue: 0
+  baseValue: 50
   recipes:
   - levelValue: 0
     cost:

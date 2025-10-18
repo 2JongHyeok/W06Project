@@ -15,7 +15,7 @@ MonoBehaviour:
   upgradeName: "\uC6B0\uC8FC\uC120 \uBBF8\uC0AC\uC77C \uD3ED\uBC1C \uBC94\uC704"
   upgradeDescription: "\uC6B0\uC8FC\uC120 \uBBF8\uC0AC\uC77C \uD3ED\uBC1C \uBC94\uC704
     \uC99D\uAC00"
-  baseValue: 0
+  baseValue: 0.4
   recipes:
   - levelValue: 0
     cost: []

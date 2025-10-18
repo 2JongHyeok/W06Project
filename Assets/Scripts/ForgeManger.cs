@@ -60,13 +60,11 @@ public class ForgeManger : MonoBehaviour
 
     public void UpgradeWeapon(int index)
     {
-        Debug.Log("버튼 감지");
         if (index < 0 || index >= weaponUpSOList.Length) return;
         if (weaponLevelList[index] >= weaponUpSOList[index].recipes.Length) return;
         
         float levelValue = weaponUpSOList[index].recipes[weaponLevelList[index]].levelValue;
         Cost[] cost = weaponUpSOList[index].recipes[weaponLevelList[index]].cost;
-        Debug.Log("Attempting to upgrade weapon at index " + index + " with levelValue " + levelValue);
         if(inventoryManger.CheckOre(cost))
         {
             foreach (var item in cost)
@@ -96,13 +94,11 @@ public class ForgeManger : MonoBehaviour
     }
     public void UpgradeSpaceship(int index)
     {
-        Debug.Log("버튼 감지");
         if (index < 0 || index >= spaceshipSOList.Length) return;
         if (spaceshipLevelList[index] >= spaceshipSOList[index].recipes.Length) return;
 
         float levelValue = spaceshipSOList[index].recipes[spaceshipLevelList[index]].levelValue;
         Cost[] cost = spaceshipSOList[index].recipes[spaceshipLevelList[index]].cost;
-        Debug.Log("Attempting to upgrade spaceship at index " + index + " with levelValue " + levelValue);
         if (inventoryManger.CheckOre(cost))
         {
             foreach (var item in cost)
@@ -137,13 +133,11 @@ public class ForgeManger : MonoBehaviour
     
     public void UpgradeAutoAttack(int index)
     {
-        Debug.Log("버튼 감지");
         if (index < 0 || index >= autoAttackSOList.Length) return;
         if (autoAttackLevelList[index] >= autoAttackSOList[index].recipes.Length) return;
         
         float levelValue = autoAttackSOList[index].recipes[autoAttackLevelList[index]].levelValue;
         Cost[] cost = autoAttackSOList[index].recipes[autoAttackLevelList[index]].cost;
-        Debug.Log("Attempting to upgrade autoAttack at index " + index + " with levelValue " + levelValue);
         if (inventoryManger.CheckOre(cost))
         {
             foreach (var item in cost)
@@ -152,8 +146,8 @@ public class ForgeManger : MonoBehaviour
             }
             if (index == (int)AutoAttackUpgradeType.AutoAttackDamage)
             {
-                Debug.LogWarning("데미지 감지2");
                 turretActivationManager.AddMissileDamage(levelValue);
+                turretActivationManager.AddMissileTurret();
             }
             if (index == (int)AutoAttackUpgradeType.AutoAttackInterval)
             {
