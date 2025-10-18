@@ -3,18 +3,27 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     public static Weapon Instance { get; private set; }
+
     [Header("WeaponPivot")]
     [SerializeField] private GameObject weaponPivot;
 
     [Header("Values")]
     [SerializeField] private int damage = 10;
     [SerializeField] private float rotationSpeed = 100f;
-    [SerializeField] private float fireRate = 0.1f;  
-    [SerializeField] private GameObject bulletPrefab; 
-    [SerializeField] private Transform firePoint;   // 총알이 발사될 위치
-    [SerializeField] private float explosionRadius = 1.5f;    // 폭발 반경
+    [SerializeField] private float fireRate = 0.1f;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private float explosionRadius = 1.5f;
     [SerializeField] private DockingStation dockingStation;
-    private float nextFireTime = 0f;  // 다음 총알을 발사할 수 있는 시간
+
+    // === 가속 관련 ===
+    [Header("Rotation Acceleration")]
+    [SerializeField] private float accelTime = 1f; // 목표 속도까지 걸리는 시간(초)
+    private float accelTimer = 0f;                 // 키 홀드 시간
+    private float lastDirection = 0f;              // 이전 프레임의 방향(부호만 의미)
+
+    private float nextFireTime = 0f;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -22,9 +31,9 @@ public class Weapon : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
     }
+
     void Update()
     {
         if (dockingStation.isSpaceshipMode) return;
@@ -34,30 +43,46 @@ public class Weapon : MonoBehaviour
 
     private void MoveWeapon()
     {
-        float rotationDirection = 0f;
+        // 입력 → 회전 방향(+1 시계/반시계 여부는 기존 코드 그대로)
+        float inputDir = 0f;
 
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            rotationDirection = 1f;
-        }
+            inputDir = 1f;
         else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            inputDir = -1f;
+
+        if (inputDir != 0f)
         {
-            rotationDirection = -1f;
+            // 방향이 바뀌면 가속 타이머 초기화
+            if (Mathf.Sign(inputDir) != Mathf.Sign(lastDirection))
+            {
+                accelTimer = 0f;
+            }
+
+            accelTimer += Time.deltaTime;
+            float ramp = Mathf.Clamp01(accelTimer / Mathf.Max(0.0001f, accelTime)); // 0→1
+            float currentSpeed = rotationSpeed * ramp;
+
+            float rotationAmount = inputDir * currentSpeed * Time.deltaTime;
+            weaponPivot.transform.Rotate(0f, 0f, rotationAmount);
+
+            lastDirection = inputDir;
         }
-        float rotationAmount = rotationDirection * rotationSpeed * Time.deltaTime;
-        weaponPivot.transform.Rotate(0, 0, rotationAmount);
+        else
+        {
+            // 입력이 없으면 즉시 정지(가속도 리셋)
+            accelTimer = 0f;
+            lastDirection = 0f;
+        }
     }
 
     void Fire()
     {
-        // 총알 프리팹이 설정되어 있는지 확인 (실수 방지)
         if (Input.GetKey(KeyCode.Space) && Time.time >= nextFireTime)
         {
-            // 다음 발사 시간을 현재 시간 + 발사 간격으로 설정
             nextFireTime = Time.time + fireRate;
             if (bulletPrefab != null && firePoint != null)
             {
-                // bulletPrefab을 firePoint의 위치와 방향으로 복제(생성)합니다.
                 Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
             }
             else
@@ -69,7 +94,7 @@ public class Weapon : MonoBehaviour
 
     #region Getter Setter
     public int GetDamage() { return damage; }
-    public void SetDamage(int val) {  damage = val; }
+    public void SetDamage(int val) { damage = val; }
     public void AddDamage(int val) { damage += val; }
     public float GetAttackSpeed() { return fireRate; }
     public void SetAttackSpeed(float val) { fireRate = val; }
