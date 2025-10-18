@@ -6,7 +6,7 @@ public class Core : MonoBehaviour
     [Header("Core 설정")]
     public int maxHP = 100;
     private int currentHP;
-    private TMP_Text CoreHpText;
+    public TMP_Text CoreHpText;
 
     private void Awake()
     {
@@ -16,7 +16,7 @@ public class Core : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
-        CoreHpText.text = $"Core HP: {maxHP}";
+        CoreHpText.text = $"Core HP: {currentHP}";
         Debug.Log($"Core HP: {currentHP}/{maxHP}");
 
         if (currentHP <= 0)
