@@ -121,8 +121,6 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         
         isLocked = !canPurchase;
         SetVisualLocked(isLocked);
-        
-        // Debug.Log($"Node {forgeSO.upgradeName} ({forgeSO.forgeId} Level {forgeIndexInSameId}): CanPurchase={canPurchase}, Locked={isLocked}");
     }
     
     // 시각적 잠금 상태 설정
@@ -147,7 +145,9 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         
         if (forgeSO != null && tooltipUI != null)
         {
-            tooltipUI.Show(forgeSO, eventData.position);
+            // 구매 가능 여부 전달 (잠기지 않았으면 구매 가능)
+            bool canPurchase = !isLocked;
+            tooltipUI.Show(forgeSO, eventData.position, canPurchase);
         }
     }
 
@@ -168,17 +168,15 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (eventData.button == PointerEventData.InputButton.Left && forgeSO != null)
         {
-            // 잠긴 상태면 차징 불가
+            // 잠긴 노드는 차징 불가
             if (isLocked)
             {
-                Debug.Log($"<color=yellow>[Locked]</color> {forgeSO.upgradeName} is locked!");
                 return;
             }
             
             // 자원 부족하면 차징 불가
             if (!CanAfford())
             {
-                Debug.Log($"<color=red>[Not Enough Resources]</color> Cannot afford {forgeSO.upgradeName}!");
                 return;
             }
             
@@ -190,11 +188,9 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 자원이 충분한지 확인
     private bool CanAfford()
     {
-        // InventoryManger 찾기
-        InventoryManger inventoryManger = FindFirstObjectByType<InventoryManger>();
+        InventoryManger inventoryManger = Managers.Instance?.inventory;
         if (inventoryManger == null)
         {
-            Debug.LogWarning("InventoryManger not found!");
             return false;
         }
         
@@ -284,7 +280,8 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         while (currentChargeTime < chargeTime)
         {
-            currentChargeTime += Time.deltaTime;
+            // Time.timeScale의 영향을 받지 않는 unscaledDeltaTime 사용 (포지 패널에서 timeScale=0이므로)
+            currentChargeTime += Time.unscaledDeltaTime;
             
             float fillAmount = currentChargeTime / chargeTime;
             
@@ -318,8 +315,9 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // 툴팁 갱신 (자원 소모 반영)
         if (tooltipUI != null && isHovering && forgeSO != null)
         {
-            // 툴팁이 열려있고 마우스가 호버 중이면 즉시 갱신
-            tooltipUI.RefreshContent(forgeSO);
+            // 구매 후 상태 다시 확인 (잠금 상태와 자원 상태 모두 변경되었을 수 있음)
+            bool canPurchase = !isLocked;
+            tooltipUI.RefreshContent(forgeSO, canPurchase);
         }
         
         // 차징 상태 리셋

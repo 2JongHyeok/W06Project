@@ -1542,7 +1542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6679245, g: 0.6679245, b: 0.6679245, a: 1}
+  m_Color: {r: 0.4415095, g: 0.4415095, b: 0.4415095, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1573,8 +1573,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeIcon: {fileID: 1542974590427320396}
   chargeSlider: {fileID: 5113427952112947613}
+  canvasGroup: {fileID: 0}
   coalText: {fileID: 1809741640653845861}
   ironText: {fileID: 7423509246555952292}
   goldText: {fileID: 4828071321344663380}
   diamondText: {fileID: 5364643442136358467}
   chargeTime: 1
+  lockedAlpha: 0.5

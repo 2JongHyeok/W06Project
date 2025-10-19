@@ -72,12 +72,12 @@ public class ForgeTooltipUI : MonoBehaviour
         Debug.Log($"<color=green>Tooltip Raycast Targets disabled: {graphics.Length} components</color>");
     }
 
-    public void Show(BaseForgeSO forgeSO, Vector2 mousePosition)
+    public void Show(BaseForgeSO forgeSO, Vector2 mousePosition, bool canPurchase = true)
     {
         if (forgeSO == null) return;
 
         gameObject.SetActive(true);
-        UpdateContent(forgeSO);
+        UpdateContent(forgeSO, canPurchase);
         
         // Canvas 업데이트
         Canvas.ForceUpdateCanvases();
@@ -104,15 +104,15 @@ public class ForgeTooltipUI : MonoBehaviour
     }
     
     // 외부에서 콘텐츠만 갱신 (강화 완료 후 자원 변경 반영용)
-    public void RefreshContent(BaseForgeSO forgeSO)
+    public void RefreshContent(BaseForgeSO forgeSO, bool canPurchase = true)
     {
         if (forgeSO != null && gameObject.activeSelf)
         {
-            UpdateContent(forgeSO);
+            UpdateContent(forgeSO, canPurchase);
         }
     }
 
-    private void UpdateContent(BaseForgeSO forgeSO)
+    private void UpdateContent(BaseForgeSO forgeSO, bool canPurchase = true)
     {
         // 강화 명
         if (nameText != null)
@@ -148,10 +148,10 @@ public class ForgeTooltipUI : MonoBehaviour
         // 모든 자원이 충분한지 체크
         bool canAfford = hasEnoughCoal && hasEnoughIron && hasEnoughGold && hasEnoughDiamond;
         
-        // 배경 색상 변경
+        // 배경 색상 변경 (구매 불가능하거나 자원 부족하면 빨간 배경)
         if (backgroundImage != null)
         {
-            backgroundImage.color = canAfford ? normalColor : unaffordableColor;
+            backgroundImage.color = (canPurchase && canAfford) ? normalColor : unaffordableColor;
         }
         
         if (coalCostText != null)
