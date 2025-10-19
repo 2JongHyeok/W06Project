@@ -19,6 +19,5 @@ MonoBehaviour:
   ironCost: 5
   goldCost: 2
   diamondCost: 1
-  postSubBranches:
-  - {fileID: 11400000, guid: ec3378ff269c12c41b500b69b25ff348, type: 2}
+  postSubBranches: []
   AtkDamage: 1

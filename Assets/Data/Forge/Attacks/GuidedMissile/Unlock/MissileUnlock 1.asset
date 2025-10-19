@@ -16,10 +16,12 @@ MonoBehaviour:
   upgradeName: "\uC720\uB3C4 \uBBF8\uC0AC\uC77C \uD3EC\uB300 \uAC74\uC124"
   upgradeDescription: "\uC790\uB3D9\uC73C\uB85C \uC801\uC744 \uACF5\uACA9\uD558\uB294
     \uBBF8\uC0AC\uC77C \uD3EC\uB300\uB97C \uAC74\uC124\uD569\uB2C8\uB2E4."
+  depth: 1
   coalCost: 10
   ironCost: 5
   goldCost: 3
   diamondCost: 0
+  prerequisiteForgeIds: 
   postSubBranches:
   - {fileID: 11400000, guid: c6fbacaee73b87d44ad53579e571db7a, type: 2}
   - {fileID: 11400000, guid: 69d5820356c33d545a3b7d7b7d7832b5, type: 2}

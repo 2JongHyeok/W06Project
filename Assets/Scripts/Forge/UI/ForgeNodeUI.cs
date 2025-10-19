@@ -1,40 +1,72 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 using System;
+using System.Collections;
 
-public class ForgeNodeUI : MonoBehaviour
+public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     [Header("UI References")]
-    [SerializeField] private Button nodeButton;
     [SerializeField] private Image nodeIcon;
+    [SerializeField] private Slider chargeSlider; // 차징 게이지 슬라이더 (optional)
+    [SerializeField] private CanvasGroup canvasGroup; // 잠금 상태 표시용 (optional)
+    
+    [Header("Ore Cost Text")]
+    [SerializeField] private TextMeshProUGUI coalText;
+    [SerializeField] private TextMeshProUGUI ironText;
+    [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI diamondText;
+    
+    [Header("Charge Settings")]
+    [SerializeField] private float chargeTime = 1f; // 차징 완료 시간 (초)
+    [SerializeField] private float lockedAlpha = 0.5f; // 잠긴 상태의 투명도
 
     private BaseForgeSO forgeSO;
-    private Action<BaseForgeSO> onClickCallback;
+    private SubBranchType subBranchType; // 이 노드가 속한 서브브랜치
+    private int forgeIndexInSameId; // 같은 ForgeId 내에서 몇 번째인지 (0부터 시작)
+    private Action<BaseForgeSO> onChargeCompleteCallback;
+    private ForgeManger forgeManger;
+    private bool isLocked = false; // 잠금 상태
+    
+    // Tooltip 관련
+    private static ForgeTooltipUI tooltipUI;
+    
+    // 차징 관련
+    private bool isCharging = false;
+    private float currentChargeTime = 0f;
+    private Coroutine chargeCoroutine;
+    private bool isHovering = false; // 마우스 호버 상태
 
-    public void Initialize(BaseForgeSO forgeData, Action<BaseForgeSO> onClick)
+    public void Initialize(BaseForgeSO forgeData, SubBranchType subBranch, int indexInSameId, ForgeManger manager, Action<BaseForgeSO> onChargeComplete)
     {
         forgeSO = forgeData;
-        onClickCallback = onClick;
+        subBranchType = subBranch;
+        forgeIndexInSameId = indexInSameId;
+        forgeManger = manager;
+        onChargeCompleteCallback = onChargeComplete;
 
-        // 버튼 리스너 등록
-        if (nodeButton != null)
+        // 차징 슬라이더 초기화
+        if (chargeSlider != null)
         {
-            nodeButton.onClick.RemoveAllListeners();
-            nodeButton.onClick.AddListener(OnButtonClicked);
+            chargeSlider.minValue = 0f;
+            chargeSlider.maxValue = 1f;
+            chargeSlider.value = 0f;
+            chargeSlider.gameObject.SetActive(false);
         }
-        else
+        
+        // CanvasGroup 자동 추가
+        if (canvasGroup == null)
         {
-            // nodeButton이 할당되지 않았으면 자동으로 찾기
-            nodeButton = GetComponent<Button>();
-            if (nodeButton != null)
+            canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
             {
-                nodeButton.onClick.RemoveAllListeners();
-                nodeButton.onClick.AddListener(OnButtonClicked);
+                canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
         }
 
         UpdateUI();
+        UpdateLockState();
     }
 
     private void UpdateUI()
@@ -46,25 +78,251 @@ public class ForgeNodeUI : MonoBehaviour
         // {
         //     nodeIcon.sprite = forgeSO.icon;
         // }
-    }
-
-    private void OnButtonClicked()
-    {
-        onClickCallback?.Invoke(forgeSO);
+        
+        // 광석 비용 표시
+        if (coalText != null)
+            coalText.text = forgeSO.coalCost.ToString();
+        
+        if (ironText != null)
+            ironText.text = forgeSO.ironCost.ToString();
+        
+        if (goldText != null)
+            goldText.text = forgeSO.goldCost.ToString();
+        
+        if (diamondText != null)
+            diamondText.text = forgeSO.diamondCost.ToString();
     }
 
     // 외부에서 버튼 활성화/비활성화
     public void SetInteractable(bool interactable)
     {
-        if (nodeButton != null)
-        {
-            nodeButton.interactable = interactable;
-        }
+        enabled = interactable;
     }
 
     // 노드 정보 업데이트 (예: 비용이나 상태가 변경되었을 때)
     public void RefreshUI()
     {
         UpdateUI();
+        UpdateLockState();
+    }
+    
+    // 잠금 상태 업데이트
+    private void UpdateLockState()
+    {
+        if (forgeSO == null || forgeManger == null)
+        {
+            isLocked = true;
+            SetVisualLocked(true);
+            return;
+        }
+        
+        // 구매 가능 여부 확인 (서브브랜치 해금 + ForgeId 레벨 일치)
+        bool canPurchase = forgeManger.CanPurchaseForge(subBranchType, forgeSO.forgeId, forgeIndexInSameId);
+        
+        isLocked = !canPurchase;
+        SetVisualLocked(isLocked);
+        
+        // Debug.Log($"Node {forgeSO.upgradeName} ({forgeSO.forgeId} Level {forgeIndexInSameId}): CanPurchase={canPurchase}, Locked={isLocked}");
+    }
+    
+    // 시각적 잠금 상태 설정
+    private void SetVisualLocked(bool locked)
+    {
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = locked ? lockedAlpha : 1f;
+        }
+    }
+
+    // Tooltip 설정
+    public static void SetTooltip(ForgeTooltipUI tooltip)
+    {
+        tooltipUI = tooltip;
+    }
+
+    // IPointerEnterHandler 구현
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        isHovering = true;
+        
+        if (forgeSO != null && tooltipUI != null)
+        {
+            tooltipUI.Show(forgeSO, eventData.position);
+        }
+    }
+
+    // IPointerExitHandler 구현
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isHovering = false;
+        
+        // 차징 중이 아닐 때만 툴팁 숨김
+        if (!isCharging && tooltipUI != null)
+        {
+            tooltipUI.Hide();
+        }
+    }
+
+    // IPointerDownHandler 구현 - 마우스 좌클릭 시작
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left && forgeSO != null)
+        {
+            // 잠긴 상태면 차징 불가
+            if (isLocked)
+            {
+                Debug.Log($"<color=yellow>[Locked]</color> {forgeSO.upgradeName} is locked!");
+                return;
+            }
+            
+            // 자원 부족하면 차징 불가
+            if (!CanAfford())
+            {
+                Debug.Log($"<color=red>[Not Enough Resources]</color> Cannot afford {forgeSO.upgradeName}!");
+                return;
+            }
+            
+            // 차징 시작
+            StartCharging();
+        }
+    }
+    
+    // 자원이 충분한지 확인
+    private bool CanAfford()
+    {
+        // InventoryManger 찾기
+        InventoryManger inventoryManger = FindFirstObjectByType<InventoryManger>();
+        if (inventoryManger == null)
+        {
+            Debug.LogWarning("InventoryManger not found!");
+            return false;
+        }
+        
+        // 비용 체크
+        if (inventoryManger.OreList[(int)OreType.Coal] < forgeSO.coalCost) return false;
+        if (inventoryManger.OreList[(int)OreType.Iron] < forgeSO.ironCost) return false;
+        if (inventoryManger.OreList[(int)OreType.Gold] < forgeSO.goldCost) return false;
+        if (inventoryManger.OreList[(int)OreType.Diamond] < forgeSO.diamondCost) return false;
+        
+        return true;
+    }
+
+    // IPointerUpHandler 구현 - 마우스 좌클릭 해제
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            StopCharging();
+        }
+    }
+
+    // 차징 시작
+    private void StartCharging()
+    {
+        if (isCharging) return;
+        
+        isCharging = true;
+        currentChargeTime = 0f;
+        
+        // 차징 슬라이더 표시
+        if (chargeSlider != null)
+        {
+            chargeSlider.gameObject.SetActive(true);
+            chargeSlider.value = 0f;
+        }
+        
+        // Tooltip 차징 게이지도 초기화
+        if (tooltipUI != null)
+        {
+            tooltipUI.UpdateChargeGauge(0f);
+        }
+        
+        // 차징 코루틴 시작
+        if (chargeCoroutine != null)
+        {
+            StopCoroutine(chargeCoroutine);
+        }
+        chargeCoroutine = StartCoroutine(ChargeCoroutine());
+    }
+
+    // 차징 중단
+    private void StopCharging()
+    {
+        if (!isCharging) return;
+        
+        isCharging = false;
+        
+        // 차징 슬라이더 숨김
+        if (chargeSlider != null)
+        {
+            chargeSlider.gameObject.SetActive(false);
+            chargeSlider.value = 0f;
+        }
+        
+        // Tooltip 차징 게이지도 초기화
+        if (tooltipUI != null)
+        {
+            tooltipUI.UpdateChargeGauge(0f);
+            
+            // 차징 종료 후 마우스가 노드 밖에 있으면 툴팁 숨김
+            if (!isHovering)
+            {
+                tooltipUI.Hide();
+            }
+        }
+        
+        // 코루틴 중단
+        if (chargeCoroutine != null)
+        {
+            StopCoroutine(chargeCoroutine);
+            chargeCoroutine = null;
+        }
+    }
+
+    // 차징 코루틴
+    private IEnumerator ChargeCoroutine()
+    {
+        while (currentChargeTime < chargeTime)
+        {
+            currentChargeTime += Time.deltaTime;
+            
+            float fillAmount = currentChargeTime / chargeTime;
+            
+            // 노드 차징 슬라이더 업데이트
+            if (chargeSlider != null)
+            {
+                chargeSlider.value = fillAmount;
+            }
+            
+            // Tooltip 차징 게이지도 동시에 업데이트
+            if (tooltipUI != null)
+            {
+                tooltipUI.UpdateChargeGauge(fillAmount);
+            }
+            
+            yield return null;
+        }
+        
+        // 차징 완료
+        OnChargeComplete();
+    }
+
+    // 차징 완료 시 호출
+    private void OnChargeComplete()
+    {
+        Debug.Log($"<color=green>[Charge Complete]</color> {forgeSO.upgradeName}");
+        
+        // 콜백 실행 (강화 적용)
+        onChargeCompleteCallback?.Invoke(forgeSO);
+        
+        // 툴팁 갱신 (자원 소모 반영)
+        if (tooltipUI != null && isHovering && forgeSO != null)
+        {
+            // 툴팁이 열려있고 마우스가 호버 중이면 즉시 갱신
+            tooltipUI.RefreshContent(forgeSO);
+        }
+        
+        // 차징 상태 리셋
+        StopCharging();
     }
 }
