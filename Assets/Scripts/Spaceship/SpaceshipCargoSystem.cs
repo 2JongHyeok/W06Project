@@ -59,18 +59,37 @@ public class SpaceshipCargoSystem : MonoBehaviour
     void OnDisable()
     {
         WorldWarper.OnWarped -= HandleWorldWarped;   // 해제 (중복구독 방지)
+
+        if (hasPotentialOresState != null)
+        {
+            hasPotentialOresState.Value = false;
+        }
+        if (isCarryingOresState != null)
+        {
+            isCarryingOresState.Value = false;
+        }
     }
 
     void Update()
     {
-        if (hasPotentialOresState != null)
-        {
-            hasPotentialOresState.Value = potentialOres.Count > 0;
-        }
+        UpdatePotentialOresState();
 
         if (Input.GetKeyDown(KeyCode.E)) CollectNearestOre();
         if (Input.GetKeyDown(KeyCode.Q)) DropLastCollectedOre();
     }
+
+    private void UpdatePotentialOresState()
+    {
+        if (hasPotentialOresState == null) return;
+        
+        // 현재 상태와 계산된 상태가 다를 때만 값을 변경합니다. (효율성!)
+        bool hasOres = potentialOres.Count > 0;
+        if (hasPotentialOresState.Value != hasOres)
+        {
+            hasPotentialOresState.Value = hasOres;
+        }
+    }
+
     void LateUpdate()
     {
         // 워프는 WorldWarper.LateUpdate()에서 발생
