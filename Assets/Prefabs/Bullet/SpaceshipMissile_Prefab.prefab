@@ -168,4 +168,4 @@ MonoBehaviour:
   speed: 3
   lifeTime: 5
   debrisParticlePrefab: {fileID: 3833818897760939570, guid: 2ceb632170e3a5642816da2cf44a0053, type: 3}
-  colorProbeDepth: 0.01
+  colorSearchRadius: 1
