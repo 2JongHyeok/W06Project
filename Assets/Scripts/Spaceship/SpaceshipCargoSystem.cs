@@ -139,10 +139,33 @@ public class SpaceshipCargoSystem : MonoBehaviour
         collectedOres.Add(new CollectedOreInfo(nearestOre, line, ropeSegments));
     }
     private void DropLastCollectedOre()
-    {
-        if (collectedOres.Count == 0) return;
-        BreakConnection(collectedOres.Last());
-    }
+        {
+            if (collectedOres.Count == 0) return;
+
+            // 1. 연결을 끊기 전에, 버려질 광물 오브젝트에 대한 참조를 미리 저장합니다.
+            CollectedOreInfo lastOreInfo = collectedOres.Last();
+            GameObject oreObject = lastOreInfo.OreObject;
+
+            // 2. 기존 로직대로 연결을 끊습니다.
+            BreakConnection(lastOreInfo);
+
+            // 3. 방금 버린 광물 오브젝트가 여전히 존재하는지 확인합니다.
+            if (oreObject != null)
+            {
+                // 4. 버려진 광물의 콜라이더가 우리의 수집 트리거 콜라이더와 여전히 닿아 있는지 확인합니다.
+                Collider2D oreCollider = oreObject.GetComponent<Collider2D>();
+                if (oreCollider != null && collectionTrigger.IsTouching(oreCollider))
+                {
+                    // 5. 닿아있다면, 수집 가능한 목록(potentialOres)에 다시 추가해줍니다.
+                    //    (중복 추가를 방지하기 위해 목록에 없는지 먼저 확인)
+                    if (!potentialOres.Contains(oreObject))
+                    {
+                        potentialOres.Add(oreObject);
+                        Debug.Log("버려진 광물이 아직 범위 안에 있어 수집 가능 목록에 다시 추가합니다.");
+                    }
+                }
+            }
+        }
 
 
     private void UpdateAndCheckConnections_Late()
