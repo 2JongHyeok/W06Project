@@ -33,6 +33,9 @@ public abstract class BaseForgeSO : ScriptableObject
     [Header("기본 정보")]
     public string upgradeName;
     public string upgradeDescription;
+    
+    [Range(1, 4)]
+    public int depth = 1;
 
     // 고정 4종 광석 비용
     public int coalCost = 0;
