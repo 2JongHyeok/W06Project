@@ -18,7 +18,6 @@ public class WorldAnalysisLogger : MonoBehaviour
     [Tooltip("월드 생성이 끝날 때까지 기다릴 시간 (초)")]
     [SerializeField] private float waitSecondsBeforeAnalysis = 2.0f;
     
-    // ✨ [수정] 파일 이름을 더 직관적인 .txt 파일로 변경
     [Tooltip("로그 파일 이름")]
     [SerializeField] private string logFileName = "World_Analysis_Report.txt";
 
@@ -44,7 +43,8 @@ public class WorldAnalysisLogger : MonoBehaviour
     {
         Debug.Log("월드 분석 중...");
 
-        Dictionary<string, int> oreCounts = new Dictionary<string, int>();
+        // 1. 모든 타일의 개별 카운트를 먼저 집계합니다.
+        Dictionary<string, int> rawCounts = new Dictionary<string, int>();
         int totalOreCount = 0;
 
         worldTilemap.CompressBounds();
@@ -55,13 +55,13 @@ public class WorldAnalysisLogger : MonoBehaviour
                 TileBase tile = worldTilemap.GetTile(pos);
                 string tileName = tile.name;
 
-                if (oreCounts.ContainsKey(tileName))
+                if (rawCounts.ContainsKey(tileName))
                 {
-                    oreCounts[tileName]++;
+                    rawCounts[tileName]++;
                 }
                 else
                 {
-                    oreCounts[tileName] = 1;
+                    rawCounts[tileName] = 1;
                 }
                 totalOreCount++;
             }
@@ -69,20 +69,37 @@ public class WorldAnalysisLogger : MonoBehaviour
 
         Debug.Log($"분석 완료! 총 {totalOreCount}개의 타일을 발견했습니다.");
         
-        // 분석 결과를 새로운 리포트 형식으로 파일에 저장합니다.
-        LogResultsAsReport(oreCounts, totalOreCount);
+        // 2. 집계된 데이터를 기반으로 리포트를 작성하고 파일에 저장합니다.
+        LogResultsAsReport(rawCounts, totalOreCount);
     }
 
     // ✨ --- 이 함수가 완전히 새로워졌습니다! --- ✨
     /// <summary>
     /// 분석 결과를 사람이 읽기 쉬운 리포트 형식으로 .txt 파일에 누적 기록합니다.
     /// </summary>
-    private void LogResultsAsReport(Dictionary<string, int> counts, int total)
+    private void LogResultsAsReport(Dictionary<string, int> rawCounts, int total)
     {
         string filePath = Path.Combine(Application.dataPath, logFileName);
-        
-        // StringBuilder는 여러 줄의 텍스트를 만들 때 훨씬 효율적입니다.
         StringBuilder report = new StringBuilder();
+
+        // --- 그룹화된 데이터 생성 ---
+        Dictionary<string, int> groupedCounts = new Dictionary<string, int>
+        {
+            { "Stone", 0 }, { "Coal", 0 }, { "Iron", 0 }, { "Gold", 0 }, { "Diamond", 0 }, { "Other", 0 }
+        };
+
+        foreach (var pair in rawCounts)
+        {
+            string name = pair.Key;
+            int count = pair.Value;
+
+            if (name.EndsWith("_Stone_Tile")) groupedCounts["Stone"] += count;
+            else if (name == "CoalOre_Tile") groupedCounts["Coal"] += count;
+            else if (name == "IronOre_Tile") groupedCounts["Iron"] += count;
+            else if (name == "GoldOre_Tile") groupedCounts["Gold"] += count;
+            else if (name == "Diamond_Tile") groupedCounts["Diamond"] += count;
+            else groupedCounts["Other"] += count; // 예상치 못한 타일은 'Other'로 집계
+        }
 
         // --- 리포트 내용 생성 시작 ---
         report.AppendLine("==============================================================");
@@ -91,44 +108,39 @@ public class WorldAnalysisLogger : MonoBehaviour
         report.AppendLine();
         report.AppendLine("      [ 월드 생성 분석 리포트 ]");
         report.AppendLine();
-        report.AppendLine($"  > 발견된 총 광물 타일 수: {total:N0}개"); // N0는 1,000단위 쉼표 추가
+        report.AppendLine($"  > 발견된 총 타일 수: {total:N0}개");
         report.AppendLine();
-        report.AppendLine("  ▼ 광물 분포 상세 ▼");
-
-        // 개수가 많은 순서대로 정렬해서 보여줍니다.
-        var sortedCounts = counts.OrderByDescending(pair => pair.Value);
-
-        foreach (var oreEntry in sortedCounts)
+        
+        // --- 1. 상세 분포 ---
+        report.AppendLine("  ▼ 상세 분포 (개수 순) ▼");
+        var sortedRawCounts = rawCounts.OrderByDescending(pair => pair.Value);
+        foreach (var oreEntry in sortedRawCounts)
         {
-            string oreName = oreEntry.Key;
-            int count = oreEntry.Value;
-            float percentage = (total > 0) ? (float)count / total * 100f : 0f;
-            report.AppendLine($"    - {oreName,-20} : {count,8:N0}개 ({percentage,6:F2}%)");
+            float percentage = (total > 0) ? (float)oreEntry.Value / total * 100f : 0f;
+            report.AppendLine($"    - {oreEntry.Key,-20} : {oreEntry.Value,8:N0}개 ({percentage,6:F2}%)");
         }
         report.AppendLine();
 
-        // 가장 흔한 광물을 찾아 요약해줍니다.
-        if (sortedCounts.Any())
+        // --- 2. 최종 요약 (가장 중요) ---
+        report.AppendLine("  ▼ 최종 광물 비율 요약 (중요도 순) ▼");
+        string[] reportOrder = { "Stone", "Coal", "Iron", "Gold", "Diamond", "Other" };
+
+        foreach (string oreType in reportOrder)
         {
-            var topOre = sortedCounts.First();
-            report.AppendLine("  [ 요약 ]");
-            report.AppendLine($"    이번 월드에서 가장 흔한 광물은 '{topOre.Key}' 이며,");
-            report.AppendLine($"    총 {topOre.Value:N0}개가 발견되어 전체의 약 {((float)topOre.Value / total * 100f):F2}%를 차지합니다.");
-        }
-        else
-        {
-            report.AppendLine("  [ 요약 ] 발견된 광물이 없습니다.");
+            if (groupedCounts.ContainsKey(oreType) && groupedCounts[oreType] > 0)
+            {
+                int count = groupedCounts[oreType];
+                float percentage = (total > 0) ? (float)count / total * 100f : 0f;
+                report.AppendLine($"    - {oreType,-10} : {percentage,7:F2}% ({count,8:N0}개)");
+            }
         }
         
         report.AppendLine();
         report.AppendLine("==============================================================");
-        report.AppendLine(); // 리포트 사이에 한 줄 공백 추가
+        report.AppendLine(); // 리포트 사이에 공백 추가
 
         // --- 리포트 내용 생성 끝 ---
-
-        // 기존 파일의 맨 끝에 새로운 리포트를 추가합니다.
         File.AppendAllText(filePath, report.ToString());
-
         Debug.Log($"분석 리포트가 {filePath} 파일에 저장되었습니다.");
     }
 }
