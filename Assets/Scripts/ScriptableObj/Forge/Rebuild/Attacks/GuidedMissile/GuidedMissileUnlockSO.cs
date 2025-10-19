@@ -3,13 +3,15 @@ using UnityEngine;
 public class GuidedMissileUnlockSO : BaseForgeSO, IFirstActivation
 {
     public ForgeId ForgeId = ForgeId.GuidedMissileUnlock;
+
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        // 레벨 상승 시 추가 효과가 있으면 여기에
     }
 
+    // 처음 해금 시 1회
     public void OnFirstUnlock()
     {
-        throw new System.NotImplementedException();
+        Managers.Instance?.turretActivationManager?.AddMissileTurret();
     }
 }

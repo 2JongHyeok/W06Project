@@ -1,11 +1,13 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "MainCannonAtkSpeedSO", menuName = "ScriptableObjects/Forge/Attacks/MainCannon/MainCannonAtkSpeedSO", order = 1)]
+[CreateAssetMenu(fileName = "MainCannonAtkDamageSO", menuName = "ScriptableObjects/Forge/Attacks/MainCannon/MainCannonAtkDamageSO", order = 1)]
 public class MainCannonAtkDamageSO : BaseForgeSO
 {
     public ForgeId ForgeId = ForgeId.MainCannonAtkDamage;
     public int AtkDamage;
+
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance?.weapon == null) return;
+        Managers.Instance.weapon.AddDamage(AtkDamage);
     }
 }

@@ -6,6 +6,7 @@ public class PlanetShieldRegenSO : BaseForgeSO
     public float ShieldRegen;
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        // TODO: 실드 재생 시스템 연결
+        Debug.Log("PlanetShieldRegenSO.Apply called (implement hook to shield system).");
     }
 }

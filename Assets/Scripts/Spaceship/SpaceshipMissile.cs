@@ -57,16 +57,16 @@ public class SpaceshipMissile : MonoBehaviour
                 Vector3 cellCenterWorld = targetTilemap.GetCellCenterWorld(cellPos);
 
                 // 폭발 범위 내에 있는지 확인
-                if (Vector3.Distance(cellCenterWorld, explosionCenterWorld) <= SpaceshipWeapon.Instance.GetExplosionRadius())
+                if (Vector3.Distance(cellCenterWorld, explosionCenterWorld) <= Managers.Instance.spaceshipWeapon.GetExplosionRadius())
                 {
                     // 이벤트 방송 대신, 타겟 소행성의 ApplyDamage 함수를 직접 호출합니다.
-                    targetAsteroid.ApplyDamage(cellPos, SpaceshipWeapon.Instance.GetDamage());
+                    targetAsteroid.ApplyDamage(cellPos, Managers.Instance.spaceshipWeapon.GetDamage());
                 }
             }
             if (TilemapShadowGenerator.Instance != null)
             {
                         Vector3Int explosionCenterCell = targetAsteroid.myTilemap.WorldToCell(collision.GetContact(0).point);
-                        float explosionRadius = SpaceshipWeapon.Instance.GetExplosionRadius();
+                        float explosionRadius = Managers.Instance.spaceshipWeapon.GetExplosionRadius();
 
                         // 월드 단위의 float 반경을 그대로 전달합니다.
                         TilemapShadowGenerator.Instance.UpdateShadowsAround(explosionCenterCell, explosionRadius);

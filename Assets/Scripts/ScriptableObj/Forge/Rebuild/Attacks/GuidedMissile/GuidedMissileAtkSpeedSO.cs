@@ -6,6 +6,7 @@ public class GuidedMissileAtkSpeedSO : BaseForgeSO
     public int AtkSpeed;
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance?.turretActivationManager == null) return;
+        Managers.Instance.turretActivationManager.AddMissileInterval((float)AtkSpeed);
     }
 }

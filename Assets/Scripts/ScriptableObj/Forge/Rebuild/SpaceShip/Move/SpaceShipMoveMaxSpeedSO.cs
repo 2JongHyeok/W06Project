@@ -1,11 +1,12 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "SpaceShipMoveRotationSpeedSO", menuName = "ScriptableObjects/Forge/SpaceShip/Move/SpaceShipMoveRotationSpeedSO", order = 1)]
+[CreateAssetMenu(fileName = "SpaceShipMoveMaxSpeedSO", menuName = "ScriptableObjects/Forge/SpaceShip/Move/SpaceShipMoveMaxSpeedSO", order = 1)]
 public class SpaceShipMoveMaxSpeedSO : BaseForgeSO
 {
     public ForgeId ForgeId = ForgeId.SpaceShipMoveMaxSpeed;
     public int MaxSpeed;
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance?.spaceshipMotor == null) return;
+        Managers.Instance.spaceshipMotor.AddThrustPower((float)MaxSpeed);
     }
 }

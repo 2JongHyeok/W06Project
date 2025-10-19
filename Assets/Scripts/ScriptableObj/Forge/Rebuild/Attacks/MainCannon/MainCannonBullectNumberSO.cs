@@ -1,11 +1,13 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "MainCannonMoveSpeedSO", menuName = "ScriptableObjects/Forge/Attacks/MainCannon/MainCannonMoveSpeedSO", order = 1)]
+[CreateAssetMenu(fileName = "MainCannonBulletNumberSO", menuName = "ScriptableObjects/Forge/Attacks/MainCannon/MainCannonBulletNumberSO", order = 1)]
 public class MainCannonBulletNumberSO : BaseForgeSO
 {
     public ForgeId ForgeId = ForgeId.MainCannonBulletNumber;
-    public int BulletNumber;
+    public int BulletNumber = 1;
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance?.weapon == null) return;
+        for (int i = 0; i < Mathf.Max(1, BulletNumber); i++)
+            Managers.Instance.weapon.UpgradeTurretBulletCount();
     }
 }

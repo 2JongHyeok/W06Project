@@ -6,6 +6,7 @@ public class MainCannonMoveSpeedSO : BaseForgeSO
     public int MoveSpeed;
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance?.weapon == null) return;
+        Managers.Instance.weapon.AddCannonSpeed((float)MoveSpeed);
     }
 }

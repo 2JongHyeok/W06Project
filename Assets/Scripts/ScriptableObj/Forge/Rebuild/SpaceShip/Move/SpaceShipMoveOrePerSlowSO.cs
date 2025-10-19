@@ -1,11 +1,12 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "SpaceShipMoveRotationSpeedSO", menuName = "ScriptableObjects/Forge/SpaceShip/Move/SpaceShipMoveRotationSpeedSO", order = 1)]
+[CreateAssetMenu(fileName = "SpaceShipMoveOrePerSlowSO", menuName = "ScriptableObjects/Forge/SpaceShip/Move/SpaceShipMoveOrePerSlowSO", order = 1)]
 public class SpaceShipMoveOrePerSlowSO : BaseForgeSO
 {
     public ForgeId ForgeId = ForgeId.SpaceShipMoveOrePerSlow;
     public int OrePerSlow;
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance?.spaceshipMotor == null) return;
+        Managers.Instance.spaceshipMotor.AddThrustReductionPerOre((float)OrePerSlow);
     }
 }

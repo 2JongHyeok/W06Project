@@ -6,9 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class SpaceshipWeapon : MonoBehaviour
 {
-    // 업그레이드 관리를 위한 싱글톤 인스턴스
-    public static SpaceshipWeapon Instance { get; private set; }
-
     [Header("미사일 설정")]
     [SerializeField] private GameObject missilePrefab;
     [SerializeField] private Transform firePoint;
@@ -23,17 +20,7 @@ public class SpaceshipWeapon : MonoBehaviour
 
     void Awake()
     {
-        // 싱글톤 패턴 설정
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-
         shipRb = GetComponent<Rigidbody2D>();
-
-
     }
 
 /// <summary>
@@ -67,9 +54,11 @@ public class SpaceshipWeapon : MonoBehaviour
     }
 
     #region Getter & Setter (업그레이드용)
+    // 원래 이름 (다른 시스템 호환)
     public int GetDamage() { return damage; }
     public void SetDamage(int value) { damage = value; }
     public void AddDamage(int amount) { damage += amount; }
+
     public float GetAttackSpeed() { return fireRate; }
     public void SetAttackSpeed(float value) { fireRate = value; }
     public void AddAttackSpeed(float amount) { fireRate += amount; }
@@ -77,5 +66,18 @@ public class SpaceshipWeapon : MonoBehaviour
     public float GetExplosionRadius() { return explosionRadius; }
     public void SetExplosionRadius(float value) { explosionRadius = value; }
     public void AddExplosionRadius(float amount) { explosionRadius += amount; }
+
+    // Mining 전용 네이밍 (동일 변수 매핑)
+    public int GetMiningDamage() { return damage; }
+    public void SetMiningDamage(int value) { damage = value; }
+    public void AddMiningDamage(int amount) { damage += amount; }
+
+    public float GetMiningAttackSpeed() { return fireRate; }
+    public void SetMiningAttackSpeed(float value) { fireRate = value; }
+    public void AddMiningAttackSpeed(float amount) { fireRate += amount; }
+
+    public float GetMiningRadius() { return explosionRadius; }
+    public void SetMiningRadius(float value) { explosionRadius = value; }
+    public void AddMiningRadius(float amount) { explosionRadius += amount; }
     #endregion
 }

@@ -1,11 +1,12 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "SpaceShipMoveRotationSpeedSO", menuName = "ScriptableObjects/Forge/SpaceShip/Move/SpaceShipMoveRotationSpeedSO", order = 1)]
+[CreateAssetMenu(fileName = "SpaceShipMiningRadiusSO", menuName = "ScriptableObjects/Forge/SpaceShip/Mining/SpaceShipMiningRadiusSO", order = 1)]
 public class SpaceShipMiningRadiusSO : BaseForgeSO
 {
     public ForgeId ForgeId = ForgeId.SpaceShipMiningRadius;
     public int MiningRadius;
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance?.spaceshipWeapon != null)
+            Managers.Instance.spaceshipWeapon.AddMiningRadius((float)MiningRadius);
     }
 }

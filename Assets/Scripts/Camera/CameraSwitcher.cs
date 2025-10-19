@@ -36,10 +36,10 @@ public class CameraSwitcher : MonoBehaviour
 
     void Update()
     {
-        if(forgeManger.forgeUI.isForge)
-        {
-            return;
-        }
+        // if(forgeManger.forgeUI.isForge)
+        // {
+        //     return;
+        // }
         // 줌 처리 (마우스 휠)
         HandleZoom();
     }

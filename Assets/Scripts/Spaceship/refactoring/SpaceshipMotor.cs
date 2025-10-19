@@ -4,8 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class SpaceshipMotor : MonoBehaviour
 {
-    public static SpaceshipMotor Instance { get; private set; }
-
     private SpaceshipCargoSystem cargoSystem;
 
     [Header("Cargo Weight Penalty")]
@@ -48,14 +46,6 @@ public class SpaceshipMotor : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-
         cargoSystem = GetComponent<SpaceshipCargoSystem>();
         if (cargoSystem == null)
         {

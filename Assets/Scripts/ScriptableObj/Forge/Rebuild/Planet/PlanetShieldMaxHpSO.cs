@@ -6,6 +6,7 @@ public class PlanetShieldMaxHpSO : BaseForgeSO
     public int ShieldMaxHp;
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        // TODO: 실드 시스템 연결
+        Debug.Log("PlanetShieldMaxHpSO.Apply called (implement hook to shield system).");
     }
 }

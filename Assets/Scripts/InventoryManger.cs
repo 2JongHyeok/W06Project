@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class InventoryManger : MonoBehaviour
 {
-    public static InventoryManger Instance { get; private set; }
     public OreSO[] orePools;
     public int[] OreList;
     [SerializeField] private InventoryUI inventoryUI;
@@ -45,7 +44,7 @@ public class InventoryManger : MonoBehaviour
         return false;
     }
 
-    public bool CheckOre(Cost[] costs)
+    public bool CheckOre(BaseForgeSO.Cost[] costs)
     {
         foreach (var item in costs)
         {

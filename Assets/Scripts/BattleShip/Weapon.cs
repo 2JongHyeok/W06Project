@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public static Weapon Instance { get; private set; }
-
     [Header("WeaponPivot")]
     [SerializeField] private GameObject weaponPivot;
 
@@ -33,12 +31,6 @@ public class Weapon : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
         if (!targetRenderer) targetRenderer = GetComponentInChildren<SpriteRenderer>(true);
     }
 

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class WinchController : MonoBehaviour
 {
-    public static WinchController Instance { get; private set; }
     [Header("오브젝트 연결")]
     [Tooltip("생성할 Forcep 프리팹을 연결하세요.")]
     public GameObject forcepPrefab;
@@ -29,15 +28,6 @@ public class WinchController : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
         lineRenderer.enabled = false;
-    }
-    void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
     }
 
     void Update()
@@ -92,12 +82,7 @@ public class WinchController : MonoBehaviour
 
         lineRenderer.enabled = true;
 
-        // [추가] 무기 시스템 비활성화 (Weapon 스크립트가 Singleton일 경우)
-        if (Weapon.Instance != null)
-        {
-            Weapon.Instance.enabled = false;
-            Debug.Log("Weapon 비활성화됨");
-        }
+        
     }
 
     private void UpdateRopeVisuals()
@@ -116,12 +101,7 @@ public class WinchController : MonoBehaviour
         forcepController = null;
         lineRenderer.enabled = false;
 
-        // [추가] 무기 시스템 다시 활성화
-        if (Weapon.Instance != null)
-        {
-            Weapon.Instance.enabled = true;
-            Debug.Log("Weapon 다시 활성화됨");
-        }
+        
     }
     #region Getter Setter
     public float GetRopeSpeed()
