@@ -8961,10 +8961,6 @@ PrefabInstance:
       propertyPath: inventoryManger
       value: 
       objectReference: {fileID: 5803141803156037022}
-    - target: {fileID: 7370505871076105924, guid: 72e50df7d89bbde4b897cff783e06567, type: 3}
-      propertyPath: isFlightModeState
-      value: 
-      objectReference: {fileID: 11400000, guid: 6fc833c94dc76c247b79607e7cbd1ecc, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
