@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lv2_Zone_Settings
   m_EditorClassIdentifier: 
   minDistance: 20
-  maxDistance: 46
+  maxDistance: 80
   spawnChance: 0.05
   asteroidPool:
   - asteroidPrefab: {fileID: 165758702515033949, guid: 8cf4edae2b107ec479601e7c96d597dd, type: 3}
