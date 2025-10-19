@@ -330,7 +330,7 @@ private void UpdateHighlight()
     }
 
     // (BreakConnection, OnTriggerEnter2D, OnTriggerExit2D 함수는 변경 없음)
-// 이 메서드를 통째로 교체하세요.
+    // 이 메서드를 통째로 교체하세요.
     private void BreakConnection(CollectedOreInfo oreInfo)
     {
         if (oreInfo == null) return;
@@ -364,6 +364,26 @@ private void UpdateHighlight()
         collectedOres.Remove(oreInfo);
         UpdateCarryingState();
     }
+    /// <summary>
+    /// 외부에서 특정 광물 오브젝트와의 연결을 끊도록 요청하는 공개 함수입니다.
+    /// </summary>
+    /// <param name="oreObject">연결을 끊고자 하는 광물 게임 오브젝트</param>
+    public void BreakConnectionForOre(GameObject oreObject)
+    {
+        if (oreObject == null) return;
+
+        // collectedOres 리스트에서 요청받은 광물과 일치하는 CollectedOreInfo를 찾습니다.
+        CollectedOreInfo infoToBreak = collectedOres.FirstOrDefault(info => info.OreObject == oreObject);
+
+        // 만약 찾았다면, 기존에 있던 private BreakConnection 함수를 호출하여 안전하게 연결을 끊습니다.
+        if (infoToBreak != null)
+        {
+            BreakConnection(infoToBreak);
+            Debug.Log($"[CargoSystem] {oreObject.name}과의 연결을 외부 요청으로 끊었습니다.");
+        }
+    }   
+
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Ore"))
