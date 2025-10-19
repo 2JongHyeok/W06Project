@@ -50,6 +50,8 @@ MonoBehaviour:
   cameraSwitcher: {fileID: 0}
   dockedShip: {fileID: 0}
   departureCircleRadius: 4.2
+  canDepartState: {fileID: 11400000, guid: 404ed7a2b8bb6e84492af553503d725e, type: 2}
+  isFlightModeState: {fileID: 11400000, guid: 6fc833c94dc76c247b79607e7cbd1ecc, type: 2}
   isSpaceshipMode: 0
 --- !u!58 &2085803421363455704
 CircleCollider2D:

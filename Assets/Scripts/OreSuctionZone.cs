@@ -24,35 +24,20 @@ public class OreSuctionZone : MonoBehaviour
 
         GameObject oreObj = other.gameObject;
 
-        // 우주선 카고 시스템과 연결된 밧줄을 끊기
+        // [개선] 씬에 있는 우주선 카고 시스템을 찾습니다.
         var cargoSystem = FindAnyObjectByType<SpaceshipCargoSystem>();
         if (cargoSystem != null)
         {
-            // CollectedOreInfo 중 이 광물을 포함한 연결 찾아 끊기
-            var collected = cargoSystem
-                .GetType()
-                .GetField("collectedOres", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .GetValue(cargoSystem) as System.Collections.IEnumerable;
-
-            if (collected != null)
-            {
-                foreach (var item in collected)
-                {
-                    var oreField = item.GetType().GetProperty("OreObject");
-                    GameObject connectedOre = oreField.GetValue(item) as GameObject;
-                    if (connectedOre == oreObj)
-                    {
-                        var breakMethod = cargoSystem.GetType()
-                            .GetMethod("BreakConnection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                        breakMethod.Invoke(cargoSystem, new object[] { item });
-                        break;
-                    }
-                }
-            }
+            // [개선] 위험한 리플렉션 대신, 새로 만든 공개 함수를 호출하여 안전하게 연결 해제를 요청합니다.
+            cargoSystem.BreakConnectionForOre(oreObj);
         }
-
-        //  광물이 (0,0)으로 부드럽게 끌려가도록 코루틴 시작
-        StartCoroutine(SuckToCenter(oreObj));
+        
+        // 만약 광물이 다른 곳에서 먼저 파괴되었을 수 있으니, 확인 후 코루틴을 시작합니다.
+        if (oreObj != null)
+        {
+            // 광물이 (0,0)으로 부드럽게 끌려가도록 코루틴 시작
+            StartCoroutine(SuckToCenter(oreObj));
+        }
     }
 
     private IEnumerator SuckToCenter(GameObject ore)

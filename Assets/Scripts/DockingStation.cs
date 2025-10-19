@@ -11,10 +11,13 @@ public class DockingStation : MonoBehaviour
     [Header("우주선 정보")]
     [Tooltip("씬에 배치된 실제 우주선 인스턴스 (씬 오브젝트)")]
     [SerializeField] private GameObject dockedShip;
-    
+
     [Header("출격 설정")]
     [Tooltip("우주선이 출격할 원의 반지름입니다.")]
     [SerializeField] private float departureCircleRadius = 5f;
+    [Header("UI 상태 알림")]
+    [SerializeField] private BoolVariable canDepartState; // 출격 가능 상태
+    [SerializeField] private BoolVariable isFlightModeState;
 
     // --- 내부 변수 ---
     private SpaceshipCargoSystem cargoSystem;
@@ -43,10 +46,11 @@ public class DockingStation : MonoBehaviour
             Debug.LogWarning("[DockingStation] CameraSwitcher가 비었습니다.");
         if (!inventoryManger)
             Debug.LogWarning("[DockingStation] InventoryManger가 비었습니다.");
+        UpdateAllUIStates();
     }
 
     private void Update()
-    {
+    {    
         // 우주선 '출격' 로직만 여기에 남겨둡니다. (F키를 누르고, 우주선 모드가 아닐 때)
         if (Input.GetKeyDown(KeyCode.F) && !isSpaceshipMode)
         {
@@ -62,6 +66,9 @@ public class DockingStation : MonoBehaviour
             cameraSwitcher?.ToggleCameraMode();
             dockedShip.SetActive(true);      // 우주선 조작 시작
             isSpaceshipMode = true;
+
+            UpdateAllUIStates();
+
             Debug.Log("우주선 모드 진입. 출격 위치로 이동.");
         }
     }
@@ -96,6 +103,8 @@ public class DockingStation : MonoBehaviour
             cameraSwitcher?.ToggleCameraMode();
             isSpaceshipMode = false;
 
+            UpdateAllUIStates();
+
             // 도킹할 우주선과 카고 시스템 참조
             dockedShip = other.attachedRigidbody ? other.attachedRigidbody.gameObject : other.gameObject;
             cargoSystem = other.GetComponentInParent<SpaceshipCargoSystem>();
@@ -120,6 +129,24 @@ public class DockingStation : MonoBehaviour
             // 참조 해제
             cargoSystem = null;
             //Debug.Log("모든 광물을 기지에 저장하고 우주선을 격납했습니다.");
+        }
+    }
+
+    // [추가] UI 상태 업데이트를 전담하는 새로운 함수
+    private void UpdateAllUIStates()
+    {
+        // 1. 출격 가능 상태 업데이트 (기존 로직)
+        if (canDepartState != null)
+        {
+            // isSpaceshipMode가 '아닐 때' 출격 가능
+            canDepartState.Value = !isSpaceshipMode;
+        }
+
+        // 2. 비행 모드 상태 업데이트 (새로운 로직)
+        if (isFlightModeState != null)
+        {
+            // isSpaceshipMode가 '맞을 때' 비행 모드
+            isFlightModeState.Value = isSpaceshipMode;
         }
     }
 

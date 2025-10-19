@@ -41,6 +41,17 @@ public class SpaceshipCargoSystem : MonoBehaviour
     [SerializeField] private int skipChecksFramesAfterWarp = 4;
     private int skipChecksUntilFrame = -1;
 
+    [Header("UI 상태 알림")]
+    [SerializeField] private BoolVariable hasPotentialOresState; // 주울 광물 상태
+    [SerializeField] private BoolVariable isCarryingOresState;   // 들고 있는 광물 상태
+
+    [Header("하이라이트 설정")]
+    [Tooltip("주울 수 있는 광물을 강조할 때 사용할 색상입니다.")]
+    [SerializeField] private Color highlightColor = Color.green;
+    private GameObject currentlyHighlightedOre; // 현재 하이라이트된 광물을 추적
+    private Color originalOreColor = Color.white; // 원래 색상으로 되돌리기 위한 값 (대부분의 스프라이트는 흰색이 기본)
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -53,14 +64,53 @@ public class SpaceshipCargoSystem : MonoBehaviour
 
     void OnDisable()
     {
-        WorldWarper.OnWarped -= HandleWorldWarped;   // 해제 (중복구독 방지)
+        // 1. WorldWarper 이벤트 구독 해제 (기존 로직)
+        WorldWarper.OnWarped -= HandleWorldWarped;
+
+        // 2. [추가] 현재 수집된 모든 광물과의 연결을 강제로 끊습니다.
+        //    리스트를 순회하며 아이템을 제거할 때는 반드시 뒤에서부터 거꾸로 순회해야 안전합니다.
+        for (int i = collectedOres.Count - 1; i >= 0; i--)
+        {
+            BreakConnection(collectedOres[i]);
+        }
+        // 루프가 끝나면 collectedOres 리스트는 비워집니다.
+
+        // 3. 하이라이트가 남아있었다면 확실하게 제거합니다.
+        ClearHighlight();
+
+        // 4. UI 상태를 '없음'으로 되돌립니다.
+        if (hasPotentialOresState != null)
+        {
+            hasPotentialOresState.Value = false;
+        }
+        if (isCarryingOresState != null)
+        {
+            isCarryingOresState.Value = false;
+        }
     }
 
     void Update()
     {
+        UpdatePotentialOresState();
+    
+        UpdateHighlight();
+
         if (Input.GetKeyDown(KeyCode.E)) CollectNearestOre();
         if (Input.GetKeyDown(KeyCode.Q)) DropLastCollectedOre();
     }
+
+    private void UpdatePotentialOresState()
+    {
+        if (hasPotentialOresState == null) return;
+        
+        // 현재 상태와 계산된 상태가 다를 때만 값을 변경합니다. (효율성!)
+        bool hasOres = potentialOres.Count > 0;
+        if (hasPotentialOresState.Value != hasOres)
+        {
+            hasPotentialOresState.Value = hasOres;
+        }
+    }
+
     void LateUpdate()
     {
         // 워프는 WorldWarper.LateUpdate()에서 발생
@@ -69,39 +119,109 @@ public class SpaceshipCargoSystem : MonoBehaviour
         UpdateAndCheckConnections_Late();
     }
 
+    private void UpdateHighlight()
+    {
+        // 1. 목록에 있는 광물 중 파괴된 것이 있다면 먼저 정리합니다.
+        potentialOres.RemoveAll(item => item == null);
+
+        // 2. 주울 수 있는 후보(potentialOres) 중에서, 이미 수집한(collectedOres) 광물은 제외합니다.
+        var highlightCandidates = potentialOres.Where(p_ore => 
+            !collectedOres.Any(c_ore => c_ore.OreObject == p_ore)
+        ).ToList();
+
+        // 3. 하이라이트 후보가 없다면, 기존 하이라이트를 끄고 함수를 종료합니다.
+        if (highlightCandidates.Count == 0)
+        {
+            ClearHighlight();
+            return;
+        }
+
+        // 4. 하이라이트 후보 중에서 가장 가까운 광물을 찾습니다.
+        GameObject nearestOre = highlightCandidates
+            .OrderBy(ore => Vector2.Distance(transform.position, ore.transform.position))
+            .FirstOrDefault();
+
+        // 5. 새로 찾은 가장 가까운 광물이 기존에 하이라이트된 광물과 다르다면, 교체해줍니다.
+        if (nearestOre != currentlyHighlightedOre)
+        {
+            ClearHighlight();
+            
+            if (nearestOre != null)
+            {
+                var sr = nearestOre.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    //  여기가 핵심! 
+                    // 하이라이트 색으로 바꾸기 '직전에' 광물의 현재 색상을 저장합니다.
+                    originalOreColor = sr.color;
+
+                    // 이제 하이라이트를 적용합니다.
+                    sr.color = highlightColor;
+                    currentlyHighlightedOre = nearestOre;
+                }
+            }
+        }
+    }
+
+    // [추가] 하이라이트를 끄는 역할을 전담하는 함수 (버그 방지에 매우 중요!)
+    private void ClearHighlight()
+    {
+        if (currentlyHighlightedOre != null)
+        {
+            var sr = currentlyHighlightedOre.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.color = originalOreColor; // 원래 색상으로 복원
+            }
+            currentlyHighlightedOre = null; // 추적 변수 비우기
+        }
+    }
+
+
     private void CollectNearestOre()
     {
         if (collectedOres.Count >= maxCargoCount) return;
-        potentialOres.RemoveAll(item => item == null);
-        if (potentialOres.Count == 0) return;
 
-        GameObject nearestOre = potentialOres
-            .OrderBy(ore => Vector2.Distance(transform.position, ore.transform.position))
-            .FirstOrDefault();
-        if (nearestOre == null) return;
-        potentialOres.Remove(nearestOre);
+        // 현재 하이라이트된 광물이 수집 대상 1순위입니다.
+        GameObject oreToCollect = currentlyHighlightedOre;
 
+        // 만약 하이라이트된 광물이 없거나, 어떤 이유로든 주울 수 없는 상태라면 (안전장치)
+        // 원래 로직대로 유효한 후보 중에서 가장 가까운 것을 다시 찾습니다.
+        if (oreToCollect == null || !potentialOres.Contains(oreToCollect) || collectedOres.Any(c_ore => c_ore.OreObject == oreToCollect))
+        {
+            var validOres = potentialOres.Where(p_ore => !collectedOres.Any(c_ore => c_ore.OreObject == p_ore)).ToList();
+            if(validOres.Count == 0) return; // 주울 것이 완전히 없으면 종료
+
+            oreToCollect = validOres
+                .OrderBy(ore => Vector2.Distance(transform.position, ore.transform.position))
+                .FirstOrDefault();
+        }
+        
+        if (oreToCollect == null) return;
+        
+        // 수집 직전에 하이라이트를 확실히 끕니다.
+        ClearHighlight();
+        
+        potentialOres.Remove(oreToCollect);
+        
+        // --- 이하 로프 생성 로직 ---
         List<GameObject> ropeSegments = new List<GameObject>();
         Rigidbody2D previousSegmentRB = this.rb;
 
         Vector2 hookPos = cargoHook.position;
-        Vector2 orePos = nearestOre.transform.position;
+        Vector2 orePos = oreToCollect.transform.position;
         float totalDistance = Vector2.Distance(hookPos, orePos);
         Vector2 direction = (orePos - hookPos).normalized;
         float segmentLength = totalDistance / (numberOfSegments + 1);
-
-        // 우주선 로컬에서 본 카고 훅 좌표(자식이 아니어도 안전)
+        
         Vector2 shipLocalHook = rb.transform.InverseTransformPoint(cargoHook.position);
 
         for (int i = 0; i < numberOfSegments; i++)
         {
-            // ⬇︎ 첫 세그먼트를 훅 위치에 스폰
             Vector2 spawnPos = hookPos + direction * segmentLength * i;
-
             GameObject segmentObj = Instantiate(ropeSegmentPrefab, spawnPos, Quaternion.identity);
             ropeSegments.Add(segmentObj);
-
-            // 세그먼트가 꼭 RB2D/Hinge를 갖도록 보강
+            
             var segRB = segmentObj.GetComponent<Rigidbody2D>();
             if (segRB == null) segRB = segmentObj.AddComponent<Rigidbody2D>();
 
@@ -112,60 +232,59 @@ public class SpaceshipCargoSystem : MonoBehaviour
 
             if (i == 0)
             {
-                // ⬇︎ 이것 때문에 "첫 마디가 뻣뻣한 고정처럼" 보였을 가능성이 큼
                 joint.autoConfigureConnectedAnchor = false;
-                joint.connectedAnchor = shipLocalHook; // 우주선 RB 로컬 기준의 훅 위치
-                // 필요시: joint.enableCollision = true; // 로프끼리 충돌 원하면
+                joint.connectedAnchor = shipLocalHook;
             }
             else
             {
                 joint.autoConfigureConnectedAnchor = true;
             }
-
             previousSegmentRB = segRB;
         }
 
-        // 광물에 힌지 연결 (필요시 RB 보강)
-        var oreRB = nearestOre.GetComponent<Rigidbody2D>();
-        if (oreRB == null) oreRB = nearestOre.AddComponent<Rigidbody2D>();
+        var oreRB = oreToCollect.GetComponent<Rigidbody2D>();
+        if (oreRB == null) oreRB = oreToCollect.AddComponent<Rigidbody2D>();
 
-        HingeJoint2D oreJoint = nearestOre.GetComponent<HingeJoint2D>();
-        if (oreJoint == null) oreJoint = nearestOre.AddComponent<HingeJoint2D>();
+        HingeJoint2D oreJoint = oreToCollect.GetComponent<HingeJoint2D>();
+        if (oreJoint == null) oreJoint = oreToCollect.AddComponent<HingeJoint2D>();
         oreJoint.connectedBody = previousSegmentRB;
         oreJoint.autoConfigureConnectedAnchor = true;
 
         GameObject lineObj = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
         LineRenderer line = lineObj.GetComponent<LineRenderer>();
-        collectedOres.Add(new CollectedOreInfo(nearestOre, line, ropeSegments));
+        collectedOres.Add(new CollectedOreInfo(oreToCollect, line, ropeSegments));
+
+        UpdateCarryingState();
     }
     private void DropLastCollectedOre()
+    {
+        if (collectedOres.Count == 0) return;
+
+        // 1. 연결을 끊기 전에, 버려질 광물 오브젝트에 대한 참조를 미리 저장합니다.
+        CollectedOreInfo lastOreInfo = collectedOres.Last();
+        GameObject oreObject = lastOreInfo.OreObject;
+
+        // 2. 기존 로직대로 연결을 끊습니다.
+        BreakConnection(lastOreInfo);
+
+        // 3. 방금 버린 광물 오브젝트가 여전히 존재하는지 확인합니다.
+        if (oreObject != null)
         {
-            if (collectedOres.Count == 0) return;
-
-            // 1. 연결을 끊기 전에, 버려질 광물 오브젝트에 대한 참조를 미리 저장합니다.
-            CollectedOreInfo lastOreInfo = collectedOres.Last();
-            GameObject oreObject = lastOreInfo.OreObject;
-
-            // 2. 기존 로직대로 연결을 끊습니다.
-            BreakConnection(lastOreInfo);
-
-            // 3. 방금 버린 광물 오브젝트가 여전히 존재하는지 확인합니다.
-            if (oreObject != null)
+            // 4. 버려진 광물의 콜라이더가 우리의 수집 트리거 콜라이더와 여전히 닿아 있는지 확인합니다.
+            Collider2D oreCollider = oreObject.GetComponent<Collider2D>();
+            if (oreCollider != null && collectionTrigger.IsTouching(oreCollider))
             {
-                // 4. 버려진 광물의 콜라이더가 우리의 수집 트리거 콜라이더와 여전히 닿아 있는지 확인합니다.
-                Collider2D oreCollider = oreObject.GetComponent<Collider2D>();
-                if (oreCollider != null && collectionTrigger.IsTouching(oreCollider))
+                // 5. 닿아있다면, 수집 가능한 목록(potentialOres)에 다시 추가해줍니다.
+                //    (중복 추가를 방지하기 위해 목록에 없는지 먼저 확인)
+                if (!potentialOres.Contains(oreObject))
                 {
-                    // 5. 닿아있다면, 수집 가능한 목록(potentialOres)에 다시 추가해줍니다.
-                    //    (중복 추가를 방지하기 위해 목록에 없는지 먼저 확인)
-                    if (!potentialOres.Contains(oreObject))
-                    {
-                        potentialOres.Add(oreObject);
-                        Debug.Log("버려진 광물이 아직 범위 안에 있어 수집 가능 목록에 다시 추가합니다.");
-                    }
+                    potentialOres.Add(oreObject);
+                    Debug.Log("버려진 광물이 아직 범위 안에 있어 수집 가능 목록에 다시 추가합니다.");
                 }
             }
         }
+        UpdateCarryingState();
+    }
 
 
     private void UpdateAndCheckConnections_Late()
@@ -216,18 +335,30 @@ public class SpaceshipCargoSystem : MonoBehaviour
     }
 
     // (BreakConnection, OnTriggerEnter2D, OnTriggerExit2D 함수는 변경 없음)
+    // 이 메서드를 통째로 교체하세요.
     private void BreakConnection(CollectedOreInfo oreInfo)
     {
         if (oreInfo == null) return;
 
+        // [추가] 연결이 끊어지는 광물이 하이라이트된 광물이었다면, 하이라이트를 끕니다. (버그 방지)
+        if (oreInfo.OreObject != null && oreInfo.OreObject == currentlyHighlightedOre)
+        {
+            ClearHighlight();
+        }
+
         if (oreInfo.OreObject != null)
         {
-            Destroy(oreInfo.OreObject.GetComponent<HingeJoint2D>());
+            // HingeJoint2D가 없을 수도 있으니, 확인 후 파괴합니다.
+            var joint = oreInfo.OreObject.GetComponent<HingeJoint2D>();
+            if (joint != null)
+            {
+                Destroy(joint);
+            }
         }
 
         foreach (var segment in oreInfo.RopeSegments)
         {
-            Destroy(segment);
+            if (segment != null) Destroy(segment);
         }
 
         if (oreInfo.Line != null)
@@ -236,7 +367,27 @@ public class SpaceshipCargoSystem : MonoBehaviour
         }
 
         collectedOres.Remove(oreInfo);
+        UpdateCarryingState();
     }
+    /// <summary>
+    /// 외부에서 특정 광물 오브젝트와의 연결을 끊도록 요청하는 공개 함수입니다.
+    /// </summary>
+    /// <param name="oreObject">연결을 끊고자 하는 광물 게임 오브젝트</param>
+    public void BreakConnectionForOre(GameObject oreObject)
+    {
+        if (oreObject == null) return;
+
+        // collectedOres 리스트에서 요청받은 광물과 일치하는 CollectedOreInfo를 찾습니다.
+        CollectedOreInfo infoToBreak = collectedOres.FirstOrDefault(info => info.OreObject == oreObject);
+
+        // 만약 찾았다면, 기존에 있던 private BreakConnection 함수를 호출하여 안전하게 연결을 끊습니다.
+        if (infoToBreak != null)
+        {
+            BreakConnection(infoToBreak);
+            Debug.Log($"[CargoSystem] {oreObject.name}과의 연결을 외부 요청으로 끊었습니다.");
+        }
+    }   
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -294,7 +445,17 @@ public class SpaceshipCargoSystem : MonoBehaviour
 
         // 5. 모든 짐을 내렸으니, 수집 목록을 깨끗하게 비운다.
         collectedOres.Clear();
+        UpdateCarryingState();
     }
+
+    private void UpdateCarryingState()
+    {
+        if (isCarryingOresState != null)
+        {
+            isCarryingOresState.Value = collectedOres.Count > 0;
+        }
+    }
+
     // 다른 스크립트에서 현재 수집한 광물 개수를 물어볼 수 있도록 통로를 열어줍니다.
     public int GetCollectedOreCount()
     {
