@@ -2,8 +2,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MainCannonAtkDamageSO", menuName = "ScriptableObjects/Forge/Attacks/MainCannon/MainCannonAtkDamageSO", order = 1)]
 public class MainCannonAtkDamageSO : BaseForgeSO
 {
-    public ForgeId ForgeId = ForgeId.MainCannonAtkDamage;
     public int AtkDamage;
+
+    protected override ForgeId GetForgeId() => ForgeId.MainCannonAtkDamage;
 
     public override void Apply()
     {

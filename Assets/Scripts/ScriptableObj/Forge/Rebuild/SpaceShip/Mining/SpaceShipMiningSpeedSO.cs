@@ -2,8 +2,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpaceShipMiningSpeedSO", menuName = "ScriptableObjects/Forge/SpaceShip/Mining/SpaceShipMiningSpeedSO", order = 1)]
 public class SpaceShipMiningSpeedSO : BaseForgeSO
 {
-    public ForgeId ForgeId = ForgeId.SpaceShipMiningSpeed;
     public int MiningSpeed;
+    
+    protected override ForgeId GetForgeId() => ForgeId.SpaceShipMiningSpeed;
+    
     public override void Apply()
     {
         if (Managers.Instance?.spaceshipWeapon != null)

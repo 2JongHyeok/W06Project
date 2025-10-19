@@ -44,15 +44,29 @@ public class InventoryManger : MonoBehaviour
         return false;
     }
 
-    public bool CheckOre(BaseForgeSO.Cost[] costs)
+    // BaseForgeSO의 비용 체크
+    public bool CheckOre(BaseForgeSO forgeSO)
     {
-        foreach (var item in costs)
-        {
-            if (OreList[(int)item.oreType] < item.amount)
-            {
-                return false;
-            }
-        }
+        if (forgeSO == null) return false;
+        
+        if (OreList[(int)OreType.Coal] < forgeSO.coalCost) return false;
+        if (OreList[(int)OreType.Iron] < forgeSO.ironCost) return false;
+        if (OreList[(int)OreType.Gold] < forgeSO.goldCost) return false;
+        if (OreList[(int)OreType.Diamond] < forgeSO.diamondCost) return false;
+        
+        return true;
+    }
+    
+    // BaseForgeSO의 비용 차감
+    public bool ConsumeOre(BaseForgeSO forgeSO)
+    {
+        if (!CheckOre(forgeSO)) return false;
+        
+        RemoveOre(OreType.Coal, forgeSO.coalCost);
+        RemoveOre(OreType.Iron, forgeSO.ironCost);
+        RemoveOre(OreType.Gold, forgeSO.goldCost);
+        RemoveOre(OreType.Diamond, forgeSO.diamondCost);
+        
         return true;
     }
 }
