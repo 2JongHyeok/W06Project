@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8008838dcd2d2324098fbaa99bae2bc5, type: 3}
   m_Name: MissileAtkSpeed 1
   m_EditorClassIdentifier: 
+  forgeId: 8
   upgradeName: "\uC720\uB3C4 \uBBF8\uC0AC\uC77C \uACF5\uACA9 \uC18D\uB3C4"
   upgradeDescription: "\uC720\uB3C4 \uBBF8\uC0AC\uC77C \uACF5\uACA9 \uC18D\uB3C4
     \uC99D\uAC00"
-  cost: []
+  coalCost: 6
+  ironCost: 3
+  goldCost: 0
+  diamondCost: 0
   postSubBranches: []
-  ForgeId: 8
-  AtkSpeed: 0
+  AtkSpeed: -0.8

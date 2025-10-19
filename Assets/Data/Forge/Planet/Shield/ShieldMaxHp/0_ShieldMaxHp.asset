@@ -16,3 +16,5 @@ MonoBehaviour:
   subBranchType: 15
   baseForgeSOs:
   - {fileID: 11400000, guid: 5b1cc9633c729ec4f898c3a5278cf49f, type: 2}
+  - {fileID: 11400000, guid: d8791e261c3e3934a93c4ae310ba0b59, type: 2}
+  - {fileID: 11400000, guid: f94d6a5cde6ec644faf9923be9c257e5, type: 2}

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a52dc7130b4d0645b26c421ad42cf03, type: 3}
+  m_Name: ShieldRegenSpeed 2
+  m_EditorClassIdentifier: 
+  forgeId: 16
+  upgradeName: "\uD589\uC131 \uC274\uB4DC \uB9AC\uC820"
+  upgradeDescription: "\uD589\uC131 \uC274\uB4DC \uB9AC\uC820\uB7C9 \uC99D\uAC00"
+  coalCost: 12
+  ironCost: 4
+  goldCost: 0
+  diamondCost: 0
+  postSubBranches: []
+  ShieldRegen: -15

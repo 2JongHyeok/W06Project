@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a52dc7130b4d0645b26c421ad42cf03, type: 3}
   m_Name: ShieldRegenSpeed 1
   m_EditorClassIdentifier: 
+  forgeId: 16
   upgradeName: "\uD589\uC131 \uC274\uB4DC \uB9AC\uC820"
   upgradeDescription: "\uD589\uC131 \uC274\uB4DC \uB9AC\uC820\uB7C9 \uC99D\uAC00"
-  cost: []
+  coalCost: 5
+  ironCost: 1
+  goldCost: 0
+  diamondCost: 0
   postSubBranches: []
-  ForgeId: 16
-  ShieldRegen: 0
+  ShieldRegen: -5

@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4150fc41a4f5f3645b47ba74e3c92766, type: 3}
   m_Name: MoveMaxSpeed 1
   m_EditorClassIdentifier: 
+  forgeId: 1
   upgradeName: "\uC6B0\uC8FC\uC120 \uCD5C\uB300 \uC18D\uB3C4"
   upgradeDescription: "\uC6B0\uC8FC\uC120 \uCD5C\uB300 \uC18D\uB3C4\uAC00 \uC99D\uAC00\uD569\uB2C8\uB2E4"
-  cost: []
+  coalCost: 3
+  ironCost: 2
+  goldCost: 0
+  diamondCost: 0
   postSubBranches: []
-  ForgeId: 1
-  MaxSpeed: 0
+  MaxSpeed: 10

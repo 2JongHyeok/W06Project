@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d384677d119519a45ba2919425165469, type: 3}
   m_Name: MiningDamage 1
   m_EditorClassIdentifier: 
+  forgeId: 3
   upgradeName: "\uCC44\uAD74 \uBBF8\uC0AC\uC77C \uB370\uBBF8\uC9C0"
   upgradeDescription: "\uCC44\uAD74 \uBBF8\uC0AC\uC77C \uB370\uBBF8\uC9C0 \uC0C1\uC2B9"
-  cost: []
+  coalCost: 2
+  ironCost: 1
+  goldCost: 0
+  diamondCost: 0
   postSubBranches: []
-  ForgeId: 3
-  MiningDamage: 0
+  MiningDamage: 1

@@ -16,6 +16,5 @@ MonoBehaviour:
   branchType: 2
   subBranches:
   - {fileID: 11400000, guid: 2fe289b7eba14454781947716987c328, type: 2}
-  - {fileID: 11400000, guid: 04de374c24fac3443bc8072a91190a9e, type: 2}
   - {fileID: 11400000, guid: 6c3cc787d64859544bdb967f244b5525, type: 2}
   - {fileID: 11400000, guid: c751b0e8a26dc96468e8ab899fa76142, type: 2}

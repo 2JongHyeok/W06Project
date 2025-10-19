@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f90ea7eeba92da04f98e7e977d8735c0, type: 3}
   m_Name: MiningSpeed 1
   m_EditorClassIdentifier: 
+  forgeId: 5
   upgradeName: "\uC6B0\uC8FC\uC120 \uCC44\uAD74 \uBBF8\uC0AC\uC77C \uACF5\uACA9 \uC18D\uB3C4"
   upgradeDescription: "\uC6B0\uC8FC\uC120 \uCC44\uAD74 \uBBF8\uC0AC\uC77C \uACF5\uACA9
     \uC18D\uB3C4 \uC99D\uAC00"
-  cost: []
+  coalCost: 3
+  ironCost: 2
+  goldCost: 0
+  diamondCost: 0
   postSubBranches: []
-  ForgeId: 5
-  MiningSpeed: 0
+  MiningSpeed: -0.1

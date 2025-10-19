@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 967bf70328800c94fbdf957ce0f262e8, type: 3}
   m_Name: CannonBulletNumber 1
   m_EditorClassIdentifier: 
+  forgeId: 11
   upgradeName: "\uC8FC\uD3EC \uD0C4\uD658 \uAC1C\uC218"
   upgradeDescription: "\uC8FC\uD3EC \uD0C4\uD658 \uAC1C\uC218 \uC99D\uAC00"
-  cost: []
+  coalCost: 6
+  ironCost: 2
+  goldCost: 0
+  diamondCost: 0
   postSubBranches: []
-  ForgeId: 11
   BulletNumber: 1
