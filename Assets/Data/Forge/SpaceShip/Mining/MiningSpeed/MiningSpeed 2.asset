@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: MiningSpeed 2
   m_EditorClassIdentifier: 
   forgeId: 5
-  upgradeName: "\uC6B0\uC8FC\uC120 \uCC44\uAD74 \uBBF8\uC0AC\uC77C \uACF5\uACA9 \uC18D\uB3C4"
-  upgradeDescription: "\uC6B0\uC8FC\uC120 \uCC44\uAD74 \uBBF8\uC0AC\uC77C \uACF5\uACA9
-    \uC18D\uB3C4 \uC99D\uAC00"
+  upgradeName: "\uCC44\uAD74 \uBBF8\uC0AC\uC77C \uC7AC\uC7A5\uC804 Lv.2"
+  upgradeDescription: "\uCC44\uAD74 \uBBF8\uC0AC\uC77C \uBC1C\uC0AC\uC18D\uB3C4\\n0.5
+    > <color=green>0.35</color>"
   coalCost: 8
   ironCost: 4
   goldCost: 0

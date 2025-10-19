@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ShieldMaxHp 2
   m_EditorClassIdentifier: 
   forgeId: 15
-  upgradeName: "\uD589\uC131 \uC274\uB4DC \uB9E5\uC2A4"
-  upgradeDescription: "\uD589\uC131 \uC274\uB4DC \uB9E5\uC2A4 \uC99D\uAC00"
+  upgradeName: "\uC274\uB4DC \uB0B4\uAD6C\uB3C4 Lv.2"
+  upgradeDescription: "\uD0C0\uC77C\uB2F9 \uC274\uB4DC \uB0B4\uAD6C\uB3C4\\n4 > <color=green>5</color>"
   coalCost: 8
   ironCost: 5
   goldCost: 1

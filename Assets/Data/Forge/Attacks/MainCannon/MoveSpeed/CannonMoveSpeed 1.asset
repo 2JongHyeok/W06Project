@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CannonMoveSpeed 1
   m_EditorClassIdentifier: 
   forgeId: 12
-  upgradeName: "\uC8FC\uD3EC \uD68C\uC804 \uC18D\uB3C4"
-  upgradeDescription: "\uC8FC\uD3EC \uD68C\uC804 \uC18D\uB3C4 \uC99D\uAC00"
+  upgradeName: "\uC8FC\uD3EC \uB808\uC77C Lv.1"
+  upgradeDescription: "\uC8FC\uD3EC \uD68C\uC804 \uC18D\uB3C4\\n60 > <color=green>80</color>"
   coalCost: 3
   ironCost: 1
   goldCost: 0

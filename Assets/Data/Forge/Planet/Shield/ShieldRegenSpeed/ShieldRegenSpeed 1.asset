@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: ShieldRegenSpeed 1
   m_EditorClassIdentifier: 
   forgeId: 16
-  upgradeName: "\uD589\uC131 \uC274\uB4DC \uB9AC\uC820"
-  upgradeDescription: "\uD589\uC131 \uC274\uB4DC \uB9AC\uC820\uB7C9 \uC99D\uAC00"
+  upgradeName: "\uC274\uB4DC \uC7AC\uC0DD\uC131 Lv.1"
+  upgradeDescription: "\uD30C\uAD34\uB41C \uC274\uB4DC \uC7AC\uC0DD \uC2DC\uAC04\\n90
+    > <color=green>85</color>"
   coalCost: 5
   ironCost: 1
   goldCost: 0

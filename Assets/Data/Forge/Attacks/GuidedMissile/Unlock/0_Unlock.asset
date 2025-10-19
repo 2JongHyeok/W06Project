@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffc067897671d04fa641fe01a67676c, type: 3}
   m_Name: 0_Unlock
   m_EditorClassIdentifier: 
-  branchName: "\uC720\uB3C4 \uBBF8\uC0AC\uC77C \uD574\uAE08"
+  branchName: "\uC720\uB3C4 \uBBF8\uC0AC\uC77C \uD3EC\uB300 \uAC74\uC124"
   subBranchType: 6
   baseForgeSOs:
   - {fileID: 11400000, guid: a077497148e7e0a458aeee80993af9c5, type: 2}

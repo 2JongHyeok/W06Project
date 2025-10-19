@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: MissileAtkDamage 1
   m_EditorClassIdentifier: 
   forgeId: 7
-  upgradeName: "\uC720\uB3C4 \uBBF8\uC0AC\uC77C \uACF5\uACA9\uB825"
-  upgradeDescription: "\uC790\uC73C\uB85C \uC801\uC744 \uACF5\uACA9\uD558\uB294 \uBBF8\uC0AC\uC77C/n\uC720\uB3C4
-    \uBBF8\uB3D9\uC0AC\uC77C \uACF5\uACA9\uB825/n<color=#red>"
+  upgradeName: "\uBBF8\uC0AC\uC77C \uACF5\uACA9\uB825 Lv.1"
+  upgradeDescription: "\uBBF8\uC0AC\uC77C \uACF5\uACA9\uB825\\n3 > <color=green>8</color>"
   coalCost: 4
   ironCost: 2
   goldCost: 0

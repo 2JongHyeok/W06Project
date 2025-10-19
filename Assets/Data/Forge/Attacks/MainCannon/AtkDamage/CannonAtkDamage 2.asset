@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CannonAtkDamage 2
   m_EditorClassIdentifier: 
   forgeId: 9
-  upgradeName: "\uC8FC\uD3EC \uACF5\uACA9\uB825"
-  upgradeDescription: "\uC8FC\uD3EC \uACF5\uACA9\uB825 \uC99D\uAC00"
+  upgradeName: "\uC8FC\uD3EC \uD0C4 Lv.2"
+  upgradeDescription: "\uC8FC\uD3EC \uACF5\uACA9\uB825\\n2 > <color=green>3</color>"
   coalCost: 9
   ironCost: 4
   goldCost: 1

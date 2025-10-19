@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffc067897671d04fa641fe01a67676c, type: 3}
   m_Name: 0_AtkSpeed
   m_EditorClassIdentifier: 
-  branchName: "\uC8FC\uD3EC \uACF5\uACA9 \uC18D\uB3C4"
+  branchName: "\uC8FC\uD3EC \uC7AC\uC7A5\uC804"
   subBranchType: 10
   baseForgeSOs:
   - {fileID: 11400000, guid: a8b150e0f35f24740b7067d4ab2a0ba8, type: 2}

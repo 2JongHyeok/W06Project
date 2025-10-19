@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forgeId: 14
   upgradeName: "\uCF54\uC5B4 \uCCB4\uB825 \uD68C\uBCF5"
-  upgradeDescription: "\uCF54\uC5B4 \uCCB4\uB825 \uD68C\uBCF5 +10"
+  upgradeDescription: "\uCF54\uC5B4 \uCCB4\uB825 \uD68C\uBCF5\\n<color=red>+10</color>"
   coalCost: 3
   ironCost: 2
   goldCost: 0

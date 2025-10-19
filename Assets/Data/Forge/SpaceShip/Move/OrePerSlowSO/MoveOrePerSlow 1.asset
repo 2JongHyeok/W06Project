@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MoveOrePerSlow 1
   m_EditorClassIdentifier: 
   forgeId: 2
-  upgradeName: "\uC790\uC6D0 \uAC10\uC18C\uB7C9"
-  upgradeDescription: "\uC790\uC6D0 \uB2F9 \uC18D\uB3C4 \uAC10\uB3C4\uB7C9 \uC644\uD654"
+  upgradeName: "\uC6B4\uBC18\uB825 Lv.1"
+  upgradeDescription: "\uC6B4\uBC18\uC73C\uB85C \uC778\uD55C \uAC10\uC18D\\n3 > <color=green>1.5</color>"
   coalCost: 3
   ironCost: 1
   goldCost: 0

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MoveMaxSpeed 1
   m_EditorClassIdentifier: 
   forgeId: 1
-  upgradeName: "\uC6B0\uC8FC\uC120 \uCD5C\uB300 \uC18D\uB3C4"
-  upgradeDescription: "\uC6B0\uC8FC\uC120 \uCD5C\uB300 \uC18D\uB3C4\uAC00 \uC99D\uAC00\uD569\uB2C8\uB2E4"
+  upgradeName: "\uC6B0\uC8FC\uC120 \uCD9C\uB825 Lv.1"
+  upgradeDescription: "\uC6B0\uC8FC\uC120 \uCD5C\uB300 \uC18D\uB3C4\\n50 > <color=green>60</color>"
   coalCost: 3
   ironCost: 2
   goldCost: 0

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: MissileAtkSpeed 2
   m_EditorClassIdentifier: 
   forgeId: 8
-  upgradeName: "\uC720\uB3C4 \uBBF8\uC0AC\uC77C \uACF5\uACA9 \uC18D\uB3C4"
-  upgradeDescription: "\uC720\uB3C4 \uBBF8\uC0AC\uC77C \uACF5\uACA9 \uC18D\uB3C4
-    \uC99D\uAC00"
+  upgradeName: "\uC7AC\uC7A5\uC804 \uC2DC\uAC04 Lv.Max"
+  upgradeDescription: "\uBBF8\uC0AC\uC77C \uC7AC\uC7A5\uC804 \uC2DC\uAC04\\n2.2 >
+    <color=green>1</color>"
   coalCost: 12
   ironCost: 5
   goldCost: 3

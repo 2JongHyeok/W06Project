@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CoreMaxHp 1
   m_EditorClassIdentifier: 
   forgeId: 13
-  upgradeName: "\uCF54\uC5B4 \uCD5C\uB300 \uCCB4\uB825"
-  upgradeDescription: "\uCF54\uC5B4 \uCD5C\uB300 \uCCB4\uB825 \uC99D\uAC00"
+  upgradeName: "\uCF54\uC5B4 \uCCB4\uB825 Lv.1"
+  upgradeDescription: "\uCF54\uC5B4 \uCD5C\uB300 \uCC44\uB825\\n100 > <color=green>120</color>"
   coalCost: 3
   ironCost: 1
   goldCost: 0
