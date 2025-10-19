@@ -16,5 +16,9 @@ MonoBehaviour:
   maxDistance: 80
   spawnChance: 0.05
   asteroidPool:
+  - asteroidPrefab: {fileID: 2161304723462897001, guid: 51b8ba96543ff844883755f3a3ac4ef1, type: 3}
+    weight: 60
+  - asteroidPrefab: {fileID: 2161304723462897001, guid: f81af4a10d3466d439f6ad37b28110ff, type: 3}
+    weight: 15
   - asteroidPrefab: {fileID: 2161304723462897001, guid: 4ff7a47ece433c04e84262f5d82ad5ce, type: 3}
-    weight: 10
+    weight: 5

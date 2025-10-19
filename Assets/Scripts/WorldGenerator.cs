@@ -133,6 +133,7 @@ public class WorldGenerator : MonoBehaviour
 
     /// <summary>
     /// 선택된 소행성 프리팹의 모양을 월드 타일맵의 특정 위치에 그대로 복사합니다.
+    /// 이때 무작위로 회전 및 반전 변환을 적용합니다.
     /// </summary>
     private void StampAsteroid(Vector2 worldPosition, GameObject asteroidPrefab)
     {
@@ -143,15 +144,51 @@ public class WorldGenerator : MonoBehaviour
             return;
         }
 
+        // --- 여기가 핵심 로직! (더 직관적인 방식으로 변경) ---
+        // 1. 어떤 변환을 적용할지 무작위로 결정합니다.
+        int rotationIndex = Random.Range(0, 4); // 0: 0도, 1: 90도, 2: 180도, 3: 270도
+        bool mirrorX = Random.value > 0.5f;     // 수평 반전 여부
+        bool mirrorY = Random.value > 0.5f;     // 수직 반전 여부
+
+        // 디버깅을 위해 어떤 변환이 선택되었는지 확인하고 싶다면 아래 주석을 해제하세요.
+        // Debug.Log($"Spawning with Rotation: {rotationIndex * 90} deg, MirrorX: {mirrorX}, MirrorY: {mirrorY}");
+
         // 프리팹 타일맵의 모든 타일 정보를 순회합니다.
         foreach (var pos in prefabTilemap.cellBounds.allPositionsWithin)
         {
             if (prefabTilemap.HasTile(pos))
             {
                 TileBase tile = prefabTilemap.GetTile(pos);
-                // 월드 타일맵에 찍힐 최종 위치를 계산합니다.
-                // (생성 위치 + 타일의 상대 위치)
-                Vector3Int targetPos = worldTilemap.WorldToCell(worldPosition) + pos;
+                Vector3Int currentPos = pos;
+                
+                // 2. 결정된 값에 따라 타일의 상대 위치를 직접 계산합니다.
+                // 2-1. 회전 적용
+                switch (rotationIndex)
+                {
+                    case 1: // 90도
+                        currentPos = new Vector3Int(-pos.y, pos.x, pos.z);
+                        break;
+                    case 2: // 180도
+                        currentPos = new Vector3Int(-pos.x, -pos.y, pos.z);
+                        break;
+                    case 3: // 270도
+                        currentPos = new Vector3Int(pos.y, -pos.x, pos.z);
+                        break;
+                    // case 0 (0도)는 아무것도 하지 않습니다.
+                }
+
+                // 2-2. 반전 적용
+                if (mirrorX)
+                {
+                    currentPos.x *= -1;
+                }
+                if (mirrorY)
+                {
+                    currentPos.y *= -1;
+                }
+
+                // 3. 월드 타일맵에 찍힐 최종 위치를 계산하여 타일을 찍습니다.
+                Vector3Int targetPos = worldTilemap.WorldToCell(worldPosition) + currentPos;
                 worldTilemap.SetTile(targetPos, tile);
             }
         }

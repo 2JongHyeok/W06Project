@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1558990586609452941, guid: 1d695ca0ee353a445a239ecaa71a2ad1, type: 3}
       propertyPath: m_Radius
-      value: 12.12
+      value: 5.2
       objectReference: {fileID: 0}
     - target: {fileID: 4011514986629410080, guid: 1d695ca0ee353a445a239ecaa71a2ad1, type: 3}
       propertyPath: m_Tiles.Array.size
