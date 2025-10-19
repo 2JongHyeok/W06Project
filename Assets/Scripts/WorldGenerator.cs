@@ -20,6 +20,11 @@ public class WorldGenerator : MonoBehaviour
     [Tooltip("생성할 모든 구역의 설정값(SO)들을 여기에 등록하세요.")]
     [SerializeField] private List<GenerationZoneSettingsSO> zoneSettings;
 
+    [Tooltip("월드 타일맵에 연결된 AsteroidHealth 스크립트")]
+    [SerializeField] private AsteroidHealth asteroidHealth;
+    [Tooltip("씬에 있는 TilemapShadowGenerator 스크립트")]
+    [SerializeField] private TilemapShadowGenerator shadowGenerator;
+
     // 게임이 시작될 때 월드 생성을 자동으로 실행합니다.
     void Start()
     {
@@ -35,45 +40,59 @@ public class WorldGenerator : MonoBehaviour
         // 테스트를 위해 기존 타일을 모두 지웁니다.
         worldTilemap.ClearAllTiles();
 
-        // 이제 각 구역(Zone) 설정을 순서대로 하나씩 처리합니다. (겹쳐서 생성)
-        foreach (var currentZone in zoneSettings.AsEnumerable().Reverse())
+        // generationRadius와 gridCellSize에 따라 격자를 순회합니다.
+        for (float x = -generationRadius; x < generationRadius; x += gridCellSize)
         {
-            Debug.Log($"[{currentZone.name}] 구역 생성 패스를 시작합니다...");
-
-            // 이 구역의 최대 거리까지만 격자를 순회하여 불필요한 연산을 줄입니다.
-            for (float x = -currentZone.maxDistance; x < currentZone.maxDistance; x += gridCellSize)
+            for (float y = -generationRadius; y < generationRadius; y += gridCellSize)
             {
-                for (float y = -currentZone.maxDistance; y < currentZone.maxDistance; y += gridCellSize)
+                Vector2 currentPosition = new Vector2(x, y);
+
+                // 1. 현재 위치가 어떤 구역에 속하는지 확인합니다.
+                float distanceFromCenter = Vector2.Distance(currentPosition, Vector2.zero);
+                GenerationZoneSettingsSO currentZone = GetZoneForDistance(distanceFromCenter);
+
+                // 유효한 구역이 아니면 (예: 중심의 빈 공간) 건너뜁니다.
+                if (currentZone == null) continue;
+
+                // 2. 이 위치에 소행성을 생성할지 확률(spawnChance)에 따라 결정합니다.
+                if (Random.value > currentZone.spawnChance) continue;
+
+                // 3. 이 구역의 소행성 풀에서 어떤 소행성을 생성할지 확률(weight)에 따라 선택합니다.
+                GameObject asteroidPrefabToSpawn = SelectRandomAsteroid(currentZone.asteroidPool);
+                if (asteroidPrefabToSpawn == null) continue;
+
+                // 4. 생성하기 전에, 해당 위치가 비어있는지 확인합니다. (겹침 방지)
+                CircleCollider2D prefabCollider = asteroidPrefabToSpawn.GetComponent<CircleCollider2D>();
+                if (prefabCollider == null)
                 {
-                    Vector2 currentPosition = new Vector2(x, y);
-
-                    // 1. 현재 위치가 이 구역의 '반지(Ring)' 범위 안에 있는지 확인합니다.
-                    float distanceFromCenter = Vector2.Distance(currentPosition, Vector2.zero);
-                    if (distanceFromCenter < currentZone.minDistance || distanceFromCenter >= currentZone.maxDistance)
-                    {
-                        continue; // 이 구역의 범위가 아니면 건너뜁니다.
-                    }
-
-                    // 2. 이 위치에 소행성을 생성할지 이 구역의 확률(spawnChance)에 따라 결정합니다.
-                    if (Random.value > currentZone.spawnChance) continue;
-
-                    // 3. 이 구역의 소행성 풀에서 어떤 소행성을 생성할지 확률(weight)에 따라 선택합니다.
-                    GameObject asteroidPrefabToSpawn = SelectRandomAsteroid(currentZone.asteroidPool);
-                    if (asteroidPrefabToSpawn == null) continue;
-                    
-                    // 4. 생성하기 전에, 해당 위치가 비어있는지 확인합니다. (겹침 방지)
-                    CircleCollider2D prefabCollider = asteroidPrefabToSpawn.GetComponent<CircleCollider2D>();
-                    if (prefabCollider != null && Physics2D.OverlapCircle(currentPosition, prefabCollider.radius))
-                    {
-                        continue; 
-                    }
-
-                    // 5. 모든 조건을 통과했으면, 소행성을 월드 타일맵에 '도장'처럼 찍습니다.
-                    StampAsteroid(currentPosition, asteroidPrefabToSpawn);
+                    Debug.LogWarning($"{asteroidPrefabToSpawn.name}에 CircleCollider2D가 없어 겹침 확인을 건너뜁니다.");
                 }
+                else if (Physics2D.OverlapCircle(currentPosition, prefabCollider.radius))
+                {
+                    // 이미 무언가 있다면 건너뜁니다.
+                    continue;
+                }
+
+                // 5. 모든 조건을 통과했으면, 소행성을 월드 타일맵에 '도장'처럼 찍습니다.
+                StampAsteroid(currentPosition, asteroidPrefabToSpawn);
             }
         }
         Debug.Log("월드 생성 완료!");
+        // 1. 월드 생성이 끝났으니, AsteroidHealth에게 타일 초기화를 지시합니다.
+        if (asteroidHealth != null)
+        {
+            Debug.Log("AsteroidHealth 초기화를 시작합니다...");
+            asteroidHealth.InitializeFromGenerator();
+        }
+
+        // 2. 타일 초기화까지 끝났으니, ShadowGenerator에게 그림자 생성을 지시합니다.
+        if (shadowGenerator != null)
+        {
+            Debug.Log("초기 그림자 생성을 시작합니다...");
+            shadowGenerator.GenerateInitialShadow();
+        }
+
+
     }
 
     /// <summary>
@@ -112,10 +131,9 @@ public class WorldGenerator : MonoBehaviour
         return null;
     }
 
-/// <summary>
-/// 선택된 소행성 프리팹의 모양을 월드 타일맵의 특정 위치에 그대로 복사합니다.
-/// 이때 무작위로 회전 및 반전 변환을 적용합니다.
-/// </summary>
+    /// <summary>
+    /// 선택된 소행성 프리팹의 모양을 월드 타일맵의 특정 위치에 그대로 복사합니다.
+    /// </summary>
     private void StampAsteroid(Vector2 worldPosition, GameObject asteroidPrefab)
     {
         Tilemap prefabTilemap = asteroidPrefab.GetComponentInChildren<Tilemap>();
@@ -125,50 +143,15 @@ public class WorldGenerator : MonoBehaviour
             return;
         }
 
-        // 1. 어떤 변환을 적용할지 무작위로 결정합니다.
-        int rotationIndex = Random.Range(0, 4); // 0: 0도, 1: 90도, 2: 180도, 3: 270도
-        bool mirrorX = Random.value > 0.5f;     // 수평 반전 여부
-        bool mirrorY = Random.value > 0.5f;     // 수직 반전 여부
-
-        // 디버깅을 위해 어떤 변환이 선택되었는지 확인하고 싶다면 아래 주석을 해제하세요.
-        // Debug.Log($"Spawning with Rotation: {rotationIndex * 90} deg, MirrorX: {mirrorX}, MirrorY: {mirrorY}");
-
         // 프리팹 타일맵의 모든 타일 정보를 순회합니다.
         foreach (var pos in prefabTilemap.cellBounds.allPositionsWithin)
         {
             if (prefabTilemap.HasTile(pos))
             {
                 TileBase tile = prefabTilemap.GetTile(pos);
-                Vector3Int currentPos = pos;
-                
-                // 2. 결정된 값에 따라 타일의 상대 위치를 직접 계산합니다.
-                // 2-1. 회전 적용
-                switch (rotationIndex)
-                {
-                    case 1: // 90도
-                        currentPos = new Vector3Int(-pos.y, pos.x, pos.z);
-                        break;
-                    case 2: // 180도
-                        currentPos = new Vector3Int(-pos.x, -pos.y, pos.z);
-                        break;
-                    case 3: // 270도
-                        currentPos = new Vector3Int(pos.y, -pos.x, pos.z);
-                        break;
-                    // case 0 (0도)는 아무것도 하지 않습니다.
-                }
-
-                // 2-2. 반전 적용
-                if (mirrorX)
-                {
-                    currentPos.x *= -1;
-                }
-                if (mirrorY)
-                {
-                    currentPos.y *= -1;
-                }
-
-                // 3. 월드 타일맵에 찍힐 최종 위치를 계산하여 타일을 찍습니다.
-                Vector3Int targetPos = worldTilemap.WorldToCell(worldPosition) + currentPos;
+                // 월드 타일맵에 찍힐 최종 위치를 계산합니다.
+                // (생성 위치 + 타일의 상대 위치)
+                Vector3Int targetPos = worldTilemap.WorldToCell(worldPosition) + pos;
                 worldTilemap.SetTile(targetPos, tile);
             }
         }

@@ -23,11 +23,17 @@ public class AsteroidHealth : MonoBehaviour
         }
     }
 
-    void Start()
+    // void Start()
+    // {
+    //     InitializeDurability();
+    // }
+
+    public void InitializeFromGenerator()
     {
         InitializeDurability();
     }
-    
+
+
     void InitializeDurability()
     {
         if (myTilemap == null) return;
