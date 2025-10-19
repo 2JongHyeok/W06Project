@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "PlanetShieldRegenSO", menuName = "ScriptableObjects/Forge/Planet/PlanetShieldRegenSO", order = 1)]
+[CreateAssetMenu(fileName = "PlanetShieldRegenSpeedSO", menuName = "ScriptableObjects/Forge/Planet/PlanetShieldRegenSO", order = 1)]
 public class PlanetShieldRegenSO : BaseForgeSO
 {
     public ForgeId ForgeId = ForgeId.PlanetShieldRegenSpeed;
