@@ -41,6 +41,11 @@ public class SpaceshipCargoSystem : MonoBehaviour
     [SerializeField] private int skipChecksFramesAfterWarp = 4;
     private int skipChecksUntilFrame = -1;
 
+    [Header("UI 상태 알림")]
+    [SerializeField] private BoolVariable hasPotentialOresState; // 주울 광물 상태
+    [SerializeField] private BoolVariable isCarryingOresState;   // 들고 있는 광물 상태
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -58,6 +63,11 @@ public class SpaceshipCargoSystem : MonoBehaviour
 
     void Update()
     {
+        if (hasPotentialOresState != null)
+        {
+            hasPotentialOresState.Value = potentialOres.Count > 0;
+        }
+
         if (Input.GetKeyDown(KeyCode.E)) CollectNearestOre();
         if (Input.GetKeyDown(KeyCode.Q)) DropLastCollectedOre();
     }
@@ -137,35 +147,38 @@ public class SpaceshipCargoSystem : MonoBehaviour
         GameObject lineObj = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
         LineRenderer line = lineObj.GetComponent<LineRenderer>();
         collectedOres.Add(new CollectedOreInfo(nearestOre, line, ropeSegments));
+
+        UpdateCarryingState();
     }
     private void DropLastCollectedOre()
+    {
+        if (collectedOres.Count == 0) return;
+
+        // 1. 연결을 끊기 전에, 버려질 광물 오브젝트에 대한 참조를 미리 저장합니다.
+        CollectedOreInfo lastOreInfo = collectedOres.Last();
+        GameObject oreObject = lastOreInfo.OreObject;
+
+        // 2. 기존 로직대로 연결을 끊습니다.
+        BreakConnection(lastOreInfo);
+
+        // 3. 방금 버린 광물 오브젝트가 여전히 존재하는지 확인합니다.
+        if (oreObject != null)
         {
-            if (collectedOres.Count == 0) return;
-
-            // 1. 연결을 끊기 전에, 버려질 광물 오브젝트에 대한 참조를 미리 저장합니다.
-            CollectedOreInfo lastOreInfo = collectedOres.Last();
-            GameObject oreObject = lastOreInfo.OreObject;
-
-            // 2. 기존 로직대로 연결을 끊습니다.
-            BreakConnection(lastOreInfo);
-
-            // 3. 방금 버린 광물 오브젝트가 여전히 존재하는지 확인합니다.
-            if (oreObject != null)
+            // 4. 버려진 광물의 콜라이더가 우리의 수집 트리거 콜라이더와 여전히 닿아 있는지 확인합니다.
+            Collider2D oreCollider = oreObject.GetComponent<Collider2D>();
+            if (oreCollider != null && collectionTrigger.IsTouching(oreCollider))
             {
-                // 4. 버려진 광물의 콜라이더가 우리의 수집 트리거 콜라이더와 여전히 닿아 있는지 확인합니다.
-                Collider2D oreCollider = oreObject.GetComponent<Collider2D>();
-                if (oreCollider != null && collectionTrigger.IsTouching(oreCollider))
+                // 5. 닿아있다면, 수집 가능한 목록(potentialOres)에 다시 추가해줍니다.
+                //    (중복 추가를 방지하기 위해 목록에 없는지 먼저 확인)
+                if (!potentialOres.Contains(oreObject))
                 {
-                    // 5. 닿아있다면, 수집 가능한 목록(potentialOres)에 다시 추가해줍니다.
-                    //    (중복 추가를 방지하기 위해 목록에 없는지 먼저 확인)
-                    if (!potentialOres.Contains(oreObject))
-                    {
-                        potentialOres.Add(oreObject);
-                        Debug.Log("버려진 광물이 아직 범위 안에 있어 수집 가능 목록에 다시 추가합니다.");
-                    }
+                    potentialOres.Add(oreObject);
+                    Debug.Log("버려진 광물이 아직 범위 안에 있어 수집 가능 목록에 다시 추가합니다.");
                 }
             }
         }
+        UpdateCarryingState();
+    }
 
 
     private void UpdateAndCheckConnections_Late()
@@ -236,6 +249,9 @@ public class SpaceshipCargoSystem : MonoBehaviour
         }
 
         collectedOres.Remove(oreInfo);
+
+        UpdateCarryingState();
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -294,7 +310,17 @@ public class SpaceshipCargoSystem : MonoBehaviour
 
         // 5. 모든 짐을 내렸으니, 수집 목록을 깨끗하게 비운다.
         collectedOres.Clear();
+        UpdateCarryingState();
     }
+
+    private void UpdateCarryingState()
+    {
+        if (isCarryingOresState != null)
+        {
+            isCarryingOresState.Value = collectedOres.Count > 0;
+        }
+    }
+
     // 다른 스크립트에서 현재 수집한 광물 개수를 물어볼 수 있도록 통로를 열어줍니다.
     public int GetCollectedOreCount()
     {
