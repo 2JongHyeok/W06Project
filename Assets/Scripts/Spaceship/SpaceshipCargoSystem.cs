@@ -119,44 +119,49 @@ public class SpaceshipCargoSystem : MonoBehaviour
         UpdateAndCheckConnections_Late();
     }
 
-private void UpdateHighlight()
-{
-    // 1. 목록에 있는 광물 중 파괴된 것이 있다면 먼저 정리합니다.
-    potentialOres.RemoveAll(item => item == null);
-
-    // 2. [개선] 주울 수 있는 후보(potentialOres) 중에서, 이미 수집한(collectedOres) 광물은 제외합니다.
-    var highlightCandidates = potentialOres.Where(p_ore => 
-        !collectedOres.Any(c_ore => c_ore.OreObject == p_ore)
-    ).ToList();
-
-    // 3. 하이라이트 후보가 없다면, 기존 하이라이트를 끄고 함수를 종료합니다.
-    if (highlightCandidates.Count == 0)
+    private void UpdateHighlight()
     {
-        ClearHighlight();
-        return;
-    }
+        // 1. 목록에 있는 광물 중 파괴된 것이 있다면 먼저 정리합니다.
+        potentialOres.RemoveAll(item => item == null);
 
-    // 4. 하이라이트 후보 중에서 가장 가까운 광물을 찾습니다.
-    GameObject nearestOre = highlightCandidates
-        .OrderBy(ore => Vector2.Distance(transform.position, ore.transform.position))
-        .FirstOrDefault();
+        // 2. 주울 수 있는 후보(potentialOres) 중에서, 이미 수집한(collectedOres) 광물은 제외합니다.
+        var highlightCandidates = potentialOres.Where(p_ore => 
+            !collectedOres.Any(c_ore => c_ore.OreObject == p_ore)
+        ).ToList();
 
-    // 5. 새로 찾은 가장 가까운 광물이 기존에 하이라이트된 광물과 다르다면, 교체해줍니다.
-    if (nearestOre != currentlyHighlightedOre)
-    {
-        ClearHighlight();
-        
-        if (nearestOre != null)
+        // 3. 하이라이트 후보가 없다면, 기존 하이라이트를 끄고 함수를 종료합니다.
+        if (highlightCandidates.Count == 0)
         {
-            var sr = nearestOre.GetComponent<SpriteRenderer>();
-            if (sr != null)
+            ClearHighlight();
+            return;
+        }
+
+        // 4. 하이라이트 후보 중에서 가장 가까운 광물을 찾습니다.
+        GameObject nearestOre = highlightCandidates
+            .OrderBy(ore => Vector2.Distance(transform.position, ore.transform.position))
+            .FirstOrDefault();
+
+        // 5. 새로 찾은 가장 가까운 광물이 기존에 하이라이트된 광물과 다르다면, 교체해줍니다.
+        if (nearestOre != currentlyHighlightedOre)
+        {
+            ClearHighlight();
+            
+            if (nearestOre != null)
             {
-                sr.color = highlightColor;
-                currentlyHighlightedOre = nearestOre;
+                var sr = nearestOre.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    //  여기가 핵심! 
+                    // 하이라이트 색으로 바꾸기 '직전에' 광물의 현재 색상을 저장합니다.
+                    originalOreColor = sr.color;
+
+                    // 이제 하이라이트를 적용합니다.
+                    sr.color = highlightColor;
+                    currentlyHighlightedOre = nearestOre;
+                }
             }
         }
     }
-}
 
     // [추가] 하이라이트를 끄는 역할을 전담하는 함수 (버그 방지에 매우 중요!)
     private void ClearHighlight()
