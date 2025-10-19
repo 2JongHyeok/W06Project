@@ -2,7 +2,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlanetShieldMaxHpSO", menuName = "ScriptableObjects/Forge/Planet/PlanetShieldMaxHpSO", order = 1)]
 public class PlanetShieldMaxHpSO : BaseForgeSO
 {
-    public int ShieldMaxHp;
+    public float ShieldMaxHp;
     
     protected override ForgeId GetForgeId() => ForgeId.PlanetShieldMaxHp;
     

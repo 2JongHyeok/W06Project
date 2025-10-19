@@ -8,6 +8,7 @@ public class ForgeManger : MonoBehaviour
     // public Dictionary<ForgeId, BaseForgeSO> forgeDictionary = new Dictionary<ForgeId, BaseForgeSO>();
     public Dictionary<MainBranchType, MainBranchSO> MainBranch = new Dictionary<MainBranchType, MainBranchSO>();
     public Dictionary<SubBranchType, SubBranchSO> SubBranch = new Dictionary<SubBranchType, SubBranchSO>();
+    public Dictionary<SubBranchType, SubBranchSO> LockedSubBranch = new Dictionary<SubBranchType, SubBranchSO>();
     private int[] currnetForgeLevel = new int[System.Enum.GetValues(typeof(ForgeId)).Length];
 
     private void Start()
@@ -25,7 +26,10 @@ public class ForgeManger : MonoBehaviour
         {
             currnetForgeLevel[i] = 0;
         }
-
+        foreach (var item in LockedSubBranch)
+        {
+            Debug.Log("LockedSubBranch: " + item.Key + " / " + item.Value.subBranchType);
+        }
         GetForgeSO(ForgeId.MainCannonAtkDamage, 0);
     }
     //서브 브랜치 탐색용 재귀 함수
@@ -42,6 +46,13 @@ public class ForgeManger : MonoBehaviour
                 // forgeDictionary.Add(subBranch.baseForgeSOs[j].ForgeId, subBranch.baseForgeSOs[j]);
                 if (subBranch.baseForgeSOs[j].postSubBranches != null && subBranch.baseForgeSOs[j].postSubBranches.Length > 0)
                 {
+                    foreach (var postSubBranch in subBranch.baseForgeSOs[j].postSubBranches)
+                    {
+                        if (!LockedSubBranch.ContainsKey(postSubBranch.subBranchType))
+                        {
+                            LockedSubBranch.Add(postSubBranch.subBranchType, postSubBranch);
+                        }
+                    }
                     FindSubBranches(subBranch.baseForgeSOs[j].postSubBranches);
                 }
             }
@@ -59,12 +70,14 @@ public class ForgeManger : MonoBehaviour
         }
         return null;
     }
-
-    public void ForgeApply(ForgeId forgeId)
+    //강화할 때 호출
+    public void ForgeApply(BaseForgeSO forgeSO)
     {
-        int level = currnetForgeLevel[(int)forgeId];
-        BaseForgeSO forgeSO = GetForgeSO(forgeId, level);
         forgeSO?.Apply();
-        currnetForgeLevel[(int)forgeId]++;
+        if(forgeSO.postSubBranches != null && forgeSO.postSubBranches.Length > 0)
+        {
+            //언락검출
+        }
+        currnetForgeLevel[(int)forgeSO.forgeId]++;
     }
 }

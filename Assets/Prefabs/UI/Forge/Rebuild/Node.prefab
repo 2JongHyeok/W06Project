@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4940603245255263384}
   - component: {fileID: 2676969106448671988}
   - component: {fileID: 3031535721385398623}
+  - component: {fileID: 5742319577597278520}
   m_Layer: 5
   m_Name: Node
   m_TagString: Untagged
@@ -120,3 +121,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5742319577597278520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9011253493481416935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8da5cd9ce2cb53418afe969f117d789, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeButton: {fileID: 4940603245255263384}
+  nodeNameText: {fileID: 0}
+  nodeDescriptionText: {fileID: 0}
+  coalCostText: {fileID: 0}
+  ironCostText: {fileID: 0}
+  goldCostText: {fileID: 0}
+  diamondCostText: {fileID: 0}
+  nodeIcon: {fileID: 3031535721385398623}
