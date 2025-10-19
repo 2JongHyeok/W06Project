@@ -29,7 +29,7 @@ public class Weapon : MonoBehaviour
     private float nextFireTime = 0f;
     [Range(1, 3)] public int maxBullets = 3;
     public float spacing = 1.0f;    // 총알 사이의 거리
-    private int level = 1;
+    public int level = 1;
 
     void Awake()
     {
