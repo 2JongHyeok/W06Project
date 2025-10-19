@@ -38,10 +38,16 @@ public class TilemapShadowGenerator : MonoBehaviour
         }
     }
 
-    void Start()
+    // void Start()
+    // {
+    //     GenerateShadow();
+    // }
+
+    public void GenerateInitialShadow()
     {
         GenerateShadow();
     }
+
 
     /// <summary>
     /// 지정된 월드 좌표 반경을 기반으로 주변 그림자를 다시 계산하고 업데이트합니다.

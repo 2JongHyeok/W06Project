@@ -23,11 +23,17 @@ public class AsteroidHealth : MonoBehaviour
         }
     }
 
-    void Start()
+    // void Start()
+    // {
+    //     InitializeDurability();
+    // }
+
+    public void InitializeFromGenerator()
     {
         InitializeDurability();
     }
-    
+
+
     void InitializeDurability()
     {
         if (myTilemap == null) return;
@@ -37,12 +43,44 @@ public class AsteroidHealth : MonoBehaviour
             return;
         }
 
-        myTilemap.CompressBounds(); 
+        myTilemap.CompressBounds();
+
+        // 1. 비어있는 리스트를 먼저 생성합니다.
+        List<Vector3Int> positions = new List<Vector3Int>();
+        
+        // 2. foreach 루프를 돌면서 모든 위치를 리스트에 직접 추가합니다.
         foreach (var pos in myTilemap.cellBounds.allPositionsWithin)
         {
-            if (!myTilemap.HasTile(pos)) continue;
-            
-            var tileBase = myTilemap.GetTile(pos);
+            positions.Add(pos);
+        }
+
+        foreach (var pos in positions)
+            {
+                if (!myTilemap.HasTile(pos)) continue;
+                
+                TileBase tileBase = myTilemap.GetTile(pos);
+
+                // ✨ --- 여기가 핵심 로직! --- ✨
+                // 1. 만약 현재 타일이 '랜덤 스포너 타일'이라면?
+                if (tileBase is RandomizedSpawnerTile spawnerTile)
+                {
+                    // 2. 스포너에게서 확률에 따른 결과 타일을 받아옵니다.
+                    TileBase newTile = spawnerTile.GetRandomOutcome();
+
+                    if (newTile != null)
+                    {
+                        // 3. 현재 위치의 '스포너 타일'을 받아온 '결과 타일'로 교체합니다!
+                        myTilemap.SetTile(pos, newTile);
+                        // 4. 방금 교체한 새 타일로 tileBase 변수를 업데이트하여, 아래의 기존 로직이 처리할 수 있도록 합니다.
+                        tileBase = newTile;
+                    }
+                    else
+                    {
+                        // 변할 타일이 없으면 그냥 지워버립니다.
+                        myTilemap.SetTile(pos, null);
+                        continue; // 아래 로직을 실행할 필요가 없으므로 다음 칸으로 넘어갑니다.
+                    }
+                }
             int maxDurability = 0;
             myTilemap.SetTileFlags(pos, TileFlags.None);
 
