@@ -79,7 +79,6 @@ public class CameraSwitcher : MonoBehaviour
         spaceshipCamera.Priority = InactivePriority;
         planetCamera.Priority = ActivePriority;
         currentCamera = planetCamera;
-        Debug.Log("카메라 모드: 행성 (Planet)");
         targetZoomSize = currentCamera.Lens.OrthographicSize;
     }
 
@@ -88,7 +87,6 @@ public class CameraSwitcher : MonoBehaviour
         planetCamera.Priority = InactivePriority;
         spaceshipCamera.Priority = ActivePriority;
         currentCamera = spaceshipCamera;
-        Debug.Log("카메라 모드: 우주선 (Spaceship)");
         targetZoomSize = currentCamera.Lens.OrthographicSize;
     }
 

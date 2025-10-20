@@ -48,7 +48,6 @@ public class SpaceshipWeapon : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("미사일 프리팹 또는 발사 지점이 설정되지 않았습니다!");
             }
         }
     }

@@ -328,15 +328,6 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // 재사용 가능한 노드인지 확인
         bool isReusable = forgeSO is IReuse reuse && reuse.IsReusable;
         
-        if (isReusable)
-        {
-            Debug.Log($"<color=cyan>[Reusable Purchase]</color> {forgeSO.upgradeName}");
-        }
-        else
-        {
-            Debug.Log($"<color=green>[Charge Complete]</color> {forgeSO.upgradeName}");
-        }
-        
         // 콜백 실행 (강화 적용)
         onChargeCompleteCallback?.Invoke(forgeSO);
         

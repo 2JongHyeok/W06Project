@@ -25,7 +25,6 @@ public class WorldAnalysisLogger : MonoBehaviour
     {
         if (worldTilemap == null)
         {
-            Debug.LogError("분석할 World Tilemap이 연결되지 않았습니다!");
             return;
         }
         StartCoroutine(AnalyzeAfterDelay());
@@ -33,7 +32,6 @@ public class WorldAnalysisLogger : MonoBehaviour
 
     private IEnumerator AnalyzeAfterDelay()
     {
-        Debug.Log($"{waitSecondsBeforeAnalysis}초 후 월드 광물 분석을 시작합니다...");
         yield return new WaitForSeconds(waitSecondsBeforeAnalysis);
         
         AnalyzeAndLogWorldOres();
@@ -41,7 +39,6 @@ public class WorldAnalysisLogger : MonoBehaviour
 
     public void AnalyzeAndLogWorldOres()
     {
-        Debug.Log("월드 분석 중...");
 
         // 1. 모든 타일의 개별 카운트를 먼저 집계합니다.
         Dictionary<string, int> rawCounts = new Dictionary<string, int>();

@@ -90,7 +90,6 @@ public class Weapon : MonoBehaviour
         nextFireTime = Time.time + fireRate;
         if (!bulletPrefab || !firePoint)
         {
-            Debug.LogWarning("Bullet Prefab 또는 Fire Point가 설정되지 않았습니다.");
             return;
         }
 

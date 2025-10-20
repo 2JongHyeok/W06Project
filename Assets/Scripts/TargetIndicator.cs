@@ -41,13 +41,11 @@ public class TargetIndicator : MonoBehaviour
         parentTransform = transform.parent;
         if (parentTransform == null)
         {
-            Debug.LogError("이 오브젝트는 우주선의 자식이어야만 해!");
             this.enabled = false;
             return;
         }
         if (indicatorVisual == null)
         {
-            Debug.LogError("Indicator Visual을 인스펙터에 할당해야지, 멍청아!");
             this.enabled = false;
             return;
         }

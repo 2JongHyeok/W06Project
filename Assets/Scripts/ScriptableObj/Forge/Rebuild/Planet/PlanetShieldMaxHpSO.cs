@@ -12,9 +12,5 @@ public class PlanetShieldMaxHpSO : BaseForgeSO
         {
             Managers.Instance.AddTileMaxHP((int)ShieldMaxHp);
         }
-        else
-        {
-            Debug.LogWarning($"PlanetShieldMaxHpSO.Apply: Planet is null. Value: {ShieldMaxHp}");
-        }
     }
 }

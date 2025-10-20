@@ -15,9 +15,5 @@ public class PlanetHpRegenAmountSO : BaseForgeSO, IReuse
         {
             Managers.Instance.HealCoreHP((int)HpRegenAmount);
         }
-        else
-        {
-            Debug.LogWarning("PlanetHpRegenAmountSO.Apply: Managers.Instance is null");
-        }
     }
 }

@@ -12,9 +12,5 @@ public class PlanetShieldRegenSO : BaseForgeSO
         {
             Managers.Instance.ReduceTileRespawnDelay(ShieldRegen);
         }
-        else
-        {
-            Debug.LogWarning($"PlanetShieldRegenSO.Apply: Planet is null. Value: {ShieldRegen}");
-        }
     }
 }

@@ -100,7 +100,6 @@ public class SpaceshipMovement : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("🚨 FuelGauge UI를 찾을 수 없습니다!");
         }
     }
     private void Update()
@@ -130,7 +129,6 @@ public class SpaceshipMovement : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("SpaceshipLocationManager가 할당되지 않았습니다.");
             }
         }
 

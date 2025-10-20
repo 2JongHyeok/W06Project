@@ -6,7 +6,6 @@ public class GuidedMissileUnlockSO : BaseForgeSO
 
     public override void Apply()
     {
-        Debug.LogError("미사일 포탑 레벨업 찍힘");
         // 레벨 상승 시 추가 효과가 있으면 여기에
         Managers.Instance?.turretActivationManager?.AddMissileTurret();
     }

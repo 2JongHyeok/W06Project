@@ -31,7 +31,7 @@ public class SubWeaponManager : MonoBehaviour
     private void Update()
     {
         // TODO 이부분 나중에 키 바인딩만 뺄 것.
-        if (Input.GetKeyDown(KeyCode.K)) LevelUp();
+        // if (Input.GetKeyDown(KeyCode.K)) LevelUp();
         if (Input.GetKeyDown(KeyCode.L)) ToggleCombine();
 
     }

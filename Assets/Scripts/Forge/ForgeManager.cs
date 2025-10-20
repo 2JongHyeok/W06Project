@@ -192,7 +192,6 @@ public class ForgeManager : MonoBehaviour
         if (SubBranch.ContainsKey((SubBranchType)(int)forgeId))
         {
             SubBranchSO subBranch = SubBranch[(SubBranchType)(int)forgeId];
-            Debug.Log(subBranch.baseForgeSOs[level].upgradeName);
             return subBranch.baseForgeSOs[level];
         }
         return null;
@@ -208,7 +207,6 @@ public class ForgeManager : MonoBehaviour
         int currentLevel = forgeLevel[(int)forgeSO.forgeId];
         int maxLevel = forgeTotalLevels.ContainsKey(forgeSO.forgeId) ? forgeTotalLevels[forgeSO.forgeId] : 1;
         
-        Debug.Log($"<color=cyan>[Forge Level Updated]</color> {forgeSO.forgeId}: Level {currentLevel}/{maxLevel}");
         
         // 후행 서브브랜치 해금
         if(forgeSO.postSubBranches != null && forgeSO.postSubBranches.Length > 0)
@@ -219,7 +217,6 @@ public class ForgeManager : MonoBehaviour
                 {
                     UnlockedSubBranches.Add(postSubBranch.subBranchType);
                     CacheForgeLevels(postSubBranch); // 새로 해금된 브랜치의 레벨도 캐싱
-                    Debug.Log($"<color=green>[SubBranch Unlocked]</color> {postSubBranch.subBranchType}");
                 }
             }
         }

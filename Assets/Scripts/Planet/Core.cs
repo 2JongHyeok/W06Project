@@ -39,7 +39,6 @@ public class Core : MonoBehaviour
     private void GameOver()
     {
         Destroy(gameObject);
-        Debug.Log("GameOver");
         // 이후에 GameOver 연출이나 Scene 전환 로직을 여기에 추가 가능
     }
 
@@ -58,10 +57,8 @@ public class Core : MonoBehaviour
     // 1회성 HP 회복 메서드
     public void HealHP(int amount)
     {
-        int oldHP = currentHP;
         currentHP = Mathf.Min(currentHP + amount, maxHP);
         UpdateHPText();
-        Debug.Log($"[Core] HP Healed: +{amount} ({oldHP} → {currentHP}/{maxHP})");
     }
     
     // 외부에서 MaxHP 증가 및 UI 갱신
@@ -70,7 +67,6 @@ public class Core : MonoBehaviour
         maxHP += amount;
         currentHP += amount; // 현재 HP도 함께 증가
         UpdateHPText();
-        Debug.Log($"[Core] MaxHP increased: +{amount} (New MaxHP: {maxHP}, CurrentHP: {currentHP})");
     }
     
     // 외부에서 UI 갱신 호출용

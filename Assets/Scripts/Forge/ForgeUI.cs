@@ -38,7 +38,6 @@ public class ForgeUI : MonoBehaviour
 
         if (forgeManager == null || forgeManager.mainBranches == null)
         {
-            Debug.LogError("ForgeManger or mainBranches is null!");
             return;
         }
 
@@ -58,7 +57,6 @@ public class ForgeUI : MonoBehaviour
     {
         if (mainBranchPrefab == null || mainBranchContainer == null)
         {
-            Debug.LogError("MainBranchPrefab or MainBranchContainer is null!");
             return;
         }
 
@@ -113,7 +111,6 @@ public class ForgeUI : MonoBehaviour
     {
         if (subBranchPrefab == null)
         {
-            Debug.LogError("SubBranchPrefab is null!");
             return (null, currentYPosition, 0);
         }
 
@@ -206,16 +203,16 @@ public class ForgeUI : MonoBehaviour
                 }
             }
             
-            Debug.Log($"<color=yellow>[PostBranch Check]</color> SubBranch: {subBranchSO.subBranchType}, Nodes: {subBranchSO.baseForgeSOs?.Length ?? 0}");
+          
             
             // postSubBranches 처리 (실제 후행 브랜치 생성)
             foreach (var forgeSO in subBranchSO.baseForgeSOs)
             {
-                Debug.Log($"<color=yellow>[Node Check]</color> {forgeSO.upgradeName}, postSubBranches: {forgeSO.postSubBranches?.Length ?? 0}");
+                
                 
                 if (forgeSO.postSubBranches != null && forgeSO.postSubBranches.Length > 0)
                 {
-                    Debug.Log($"<color=green>[PostBranch Found!]</color> {forgeSO.upgradeName} has {forgeSO.postSubBranches.Length} post branches");
+                    
                     
                     foreach (var lockedSubBranch in forgeSO.postSubBranches)
                     {
@@ -224,16 +221,15 @@ public class ForgeUI : MonoBehaviour
                         nextYPosition = result.nextYPosition;
                         totalCreatedCount += result.createdCount;
                         
-                        Debug.Log($"<color=magenta>[SubBranch Created]</color> subBranchUI null? {result.subBranchUI == null}");
+                        
                         
                         // 2. 생성된 후행 브랜치에서 NodeContainer 찾기
                         if (result.subBranchUI != null)
                         {
                             // 자식 구조 확인
-                            Debug.Log($"<color=yellow>[SubBranch Children]</color> {result.subBranchUI.name} has {result.subBranchUI.transform.childCount} children:");
+                            
                             for (int i = 0; i < result.subBranchUI.transform.childCount; i++)
                             {
-                                Debug.Log($"  Child {i}: {result.subBranchUI.transform.GetChild(i).name}");
                             }
                             
                             Transform postNodeContainer = result.subBranchUI.transform.Find("NodeContainer");
@@ -241,15 +237,15 @@ public class ForgeUI : MonoBehaviour
                             {
                                 // NodeContainer가 없으면 SubBranch 자체를 사용
                                 postNodeContainer = result.subBranchUI.transform;
-                                Debug.Log($"<color=orange>[NodeContainer]</color> Not found, using SubBranch itself");
+                                
                             }
                             
-                            Debug.Log($"<color=magenta>[NodeContainer]</color> Found? {postNodeContainer != null}");
+                            
                             
                             // 3. 후행 브랜치의 NodeContainer에 꺾인 화살표 생성
                             GameObject cornerArrow = CreateCornerArrowAndReturn(postNodeContainer);
                             
-                            Debug.Log($"<color=cyan>[Corner Arrow]</color> Created: {cornerArrow != null}, Prefab assigned: {arrowCornerPrefab != null}");
+                            
                             
                             // 4. 생성된 꺾인 화살표를 맨 앞(첫 번째 자식)으로 이동
                             if (cornerArrow != null)
@@ -259,7 +255,7 @@ public class ForgeUI : MonoBehaviour
                         }
                         else
                         {
-                            Debug.LogError($"<color=red>[ERROR]</color> result.subBranchUI is null!");
+                            
                         }
                     }
                 }
@@ -273,7 +269,7 @@ public class ForgeUI : MonoBehaviour
     {
         if (forgeNodePrefab == null)
         {
-            Debug.LogError("ForgeNodePrefab is null!");
+            
             return;
         }
 
@@ -305,7 +301,7 @@ public class ForgeUI : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"No Button found on ForgeNodePrefab for {forgeSO.upgradeName}");
+                
             }
         }
     }
@@ -370,61 +366,25 @@ public class ForgeUI : MonoBehaviour
     {
         if (forgeSO == null) return;
         
-        Debug.Log("=================================================");
-        Debug.Log($"<color=cyan>[Forge Apply Attempt]</color>");
-        Debug.Log($"<color=yellow>Name:</color> {forgeSO.upgradeName}");
-        Debug.Log($"<color=yellow>ForgeId:</color> {forgeSO.forgeId}");
-        
-        // ForgeManger 확인
-        if (forgeManager == null)
-        {
-            Debug.LogError("<color=red>ForgeManger not found!</color>");
-            Debug.Log("=================================================");
-            return;
-        }
-        
         // 인벤토리 매니저 확인
         if (inventoryManger == null)
         {
             inventoryManger = FindFirstObjectByType<InventoryManger>();
-            if (inventoryManger == null)
-            {
-                Debug.LogError("<color=red>InventoryManger not found!</color>");
-                Debug.Log("=================================================");
-                return;
-            }
+
         }
         
         // 비용 체크
         if (!inventoryManger.CheckOre(forgeSO))
         {
-            Debug.LogWarning($"<color=red>[Forge Failed]</color> Not enough resources!");
-            Debug.Log($"<color=yellow>Required:</color>");
-            Debug.Log($"  - Coal: {forgeSO.coalCost}");
-            Debug.Log($"  - Iron: {forgeSO.ironCost}");
-            Debug.Log($"  - Gold: {forgeSO.goldCost}");
-            Debug.Log($"  - Diamond: {forgeSO.diamondCost}");
-            Debug.Log($"<color=yellow>Current:</color>");
-            Debug.Log($"  - Coal: {inventoryManger.OreList[(int)OreType.Coal]}");
-            Debug.Log($"  - Iron: {inventoryManger.OreList[(int)OreType.Iron]}");
-            Debug.Log($"  - Gold: {inventoryManger.OreList[(int)OreType.Gold]}");
-            Debug.Log($"  - Diamond: {inventoryManger.OreList[(int)OreType.Diamond]}");
-            Debug.Log("=================================================");
             return;
         }
         
         // 비용 차감
         if (inventoryManger.ConsumeOre(forgeSO))
         {
-            Debug.Log($"<color=green>[Resources Consumed]</color>");
-            Debug.Log($"  - Coal: -{forgeSO.coalCost}");
-            Debug.Log($"  - Iron: -{forgeSO.ironCost}");
-            Debug.Log($"  - Gold: -{forgeSO.goldCost}");
-            Debug.Log($"  - Diamond: -{forgeSO.diamondCost}");
             
             // ForgeManger를 통해 강화 적용
             forgeManager.ForgeApply(forgeSO);
-            Debug.Log($"<color=green>[Forge Applied Successfully!]</color> {forgeSO.upgradeName}");
             
             // UI 갱신 (후행 브랜치 언락 or 인덱스 변경)
             bool needsRefresh = false;
@@ -432,11 +392,7 @@ public class ForgeUI : MonoBehaviour
             // postSubBranches가 있으면 UI 재생성
             if (forgeSO.postSubBranches != null && forgeSO.postSubBranches.Length > 0)
             {
-                Debug.Log($"<color=magenta>Unlocked SubBranches:</color>");
-                foreach (var subBranch in forgeSO.postSubBranches)
-                {
-                    Debug.Log($"  - {subBranch.subBranchType}");
-                }
+
                 needsRefresh = true;
             }
             
@@ -450,12 +406,6 @@ public class ForgeUI : MonoBehaviour
                 RefreshAllNodes(); // 잠금 상태만 업데이트
             }
         }
-        else
-        {
-            Debug.LogError($"<color=red>[Forge Failed]</color> ConsumeOre returned false!");
-        }
-        
-        Debug.Log("=================================================");
     }
     
     // 모든 노드의 잠금 상태 갱신
@@ -496,10 +446,7 @@ public class ForgeUI : MonoBehaviour
         if (inventoryManger == null)
         {
             inventoryManger = FindFirstObjectByType<InventoryManger>();
-            if (inventoryManger == null)
-            {
-                Debug.LogWarning("InventoryManger not assigned and not found in scene!");
-            }
+            
         }
         
         // Tooltip 초기화
@@ -507,10 +454,6 @@ public class ForgeUI : MonoBehaviour
         {
             ForgeNodeUI.SetTooltip(tooltipUI);
             tooltipUI.Hide(); // 시작 시 숨김
-        }
-        else
-        {
-            Debug.LogError("ForgeTooltipUI is not assigned in ForgeUI!");
         }
 
         // 런타임 시작 시 자동으로 UI 생성

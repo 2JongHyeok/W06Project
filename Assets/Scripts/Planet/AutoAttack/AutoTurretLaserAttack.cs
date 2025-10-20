@@ -73,13 +73,11 @@ public class AutoTurretLaserAttack : IAttackStrategy
 
             // 데미지 적용(게임 구조에 맞게 바꿔도 됨)
             // 예: IDamageable, EnemyHealth 등
-            Debug.Log("적 맞음");
             //hit.collider.GetComponent<EnemyScript>()?.TakeDamage(baseDamage);
         }
 
         // 3) 시각효과(라인표시) 잠깐 켜기
         turretTransform.gameObject.GetComponent<MonoBehaviour>().StartCoroutine(ShowBeam(turretTransform, origin, endPoint));
-        Debug.Log($"[Laser] Hit {(hit.collider ? hit.collider.name : "Nothing")} for {baseDamage}");
     }
 
     private IEnumerator AttackRoutine(MonoBehaviour host, Transform turretTransform, AutoTurret turret)

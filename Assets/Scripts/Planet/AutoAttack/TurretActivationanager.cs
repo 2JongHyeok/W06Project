@@ -34,8 +34,6 @@ public class TurretActivationManager : MonoBehaviour
         bulletStrategy = new AutoTurretBulletAttack(bulletPrefab, 5f, 0.5f);
         laserStrategy = new AutoTurretLaserAttack();
         missileTurretPrefab.SetActive(false);
-
-        Debug.Log("공격 전략 준비 완료. Z, X, C 키를 눌러 포탑을 활성화하세요.");
     }
     public float GetMissileDamage() => missileStrategy.Damage;
     public void SetMissileDamage(float v) => missileStrategy.Damage = v;
@@ -47,12 +45,10 @@ public class TurretActivationManager : MonoBehaviour
     public void AddMissileDamage(float delta)
     {
         missileStrategy.Damage += delta;
-        Debug.Log($"[Missile] Damage increased: +{delta} (New: {missileStrategy.Damage})");
     } 
     public void AddMissileInterval(float delta)
     {
         missileStrategy.Interval += delta;
-        Debug.Log($"[Missile] Interval changed: +{delta}s (New: {missileStrategy.Interval}s)");
     } 
     public void AddMissileTurret() { 
         missileTurretPrefab.SetActive(true);

@@ -59,9 +59,7 @@ public class Planet: MonoBehaviour
     // 외부에서 respawnDelay를 줄이는 메서드
     public void ReduceRespawnDelay(float reductionAmount)
     {
-        float oldDelay = respawnDelay;
         respawnDelay = Mathf.Max(0.1f, respawnDelay + reductionAmount); // 최소 0.1초
-        Debug.Log($"[Planet Shield] Respawn delay reduced: -{reductionAmount}s ({oldDelay}s → {respawnDelay}s)");
     }
 
     // 외부에서 타일 최대 HP를 증가시키는 메서드
@@ -75,8 +73,6 @@ public class Planet: MonoBehaviour
         {
             tileHPs[pos] += amount;
         }
-
-        Debug.Log($"[Planet Shield] Tile MaxHP increased: +{amount} (New MaxHP: {defaultTileData.maxHP})");
     }
     
     public void SetDelay(float newDelay)

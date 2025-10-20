@@ -36,7 +36,7 @@ public class SpaceshipInput : MonoBehaviour
         }
         
         // 부스트 (Shift)
-        IsBoosting = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        // IsBoosting = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
         // 회전 (A/D)
         // A키는 양수, D키는 음수 값을 줘야 Motor에서 제대로 회전해.

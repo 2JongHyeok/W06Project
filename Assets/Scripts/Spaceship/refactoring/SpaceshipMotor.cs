@@ -54,7 +54,6 @@ public class SpaceshipMotor : MonoBehaviour
         cargoSystem = GetComponent<SpaceshipCargoSystem>();
         if (cargoSystem == null)
         {
-            Debug.LogWarning("SpaceshipMotor가 SpaceshipCargoSystem을 찾지 못했습니다. 무게 패널티가 적용되지 않습니다.");
         }
         Rb = GetComponent<Rigidbody2D>();
         Rb.gravityScale = 0;

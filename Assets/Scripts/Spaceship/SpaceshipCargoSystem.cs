@@ -279,7 +279,6 @@ public class SpaceshipCargoSystem : MonoBehaviour
                 if (!potentialOres.Contains(oreObject))
                 {
                     potentialOres.Add(oreObject);
-                    Debug.Log("버려진 광물이 아직 범위 안에 있어 수집 가능 목록에 다시 추가합니다.");
                 }
             }
         }
@@ -309,7 +308,6 @@ public class SpaceshipCargoSystem : MonoBehaviour
             float distance = Vector2.Distance(cargoHook.position, oreInfo.OreObject.transform.position);
             if (distance > maxRopeLength)
             {
-                Debug.Log("거리가 너무 멀어져 밧줄이 끊어집니다!");
                 BreakConnection(oreInfo);
                 continue;
             }
@@ -384,7 +382,6 @@ public class SpaceshipCargoSystem : MonoBehaviour
         if (infoToBreak != null)
         {
             BreakConnection(infoToBreak);
-            Debug.Log($"[CargoSystem] {oreObject.name}과의 연결을 외부 요청으로 끊었습니다.");
         }
     }   
 
@@ -409,7 +406,6 @@ public class SpaceshipCargoSystem : MonoBehaviour
     {
         if (inventory == null)
         {
-            Debug.LogError("인벤토리가 없는데 어디다 납품하라는 거야!");
             return;
         }
 

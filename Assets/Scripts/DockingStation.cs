@@ -42,10 +42,6 @@ public class DockingStation : MonoBehaviour
             CalculateNextDeparturePoint(dockedShip.transform.position);
             dockedShip.SetActive(false);
         }
-        if (!cameraSwitcher)
-            Debug.LogWarning("[DockingStation] CameraSwitcher가 비었습니다.");
-        if (!inventoryManger)
-            Debug.LogWarning("[DockingStation] InventoryManger가 비었습니다.");
         UpdateAllUIStates();
     }
 
@@ -54,11 +50,6 @@ public class DockingStation : MonoBehaviour
         // 우주선 '출격' 로직만 여기에 남겨둡니다. (F키를 누르고, 우주선 모드가 아닐 때)
         if (Input.GetKeyDown(KeyCode.F) && !isSpaceshipMode)
         {
-            if (!dockedShip)
-            {
-                Debug.LogWarning("[DockingStation] dockedShip이 없습니다.");
-                return;
-            }
 
             // 활성화 전에 위치와 회전을 먼저 적용
             dockedShip.transform.SetPositionAndRotation(nextDeparturePosition, nextDepartureRotation);
@@ -68,8 +59,6 @@ public class DockingStation : MonoBehaviour
             isSpaceshipMode = true;
 
             UpdateAllUIStates();
-
-            Debug.Log("우주선 모드 진입. 출격 위치로 이동.");
         }
     }
     
@@ -97,7 +86,6 @@ public class DockingStation : MonoBehaviour
         if (isSpaceshipMode)
         {
             isSpaceshipInRange = true; // 도킹이 발생했으므로 InRange 상태로 간주
-            Debug.Log("우주선이 범위에 진입하여 자동 도킹을 시작합니다.");
 
             // --- 기존 Update()에 있던 도킹 로직을 여기로 이동 ---
             cameraSwitcher?.ToggleCameraMode();
@@ -113,10 +101,6 @@ public class DockingStation : MonoBehaviour
             if (cargoSystem != null && inventoryManger != null)
             {
                 //cargoSystem.UnloadAllOres(inventoryManger);
-            }
-            else
-            {
-                Debug.LogWarning("[DockingStation] cargoSystem 또는 inventoryManger가 null이라 하역을 건너뜁니다.");
             }
 
             // 비활성화 전에, '현재 위치'를 기준으로 다음 출격 지점을 계산
@@ -154,6 +138,5 @@ public class DockingStation : MonoBehaviour
     {
         if (!other.CompareTag("Spaceship")) return;
         isSpaceshipInRange = false;
-        Debug.Log("우주선 도킹 불가");
     }
 }

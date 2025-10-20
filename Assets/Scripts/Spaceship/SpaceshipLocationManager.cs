@@ -83,7 +83,6 @@ public class SpaceshipLocationManager : MonoBehaviour
     {
         if (playerInCockpit == null)
         {
-            Debug.LogWarning("출입할 플레이어 정보가 없습니다.");
             return;
         }
 
@@ -97,7 +96,6 @@ public class SpaceshipLocationManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Cockpit 오브젝트가 할당되지 않았습니다. 기본 exitOffset 사용.");
             Vector2 exitPosition = GetExitPosition();
             playerInCockpit.transform.position = exitPosition;
         }
@@ -115,7 +113,6 @@ public class SpaceshipLocationManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Rigidbody2D 컴포넌트가 부족합니다.");
         }
 
         // spaceshipmovement 컴포넌트를 비활성화
@@ -126,7 +123,6 @@ public class SpaceshipLocationManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("SpaceshipMovement 컴포넌트를 찾을 수 없습니다.");
         }
 
         // 메인 카메라를 다시 플레이어의 자식으로 편입시키기
@@ -138,7 +134,6 @@ public class SpaceshipLocationManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("메인 카메라를 찾을 수 없습니다.");
         }
 
         // 저장된 플레이어 정보 초기화 (필요에 따라)

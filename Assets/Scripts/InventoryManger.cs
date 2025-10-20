@@ -19,14 +19,14 @@ public class InventoryManger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            AddOre(OreType.Coal, 100);
-            AddOre(OreType.Iron, 100);
-            AddOre(OreType.Gold, 100);
-            AddOre(OreType.Diamond, 100);
-            Debug.Log("Added 100 of each ore type.");
-        }
+        // if (Input.GetKeyDown(KeyCode.O))
+        // {
+        //     AddOre(OreType.Coal, 100);
+        //     AddOre(OreType.Iron, 100);
+        //     AddOre(OreType.Gold, 100);
+        //     AddOre(OreType.Diamond, 100);
+        //     Debug.Log("Added 100 of each ore type.");
+        // }
     }
     public void AddOre(OreType oreType, int amount)
     {

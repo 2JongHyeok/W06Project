@@ -54,17 +54,13 @@ public class TilemapManager : MonoBehaviour
     {
         if (targetTilemaps == null || targetTilemaps.Length == 0)
         {
-            Debug.LogWarning("관리할 타일맵이 지정되지 않았습니다. 인스펙터에서 targetTilemaps를 설정해주세요.");
             return;
         }
         if (colorSettings == null)
         {
-            Debug.LogError("TilemapManager: colorSettings SO가 할당되지 않았습니다!", gameObject);
             return;
         }
         
-        Debug.Log($"총 {targetTilemaps.Length}개의 타일맵 초기화를 시작합니다.");
-
         foreach (var tilemap in targetTilemaps)
         {
             if (tilemap == null) continue;

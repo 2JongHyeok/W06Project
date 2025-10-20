@@ -19,7 +19,6 @@ public class AsteroidHealth : MonoBehaviour
         myTilemap = GetComponent<Tilemap>();
         if (myTilemap == null)
         {
-            Debug.LogError("AsteroidHealth: 이 게임오브젝트에서 Tilemap 컴포넌트를 찾을 수 없습니다!", gameObject);
         }
     }
 
@@ -37,11 +36,7 @@ public class AsteroidHealth : MonoBehaviour
     void InitializeDurability()
     {
         if (myTilemap == null) return;
-        if (colorSettings == null)
-        {
-            Debug.LogError("AsteroidHealth: colorSettings SO가 할당되지 않았습니다!", gameObject);
-            return;
-        }
+
 
         myTilemap.CompressBounds();
 

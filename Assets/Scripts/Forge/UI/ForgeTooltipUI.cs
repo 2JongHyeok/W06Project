@@ -44,7 +44,6 @@ public class ForgeTooltipUI : MonoBehaviour
         inventoryManger = FindFirstObjectByType<InventoryManger>();
         if (inventoryManger == null)
         {
-            Debug.LogWarning("InventoryManger not found! Tooltip will not show current resources.");
         }
         
         // 차징 슬라이더 설정
@@ -69,7 +68,6 @@ public class ForgeTooltipUI : MonoBehaviour
         {
             graphic.raycastTarget = false;
         }
-        Debug.Log($"<color=green>Tooltip Raycast Targets disabled: {graphics.Length} components</color>");
     }
 
     public void Show(BaseForgeSO forgeSO, Vector2 mousePosition, bool canPurchase = true)

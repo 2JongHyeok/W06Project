@@ -12,9 +12,5 @@ public class PlanetCoreMaxHpSO : BaseForgeSO
         {
             Managers.Instance.AddCoreMaxHP((int)CoreMaxHp);
         }
-        else
-        {
-            Debug.LogWarning("PlanetCoreMaxHpSO.Apply: Managers.Instance is null");
-        }
     }
 }

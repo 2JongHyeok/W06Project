@@ -53,6 +53,12 @@ public class WaveManager : MonoBehaviour
         {
             enemyPools[type] = CreatePool(type);
         }
+        
+        // 게임 시작 시 UI 텍스트 비우기
+        if (waveTimerText != null)
+            waveTimerText.text = "";
+        if (enemyCountText != null)
+            enemyCountText.text = "";
     }
 
     private void Update()
@@ -68,7 +74,7 @@ public class WaveManager : MonoBehaviour
             else
             {
                 waveTimerText.text = $"Final Wave";
-                enemyCountText.text = $"Enemies Left: {EnemyCount}";
+                enemyCountText.text = $"Enemies: {EnemyCount}";
             }
             return;
         }
@@ -77,7 +83,7 @@ public class WaveManager : MonoBehaviour
         if (isSpawning)
         {
             waveTimerText.text = $"Wave {currentWaveIndex + 1}";
-            enemyCountText.text = $"Enemies: {EnemyCount} / {totalEnemiesInWave}";
+            enemyCountText.text = $"Enemies: {EnemyCount}";
             return;
         }
 
@@ -85,7 +91,7 @@ public class WaveManager : MonoBehaviour
         if (EnemyCount > 0 && !isSpawning)
         {
             waveTimerText.text = $"Wave {currentWaveIndex} - Clear the enemies!";
-            enemyCountText.text = $"Enemies: {EnemyCount} / {totalEnemiesInWave}";
+            enemyCountText.text = $"Enemies: {EnemyCount}";
             return;
         }
 
@@ -104,7 +110,7 @@ public class WaveManager : MonoBehaviour
             else
             {
                 waveTimerText.text = $"Next Wave In: {Mathf.Ceil(countdown)}";
-                enemyCountText.text = "Wave Cleared!";
+                enemyCountText.text = "Mining Phase";
             }
         }
     }
@@ -172,13 +178,13 @@ public class WaveManager : MonoBehaviour
             enemyComponent.ResetState(); // 모든 상태 초기화
         }
         
-        EnemyCount++; // 풀에서 꺼낼 때마다 카운트 증가
+        // 스폰 시에는 카운트 증가 안 함 (미리 설정된 값 사용)
     }
 
     private void OnReleaseEnemy(GameObject enemy)
     {
         enemy.SetActive(false);
-        EnemyCount--; // 풀로 반환할 때마다 카운트 감소
+        EnemyCount--; // 적이 죽을 때마다 카운트 감소
     }
 
     private void OnDestroyEnemy(GameObject enemy)
@@ -194,9 +200,10 @@ public class WaveManager : MonoBehaviour
         isSpawning = true;
         WaveSO currentWave = waves[currentWaveIndex];
 
-        // 현재 웨이브의 총 적 수 계산
+        // 현재 웨이브의 총 적 수 계산 및 EnemyCount 설정
         totalEnemiesInWave = currentWave.GetTotalEnemyCount();
-
+        EnemyCount = totalEnemiesInWave; // 전체 적 수로 시작
+        
         // 현재 웨이브의 남은 스폰 수 초기화
         remainingSpawnCounts.Clear();
         EnemySpawnInfo[] spawnInfos = currentWave.GetEnemySpawnInfos();
