@@ -20,7 +20,7 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private TextMeshProUGUI diamondText;
     
     [Header("Charge Settings")]
-    [SerializeField] private float chargeTime = 1f; // 차징 완료 시간 (초)
+    [SerializeField] private float chargeTime = 0.5f; // 차징 완료 시간 (초)
     [SerializeField] private float lockedAlpha = 0.5f; // 잠긴 상태의 투명도
     
     [Header("Affordability Colors")]
