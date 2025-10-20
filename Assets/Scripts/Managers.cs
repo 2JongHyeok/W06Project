@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [DefaultExecutionOrder(-1000)]
@@ -8,11 +9,12 @@ public class Managers : MonoBehaviour
     [Header("Gameplay Services")]
     public InventoryManger inventory;
     public TurretActivationManager turretActivationManager;
-    public Weapon weapon;
+    public Weapon[] weapon;
     public SpaceshipMotor spaceshipMotor;
     public SpaceshipWeapon spaceshipWeapon;
     public TilemapManager tilemapManager;
     public Core core;
+    public Planet planet;
 
     [Header("Options")]
     [SerializeField] private bool dontDestroyOnLoad = true;
@@ -38,6 +40,13 @@ public class Managers : MonoBehaviour
     [SerializeField] private float initialMiningAttackSpeed = 0.5f;
     [SerializeField] private float initialMiningRadius = 2.0f;
 
+    [Header("Initial Tunables - Planet Core")]
+    [SerializeField] private int initialCoreMaxHP = 100;
+
+    [Header("Initial Tunables - Planet Tiles (Shield)")]
+    [SerializeField] private int initialTileMaxHP = 100;
+    [SerializeField] private float initialTileRespawnDelay = 3f;
+
 
     private void Awake()
     {
@@ -59,11 +68,12 @@ public class Managers : MonoBehaviour
     {
         inventory ??= FindAnyObjectByType<InventoryManger>();
         turretActivationManager ??= FindAnyObjectByType<TurretActivationManager>();
-        weapon ??= FindAnyObjectByType<Weapon>();
+        // weapon ??= FindAnyObjectByType<Weapon>();
         spaceshipMotor ??= FindAnyObjectByType<SpaceshipMotor>();
         spaceshipWeapon ??= FindAnyObjectByType<SpaceshipWeapon>();
         tilemapManager ??= FindAnyObjectByType<TilemapManager>();
         core ??= FindAnyObjectByType<Core>();
+        planet ??= FindAnyObjectByType<Planet>();
     }
 
     // 씬 시작 시, 강화 기반 수치들의 기준값을 한 번에 셋팅합니다.
@@ -72,11 +82,14 @@ public class Managers : MonoBehaviour
         // Weapon 기본값 셋업
         if (weapon != null)
         {
-            weapon.SetDamage(initialWeaponDamage);
-            weapon.SetAttackSpeed(initialWeaponFireRate);
-            weapon.SetCannonSpeed(initialWeaponRotationSpeed);
-            weapon.SetExplosionRange(initialWeaponExplosionRadius);
-            weapon.level = Mathf.Max(1, initialWeaponBulletLevel);
+            foreach (var w in weapon)
+            {
+                w.SetDamage(initialWeaponDamage);
+                w.SetAttackSpeed(initialWeaponFireRate);
+                w.SetCannonSpeed(initialWeaponRotationSpeed);
+                w.SetExplosionRange(initialWeaponExplosionRadius);
+                w.level = Mathf.Max(1, initialWeaponBulletLevel);
+            }
         }
 
         // Guided Missile(유도탄) 기본값 셋업
@@ -100,6 +113,15 @@ public class Managers : MonoBehaviour
             spaceshipWeapon.SetMiningAttackSpeed(initialMiningAttackSpeed);
             spaceshipWeapon.SetMiningRadius(initialMiningRadius);
         }
+
+        // Planet Core 기본값 셋업
+        if (core != null)
+        {
+            core.maxHP = initialCoreMaxHP;
+        }
+
+        // Planet Tiles (Shield) 기본값 셋업 - Planet.cs의 SerializedField 사용
+        // (Planet.cs에서 직접 설정하므로 여기서는 별도 설정 불필요)
     }
 
 
@@ -118,5 +140,59 @@ public class Managers : MonoBehaviour
         if (Instance.dontDestroyOnLoad) DontDestroyOnLoad(Instance.gameObject);
         if (Instance.autoResolveInAwake) Instance.AutoResolveRefs();
         return Instance;
+    }
+
+    public void ActiveWeapon(int index)
+    {
+        weapon[index].gameObject.SetActive(true);
+    }
+    public void AddWeaponDamage(int damage)
+    {
+        foreach (var w in weapon)
+        {
+            w.AddDamage(damage);
+        }
+    }
+    public void AddWeaponAttackSpeed(float rate)
+    {
+        foreach (var w in weapon)
+        {
+            w.AddAttackSpeed(rate);
+        }
+    }
+
+    public void ActiveWeapon(float bulletNumber)
+    {
+        throw new NotImplementedException();
+    }
+
+    // ========== Planet Core 관련 메서드 ==========
+    public void AddCoreMaxHP(int amount)
+    {
+        if (core == null) return;
+        core.maxHP += amount;
+        core.RefreshHPText(); // UI 즉시 갱신
+        Debug.Log($"Core MaxHP increased by {amount}. New MaxHP: {core.maxHP}");
+    }
+    
+    public void HealCoreHP(int amount)
+    {
+        if (core == null) return;
+        core.HealHP(amount);
+    }
+
+    // ========== Planet 타일(실드) 관련 메서드 ==========
+    public void AddTileMaxHP(int amount)
+    {
+        if (planet == null) return;
+        planet.AddTileMaxHP(amount);
+        Debug.Log($"Planet tile (shield) MaxHP increased by {amount}");
+    }
+    
+    public void ReduceTileRespawnDelay(float reductionAmount)
+    {
+        if (planet == null) return;
+        planet.ReduceRespawnDelay(reductionAmount);
+        Debug.Log($"Planet tile (shield) respawn delay reduced by {reductionAmount}");
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 0_CoreMaxHp
   m_EditorClassIdentifier: 
   branchName: "\uCF54\uC5B4 \uCCB4\uB825"
-  subBranchType: 13
+  subBranchType: 1
   baseForgeSOs:
   - {fileID: 11400000, guid: fde9ace8ecb528f42b1c26ff5379cf90, type: 2}
   - {fileID: 11400000, guid: bf0a26929dbaa144cbe442da9a1003b0, type: 2}

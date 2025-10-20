@@ -13,12 +13,21 @@ public class Core : MonoBehaviour
     private void Awake()
     {
         currentHP = maxHP;
+        UpdateHPText();
+    }
+
+    private void UpdateHPText()
+    {
+        if (CoreHpText != null)
+        {
+            CoreHpText.text = $"Core HP: {currentHP}";
+        }
     }
 
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
-        CoreHpText.text = $"Core HP: {currentHP}";
+        UpdateHPText();
         Debug.Log($"Core HP: {currentHP}/{maxHP}");
 
         if (currentHP <= 0)
@@ -45,5 +54,19 @@ public class Core : MonoBehaviour
                 Destroy(collision.gameObject);
             }
         }
+    }
+    
+    // 1회성 HP 회복 메서드
+    public void HealHP(int amount)
+    {
+        currentHP = Mathf.Min(currentHP + amount, maxHP);
+        UpdateHPText();
+        Debug.Log($"Core HP Healed: +{amount}, Current: {currentHP}/{maxHP}");
+    }
+    
+    // 외부에서 UI 갱신 호출용
+    public void RefreshHPText()
+    {
+        UpdateHPText();
     }
 }

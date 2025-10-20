@@ -8,7 +8,13 @@ public class PlanetShieldMaxHpSO : BaseForgeSO
     
     public override void Apply()
     {
-        // TODO: 실드 시스템 연결
-        Debug.Log("PlanetShieldMaxHpSO.Apply called (implement hook to shield system).");
+        if (Managers.Instance?.planet != null)
+        {
+            Managers.Instance.AddTileMaxHP((int)ShieldMaxHp);
+        }
+        else
+        {
+            Debug.LogWarning($"PlanetShieldMaxHpSO.Apply: Planet is null. Value: {ShieldMaxHp}");
+        }
     }
 }

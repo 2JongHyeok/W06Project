@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 967bf70328800c94fbdf957ce0f262e8, type: 3}
   m_Name: CannonBulletNumber 2
   m_EditorClassIdentifier: 
-  forgeId: 11
-  upgradeName: "\uC8FC\uD3EC \uD3EC\uC2E0 Lv.2"
-  upgradeDescription: "\uBC1C\uC0AC \uD0C4\uD658 \uAC1C\uC218\\n2 > <color=green>3</color>"
-  coalCost: 12
+  forgeId: 6
+  upgradeName: "\uD3EC \uAC74\uC124 Lv.Max"
+  upgradeDescription: "\uCD94\uAC00 \uD3EC\uB97C \uAC74\uC124\uD569\uB2C8\uB2E4.\\n\uD3EC:
+    2\uAC1C > <color=green>4\uAC1C</color>"
+  depth: 4
+  coalCost: 10
   ironCost: 6
-  goldCost: 2
-  diamondCost: 0
+  goldCost: 3
+  diamondCost: 1
   postSubBranches: []
   BulletNumber: 1

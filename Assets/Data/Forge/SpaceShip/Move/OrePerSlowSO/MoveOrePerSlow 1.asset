@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23e564cf66d572f478e1eedfa8ac0b4c, type: 3}
   m_Name: MoveOrePerSlow 1
   m_EditorClassIdentifier: 
-  forgeId: 2
+  forgeId: 12
   upgradeName: "\uC6B4\uBC18\uB825 Lv.1"
-  upgradeDescription: "\uC6B4\uBC18\uC73C\uB85C \uC778\uD55C \uAC10\uC18D\\n0.8 >
-    <color=green>0.6</color>"
+  upgradeDescription: "\uC6B0\uC8FC\uC120\uC774 \uB04C \uC218 \uC788\uB294 \uAD11\uBB3C\uB7C9\uC744
+    \uB298\uB9BD\uB2C8\uB2E4. \\n1.5 > <color=green>0.8</color> "
   depth: 1
   coalCost: 3
-  ironCost: 1
+  ironCost: 0
   goldCost: 0
   diamondCost: 0
   postSubBranches: []
-  OrePerSlow: -0.2
+  OrePerSlow: -0.7

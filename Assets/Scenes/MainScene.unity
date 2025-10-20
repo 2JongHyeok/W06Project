@@ -2053,11 +2053,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventory: {fileID: 0}
   turretActivationManager: {fileID: 0}
-  weapon: {fileID: 0}
+  weapon:
+  - {fileID: 1512247140}
+  - {fileID: 1019673337}
+  - {fileID: 107794005}
+  - {fileID: 1870193647}
+  - {fileID: 1065963883}
+  - {fileID: 1104671157}
+  - {fileID: 870671694}
   spaceshipMotor: {fileID: 0}
   spaceshipWeapon: {fileID: 0}
   tilemapManager: {fileID: 0}
   core: {fileID: 0}
+  planet: {fileID: 0}
   dontDestroyOnLoad: 1
   autoResolveInAwake: 1
   initialWeaponDamage: 1
@@ -2072,6 +2080,9 @@ MonoBehaviour:
   initialMiningDamage: 1
   initialMiningAttackSpeed: 0.6
   initialMiningRadius: 0.4
+  initialCoreMaxHP: 100
+  initialTileMaxHP: 3
+  initialTileRespawnDelay: 90
 --- !u!1 &1001158639
 GameObject:
   m_ObjectHideFlags: 0
@@ -6621,9 +6632,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forgePanel: {fileID: 1961691629955639023}
   mainBranches:
-  - {fileID: 11400000, guid: efbb36cea4b44454c863b2c3efbca7e7, type: 2}
   - {fileID: 11400000, guid: 92d345b9cc641b748836cf22d32a936a, type: 2}
   - {fileID: 11400000, guid: d2c177ebe559c5e45b7d7c7689b5ec39, type: 2}
+  - {fileID: 11400000, guid: efbb36cea4b44454c863b2c3efbca7e7, type: 2}
   isForgeOpenState: {fileID: 11400000, guid: 488c35a86bed74a4980674d1c93f4cd9, type: 2}
 --- !u!114 &864341012197704239
 MonoBehaviour:
@@ -7360,12 +7371,11 @@ MonoBehaviour:
   mainBranchPrefab: {fileID: 4881624519874555460, guid: 88cf4e12684477d418aa83de109a772f, type: 3}
   subBranchPrefab: {fileID: 1652754736385467122, guid: 229e385268220d14580792353b372306, type: 3}
   forgeNodePrefab: {fileID: 9011253493481416935, guid: 06a9ea6350a788348a1b458a5120924b, type: 3}
+  arrowBodyPrefab: {fileID: 9011253493481416935, guid: c9234d82aa8f3e54f9c706a910993fea, type: 3}
+  arrowCornerPrefab: {fileID: 9011253493481416935, guid: ca06bb4a38a35dc4b8bd89df32d7e40d, type: 3}
   mainBranchContainer: {fileID: 8749246955554115742}
   subBranchHeight: 150
-  subBranchGapX: 300
   subBranchGapY: 20
-  nodeWidth: 250
-  nodeHeight: 125
   baseMainBranchHeight: 300
   forgeManager: {fileID: 851302069335967697}
   inventoryManger: {fileID: 5803141803156037022}

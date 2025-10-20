@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 0_ShieldRegenSpeed
   m_EditorClassIdentifier: 
   branchName: "\uC274\uB4DC \uC7AC\uC0DD\uC131"
-  subBranchType: 16
+  subBranchType: 4
   baseForgeSOs:
   - {fileID: 11400000, guid: 7327a2be630d6e649b7b6f7bfdb30c20, type: 2}
   - {fileID: 11400000, guid: b8b0bf1180523934283599ad39130872, type: 2}

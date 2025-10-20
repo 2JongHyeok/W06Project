@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7445806a18514ff4696b945f3c48702d, type: 3}
   m_Name: CoreMaxHp 1
   m_EditorClassIdentifier: 
-  forgeId: 13
-  upgradeName: "\uCF54\uC5B4 \uCCB4\uB825 Lv.1"
-  upgradeDescription: "\uCF54\uC5B4 \uCD5C\uB300 \uCC44\uB825\\n100 > <color=green>120</color>"
-  coalCost: 3
+  forgeId: 1
+  upgradeName: "\uCD5C\uB300 \uCCB4\uB825 Lv.1"
+  upgradeDescription: "\uCF54\uC5B4\uC758 \uCD5C\uB300 \uCCB4\uB825\uC744 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4.\\n\uCD5C\uB300
+    \uCCB4\uB825: 100 > <color=green>120</color> "
+  depth: 1
+  coalCost: 4
   ironCost: 1
   goldCost: 0
   diamondCost: 0

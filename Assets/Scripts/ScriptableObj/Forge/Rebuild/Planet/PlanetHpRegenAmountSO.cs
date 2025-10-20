@@ -8,6 +8,13 @@ public class PlanetHpRegenAmountSO : BaseForgeSO
     
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance != null)
+        {
+            Managers.Instance.HealCoreHP((int)HpRegenAmount);
+        }
+        else
+        {
+            Debug.LogWarning("PlanetHpRegenAmountSO.Apply: Managers.Instance is null");
+        }
     }
 }

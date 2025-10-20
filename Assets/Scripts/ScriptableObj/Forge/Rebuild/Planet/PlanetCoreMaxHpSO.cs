@@ -8,6 +8,13 @@ public class PlanetCoreMaxHpSO : BaseForgeSO
     
     public override void Apply()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance != null)
+        {
+            Managers.Instance.AddCoreMaxHP((int)CoreMaxHp);
+        }
+        else
+        {
+            Debug.LogWarning("PlanetCoreMaxHpSO.Apply: Managers.Instance is null");
+        }
     }
 }

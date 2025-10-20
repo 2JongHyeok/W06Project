@@ -3,27 +3,23 @@ using UnityEngine;
 public enum ForgeId
 {
     None,
-    // SpaceShip Move
-    SpaceShipMoveMaxSpeed,
-    SpaceShipMoveOrePerSlow,
-    // SpaceShip Mining
-    SpaceShipMiningDamage,
-    SpaceShipMiningRadius,
-    SpaceShipMiningSpeed,
-    // Attacks GuidedMissile
-    GuidedMissileUnlock,
-    GuidedMissileAtkDamage,
-    GuidedMissileAtkSpeed,
-    // Attacks MainCannon
-    MainCannonAtkDamage,
-    MainCannonAtkSpeed,
-    MainCannonBulletNumber,
-    MainCannonMoveSpeed,
     //Planet 
     PlanetCoreMaxHp,
     PlanetHpRegenAmount,
     PlanetShieldMaxHp,
-    PlanetShieldRegenSpeed
+    PlanetShieldRegenSpeed,
+    // Attacks MainCannon
+    MainCannonUpgrade,
+    MainCannonBulletNumber,
+    // Attacks GuidedMissile
+    GuidedMissileUnlock,
+    GuidedMissileAtkSpeed,
+    // SpaceShip Mining
+    SpaceShipMiningUpgrade,
+    SpaceShipMiningRadius,
+    // SpaceShip Move
+    SpaceShipMoveMaxSpeed,
+    SpaceShipMoveOrePerSlow
 }
 public abstract class BaseForgeSO : ScriptableObject
 {

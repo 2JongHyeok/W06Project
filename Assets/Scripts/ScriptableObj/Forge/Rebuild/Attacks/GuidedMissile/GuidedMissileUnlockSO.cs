@@ -2,7 +2,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GuidedMissileUnlockSO", menuName = "ScriptableObjects/Forge/Attacks/GuidedMissile/GuidedMissileUnlockSO", order = 1)]
 public class GuidedMissileUnlockSO : BaseForgeSO, IFirstActivation
 {
-    protected override ForgeId GetForgeId() => ForgeId.GuidedMissileUnlock;
+    protected override ForgeId GetForgeId() => ForgeId.GuidedMissileAtkSpeed;
 
     public override void Apply()
     {
