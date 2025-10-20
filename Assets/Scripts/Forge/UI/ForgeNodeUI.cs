@@ -22,6 +22,10 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("Charge Settings")]
     [SerializeField] private float chargeTime = 1f; // 차징 완료 시간 (초)
     [SerializeField] private float lockedAlpha = 0.5f; // 잠긴 상태의 투명도
+    
+    [Header("Affordability Colors")]
+    [SerializeField] private Color affordableTextColor = Color.white; // 구매 가능 시 텍스트 색
+    [SerializeField] private Color unaffordableTextColor = Color.red; // 구매 불가능 시 텍스트 색
 
     private BaseForgeSO forgeSO;
     private SubBranchType subBranchType; // 이 노드가 속한 서브브랜치
@@ -111,6 +115,43 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         UpdateUI();
         UpdateLockState();
+    }
+    
+    // 구매 가능 여부에 따라 텍스트 색상 업데이트
+    public void UpdateAffordabilityTextColor()
+    {
+        if (forgeSO == null) return;
+        
+        // 인벤토리 매니저 가져오기
+        InventoryManger inventoryManger = Managers.Instance?.inventory;
+        if (inventoryManger == null) return;
+        
+        // 자원이 충분한지 체크
+        bool hasEnoughCoal = inventoryManger.OreList[(int)OreType.Coal] >= forgeSO.coalCost;
+        bool hasEnoughIron = inventoryManger.OreList[(int)OreType.Iron] >= forgeSO.ironCost;
+        bool hasEnoughGold = inventoryManger.OreList[(int)OreType.Gold] >= forgeSO.goldCost;
+        bool hasEnoughDiamond = inventoryManger.OreList[(int)OreType.Diamond] >= forgeSO.diamondCost;
+        
+        // 모든 자원이 충분하고 잠겨있지 않으면 구매 가능
+        bool canAfford = !isLocked && hasEnoughCoal && hasEnoughIron && hasEnoughGold && hasEnoughDiamond;
+        
+        // 텍스트 색상 변경
+        Color textColor = canAfford ? affordableTextColor : unaffordableTextColor;
+        
+        if (coalText != null)
+            coalText.color = textColor;
+        
+        if (ironText != null)
+            ironText.color = textColor;
+        
+        if (goldText != null)
+            goldText.color = textColor;
+        
+        if (diamondText != null)
+            diamondText.color = textColor;
+        
+        if (upgradeNameText != null)
+            upgradeNameText.color = textColor;
     }
     
     // 잠금 상태 업데이트

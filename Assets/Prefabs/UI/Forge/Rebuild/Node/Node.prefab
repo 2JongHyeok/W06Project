@@ -1794,3 +1794,5 @@ MonoBehaviour:
   diamondText: {fileID: 5364643442136358467}
   chargeTime: 1
   lockedAlpha: 0.5
+  affordableTextColor: {r: 0, g: 0, b: 0, a: 1}
+  unaffordableTextColor: {r: 1, g: 0, b: 0, a: 1}

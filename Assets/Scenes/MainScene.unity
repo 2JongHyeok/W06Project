@@ -2339,7 +2339,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 12
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2364,7 +2364,7 @@ Transform:
   m_GameObject: {fileID: 688005876}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 3.25, y: 0.09, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7717,7 +7717,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1065af5955d32ee43ad8e6dfd9f27b69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponModeText: {fileID: 494380100}
   guidedMissileTurret: {fileID: 742853716}
   bulletTurret: {fileID: 1259648941}
   laserTurret: {fileID: 1001158642}
@@ -9026,6 +9025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forgePanel: {fileID: 1961691629955639023}
+  forgeUI: {fileID: 3315322173378570673}
   mainBranches:
   - {fileID: 11400000, guid: 92d345b9cc641b748836cf22d32a936a, type: 2}
   - {fileID: 11400000, guid: d2c177ebe559c5e45b7d7c7689b5ec39, type: 2}

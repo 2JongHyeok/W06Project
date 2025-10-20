@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class TurretActivationManager : MonoBehaviour
 {
-    public GameObject WeaponModeText;
     [Header("--- 포탑 할당 ---")]
     [Tooltip("Z 키로 활성화될 유도탄 포탑")]
     public AutoTurret guidedMissileTurret;

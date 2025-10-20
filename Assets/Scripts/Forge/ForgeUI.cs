@@ -400,10 +400,12 @@ public class ForgeUI : MonoBehaviour
             if (needsRefresh)
             {
                 GenerateForgeUI(); // 전체 재생성
+                UpdateAllNodeTextColors(); // 재생성 후 텍스트 색상 업데이트
             }
             else
             {
                 RefreshAllNodes(); // 잠금 상태만 업데이트
+                UpdateAllNodeTextColors(); // 구매 후 텍스트 색상 업데이트
             }
         }
     }
@@ -419,6 +421,22 @@ public class ForgeUI : MonoBehaviour
                 if (nodeComponent != null)
                 {
                     nodeComponent.RefreshUI();
+                }
+            }
+        }
+    }
+    
+    // 모든 노드의 구매 가능 여부에 따라 텍스트 색상 업데이트
+    public void UpdateAllNodeTextColors()
+    {
+        foreach (var nodeUI in forgeNodeUIObjects.Values)
+        {
+            if (nodeUI != null)
+            {
+                var nodeComponent = nodeUI.GetComponent<ForgeNodeUI>();
+                if (nodeComponent != null)
+                {
+                    nodeComponent.UpdateAffordabilityTextColor();
                 }
             }
         }

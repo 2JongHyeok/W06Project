@@ -5,6 +5,7 @@ public class ForgeManager : MonoBehaviour
 {
     [Header("UI Panel")]
     [SerializeField] private GameObject forgePanel; // 포지 UI 패널
+    [SerializeField] private ForgeUI forgeUI; // ForgeUI 참조
     
     [Header("Branch Configuration")]
     public MainBranchSO[] mainBranches;
@@ -94,6 +95,12 @@ public class ForgeManager : MonoBehaviour
             if (isForgeOpenState != null)
             {
                 isForgeOpenState.Value = true;
+            }
+            
+            // 패널이 열릴 때 모든 노드의 텍스트 색상 업데이트
+            if (forgeUI != null)
+            {
+                forgeUI.UpdateAllNodeTextColors();
             }
         }
     }
