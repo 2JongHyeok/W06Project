@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour
     [Header("References")]
     public Transform firePoint;
     
+    [Header("Respawn Settings")]
+    [SerializeField] private float maxDistanceFromTarget = 30f; // 타겟으로부터 최대 거리
+    
     // 런타임 상태 (외부에서 접근 필요)
     [HideInInspector] public Transform target;
     [HideInInspector] public IObjectPool<GameObject> myPool;
@@ -36,6 +39,17 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        // 타겟과의 거리 체크 - 너무 멀어지면 리스폰
+        if (target != null)
+        {
+            float distanceToTarget = Vector2.Distance(transform.position, target.position);
+            if (distanceToTarget > maxDistanceFromTarget)
+            {
+                RespawnAtRandomPosition();
+                return;
+            }
+        }
+        
         // Ranger 또는 RangerTank 타입이고 공격 중일 때
         if (isAttacking && (enemyData.enemyType == EnemyType.Ranger || 
                             enemyData.enemyType == EnemyType.RangerTank ||
@@ -199,6 +213,29 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // 타겟으로부터 너무 멀어졌을 때 랜덤 스폰 포인트로 리스폰
+    private void RespawnAtRandomPosition()
+    {
+        if (WaveManager.Instance == null) return;
+        
+        // WaveManager의 GetRandomSpawnPosition 메서드를 public으로 만들어야 함
+        // 또는 여기서 직접 계산
+        float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+        
+        Camera mainCamera = Camera.main;
+        float aspect = mainCamera != null ? mainCamera.aspect : 16f / 9f;
+        float maxCameraSize = WaveManager.Instance.maxCameraSize;
+        float spawnDistanceOffset = WaveManager.Instance.spawnDistanceOffset;
+        
+        float horizontalSize = maxCameraSize * aspect;
+        float spawnRadius = Mathf.Max(maxCameraSize, horizontalSize) + spawnDistanceOffset;
+        
+        float x = Mathf.Cos(randomAngle) * spawnRadius;
+        float y = Mathf.Sin(randomAngle) * spawnRadius;
+        
+        transform.position = new Vector3(x, y, 0f);
+    }
+    
     // EnemyCount는 WaveManager의 풀 시스템에서 관리
     // void OnEnable()
     // {

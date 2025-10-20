@@ -59,6 +59,9 @@ public class WaveManager : MonoBehaviour
             waveTimerText.text = "";
         if (enemyCountText != null)
             enemyCountText.text = "";
+        
+        // 적 카운트 체크 코루틴 시작
+        StartCoroutine(CheckActiveEnemiesRoutine());
     }
 
     private void Update()
@@ -329,6 +332,38 @@ public class WaveManager : MonoBehaviour
             }
             
             prevPoint = point;
+        }
+    }
+
+    // 5초마다 활성화된 적이 있는지 체크하는 코루틴
+    private IEnumerator CheckActiveEnemiesRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5f);
+            
+            // EnemyCount가 0보다 크지만 실제로 활성화된 적이 없는 경우
+            if (EnemyCount > 0)
+            {
+                bool hasActiveEnemy = false;
+                
+                // WaveManager의 자식 중 활성화된 적 오브젝트 찾기
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    Transform child = transform.GetChild(i);
+                    if (child.gameObject.activeSelf && child.GetComponent<Enemy>() != null)
+                    {
+                        hasActiveEnemy = true;
+                        break;
+                    }
+                }
+                
+                // 활성화된 적이 없으면 카운트를 0으로 초기화
+                if (!hasActiveEnemy)
+                {
+                    EnemyCount = 0;
+                }
+            }
         }
     }
 }

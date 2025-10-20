@@ -36,7 +36,6 @@ public class WorldGenerator : MonoBehaviour
     /// </summary>
     public void GenerateWorld()
     {
-        Debug.Log("월드 생성을 시작합니다...");
         // 테스트를 위해 기존 타일을 모두 지웁니다.
         worldTilemap.ClearAllTiles();
 
@@ -65,7 +64,6 @@ public class WorldGenerator : MonoBehaviour
                 CircleCollider2D prefabCollider = asteroidPrefabToSpawn.GetComponent<CircleCollider2D>();
                 if (prefabCollider == null)
                 {
-                    Debug.LogWarning($"{asteroidPrefabToSpawn.name}에 CircleCollider2D가 없어 겹침 확인을 건너뜁니다.");
                 }
                 else if (Physics2D.OverlapCircle(currentPosition, prefabCollider.radius))
                 {
@@ -77,18 +75,15 @@ public class WorldGenerator : MonoBehaviour
                 StampAsteroid(currentPosition, asteroidPrefabToSpawn);
             }
         }
-        Debug.Log("월드 생성 완료!");
         // 1. 월드 생성이 끝났으니, AsteroidHealth에게 타일 초기화를 지시합니다.
         if (asteroidHealth != null)
         {
-            Debug.Log("AsteroidHealth 초기화를 시작합니다...");
             asteroidHealth.InitializeFromGenerator();
         }
 
         // 2. 타일 초기화까지 끝났으니, ShadowGenerator에게 그림자 생성을 지시합니다.
         if (shadowGenerator != null)
         {
-            Debug.Log("초기 그림자 생성을 시작합니다...");
             shadowGenerator.GenerateInitialShadow();
         }
 

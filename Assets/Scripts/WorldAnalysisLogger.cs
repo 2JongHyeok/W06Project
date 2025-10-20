@@ -63,8 +63,6 @@ public class WorldAnalysisLogger : MonoBehaviour
                 totalOreCount++;
             }
         }
-
-        Debug.Log($"분석 완료! 총 {totalOreCount}개의 타일을 발견했습니다.");
         
         // 2. 집계된 데이터를 기반으로 리포트를 작성하고 파일에 저장합니다.
         LogResultsAsReport(rawCounts, totalOreCount);
@@ -138,6 +136,5 @@ public class WorldAnalysisLogger : MonoBehaviour
 
         // --- 리포트 내용 생성 끝 ---
         File.AppendAllText(filePath, report.ToString());
-        Debug.Log($"분석 리포트가 {filePath} 파일에 저장되었습니다.");
     }
 }

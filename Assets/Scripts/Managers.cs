@@ -1,10 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(-1000)]
 public class Managers : MonoBehaviour
 {
     public static Managers Instance { get; private set; }
+
+    public GameObject RestartPanel;
 
     [Header("Gameplay Services")]
     public InventoryManger inventory;
@@ -196,5 +199,21 @@ public class Managers : MonoBehaviour
     {
         if (planet == null) return;
         planet.ReduceRespawnDelay(reductionAmount);
+    }
+
+    // ========== 게임 재시작 ==========
+    public void RestartGame()
+    {
+        // DontDestroyOnLoad 오브젝트들을 먼저 정리
+        if (Instance != null)
+        {
+            // Instance를 null로 설정하여 다음 씬에서 새로 생성되도록 함
+            Instance = null;
+            Destroy(gameObject);
+        }
+        
+        // 현재 활성화된 씬을 다시 로드
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 }

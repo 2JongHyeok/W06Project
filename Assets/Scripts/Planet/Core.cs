@@ -39,6 +39,7 @@ public class Core : MonoBehaviour
     private void GameOver()
     {
         Destroy(gameObject);
+        Managers.Instance.RestartPanel.SetActive(true);
         // 이후에 GameOver 연출이나 Scene 전환 로직을 여기에 추가 가능
     }
 
