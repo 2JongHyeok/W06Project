@@ -69,16 +69,23 @@ public class ForgeManger : MonoBehaviour
     
     private void Update()
     {
-        // Tab 키를 누르면 포지 패널 열기
+        // Tab 키를 누르면 포지 패널 토글 (켰다 껐다)
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (forgePanel != null)
             {
-                OpenForgePanel();
+                if (forgePanel.activeSelf)
+                {
+                    CloseForgePanel();
+                }
+                else
+                {
+                    OpenForgePanel();
+                }
             }
         }
         
-        // ESC 키를 누르면 포지 패널 닫기
+        // ESC 키를 누르면 포지 패널 닫기만
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (forgePanel != null && forgePanel.activeSelf)
