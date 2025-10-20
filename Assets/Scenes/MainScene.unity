@@ -1510,6 +1510,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 442708506751227059, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7180292076679184082, guid: 31ae00cb01416884f93ddbf2060a3dea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.25
@@ -4190,7 +4194,7 @@ PrefabInstance:
       objectReference: {fileID: 1752708900}
     - target: {fileID: 6559816729868818941, guid: 23ad2668fd171794ebb5513081490024, type: 3}
       propertyPath: countdown
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6559816729868818941, guid: 23ad2668fd171794ebb5513081490024, type: 3}
       propertyPath: waveTimerText
@@ -6153,7 +6157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateToWatch: {fileID: 11400000, guid: 488c35a86bed74a4980674d1c93f4cd9, type: 2}
-  uiElement: {fileID: 1604557740}
+  uiElement: {fileID: 1657778867}
 --- !u!1 &1657778867
 GameObject:
   m_ObjectHideFlags: 0
