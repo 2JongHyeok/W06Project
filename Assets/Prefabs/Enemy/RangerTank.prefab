@@ -284,5 +284,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e43228e6eb476d489a9cef1ff681870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flashColor: {r: 0.7248311, g: 0.29031673, b: 0.8792453, a: 1}
+  flashColor: {r: 0.77934, g: 0.47351366, b: 0.8867924, a: 1}
   flashDuration: 0.1
