@@ -67,7 +67,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3206c7fe7f8047a4e9cf7fe633905f72, type: 2}
   - {fileID: 11400000, guid: f56b47968ce933546bca3c3bfe8c83dc, type: 2}
   - {fileID: 11400000, guid: 0320ba3dc5e40dc4cbf9f16839758202, type: 2}
-  timeBetweenWaves: 90
+  timeBetweenWaves: 60
   countdown: 5
   waveTimerText: {fileID: 0}
   enemyCountText: {fileID: 0}
