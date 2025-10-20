@@ -77,14 +77,16 @@ public class SpaceshipMotor : MonoBehaviour
     {
         if (speedData == null) return;
 
+        float mass = Rb.mass;
+
         // 1. 이론상 최대 속도를 계산합니다. (최대추력 / 저항)
-        float absoluteMaxSpeed = (movementDrag > 0) ? thrustPower / movementDrag : 0f;
+        float absoluteMaxSpeed = (movementDrag > 0 && mass > 0) ? thrustPower / (movementDrag * mass) : 0f;
 
         // 2. 무게가 적용된 유효 추력을 계산합니다.
         float effectiveThrust = CalculateEffectiveThrust();
 
         // 3. 무게가 적용된 유효 최대 속도를 계산합니다. (유효추력 / 저항)
-        float effectiveMaxSpeed = (movementDrag > 0) ? effectiveThrust / movementDrag : 0f;
+        float effectiveMaxSpeed = (movementDrag > 0 && mass > 0) ? effectiveThrust / (movementDrag * mass) : 0f;
 
         // 4. 모든 계산된 값을 방송국(SO)에 업데이트합니다.
         speedData.CurrentSpeed = Rb.linearVelocity.magnitude;
