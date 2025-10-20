@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ParasiteSO
   m_EditorClassIdentifier: 
   enemyType: 4
-  enemyHP: 0
-  enemySpeed: 0
+  enemyHP: 1
+  enemySpeed: 10
   enemyPrefab: {fileID: 0}
   ParasitePrefab: {fileID: 6360892650054380025, guid: 3d29ee9112aae784da1687e8ed4153fc, type: 3}
-  attackRange: 5
-  bulletSpeed: 10
-  attackCooldown: 2
+  attackRange: 999
+  bulletSpeed: 1
+  attackCooldown: 0.5

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6559816729868818941}
   m_Layer: 0
   m_Name: WaveManger
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49,11 +49,12 @@ MonoBehaviour:
   - {fileID: 2615078695605655245, guid: 71b2860df2cd00a4dbdabb1ee68337e5, type: 3}
   - {fileID: 3732918253183833171, guid: 2f4e763b99dd012449e0fc9d0eed412b, type: 3}
   - {fileID: 3732918253183833171, guid: 40a0db0a5f174c24fb6d97ba6f46cb1b, type: 3}
+  - {fileID: 2615078695605655245, guid: 4e15d82d4de1c3947a5b22f1b76248db, type: 3}
   Target: {fileID: 0}
-  maxCameraSize: 20
+  maxCameraSize: 15
   spawnDistanceOffset: 2
   waves:
-  - {fileID: 11400000, guid: da0bbf562d181644fb52b8ecbf57284c, type: 2}
+  - {fileID: 11400000, guid: 66a6658e18527f94eb87b7729eb63815, type: 2}
   - {fileID: 11400000, guid: 764ff3157e0360542bada92cc6de648d, type: 2}
   - {fileID: 11400000, guid: 529e9ad077d4ff044b29078ccc3ebfd3, type: 2}
   timeBetweenWaves: 90
