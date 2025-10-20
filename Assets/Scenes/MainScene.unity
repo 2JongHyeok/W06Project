@@ -1026,7 +1026,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1051,7 +1051,7 @@ Transform:
   m_GameObject: {fileID: 688005876}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 3.25, y: 0.09, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4706,7 +4706,7 @@ MonoBehaviour:
   maxShipCamZoom: 20
   maxPlanetCamZoom: 20
   smoothSpeed: 5
-  forgeManger: {fileID: 0}
+  forgeManager: {fileID: 0}
 --- !u!4 &1778712952
 Transform:
   m_ObjectHideFlags: 0
@@ -5063,7 +5063,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8920092929309086370}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.36223957
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5552,7 +5552,7 @@ MonoBehaviour:
   nodeWidth: 250
   nodeHeight: 125
   baseMainBranchHeight: 300
-  forgeManger: {fileID: 851302069335967697}
+  forgeManager: {fileID: 851302069335967697}
   inventoryManger: {fileID: 5803141803156037022}
   tooltipUI: {fileID: 7069204562295432945}
 --- !u!114 &3371593990476748644
