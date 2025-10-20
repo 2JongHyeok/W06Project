@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorMappings:
   - durabilityThreshold: 5
-    color: {r: 1, g: 1, b: 1, a: 1}
+    color: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
   - durabilityThreshold: 4
-    color: {r: 0.7433963, g: 0.7433963, b: 0.7433963, a: 1}
+    color: {r: 0.3529412, g: 0.3529412, b: 0.3529412, a: 1}
   - durabilityThreshold: 3
-    color: {r: 0.3886792, g: 0.3886792, b: 0.3886792, a: 1}
+    color: {r: 0.3137255, g: 0.3137255, b: 0.3137255, a: 1}
   - durabilityThreshold: 2
-    color: {r: 0.3056603, g: 0.3056603, b: 0.3056603, a: 1}
+    color: {r: 0.27450982, g: 0.27450982, b: 0.27450982, a: 1}
   - durabilityThreshold: 1
-    color: {r: 0.21509439, g: 0.21509439, b: 0.21509439, a: 1}
+    color: {r: 0.23529412, g: 0.23529412, b: 0.23529412, a: 1}
