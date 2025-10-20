@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forgeId: 2
   upgradeName: "\uC6B4\uBC18\uB825 Lv.2"
-  upgradeDescription: "\uC6B4\uBC18\uC73C\uB85C \uC778\uD55C \uAC10\uC18D\\n1.5 >
-    <color=green>0.8</color>"
+  upgradeDescription: "\uC6B4\uBC18\uC73C\uB85C \uC778\uD55C \uAC10\uC18D\\n0.6 >
+    <color=green>0.4</color>"
+  depth: 1
   coalCost: 8
   ironCost: 4
   goldCost: 1
   diamondCost: 0
   postSubBranches: []
-  OrePerSlow: -0.7
+  OrePerSlow: -0.2
