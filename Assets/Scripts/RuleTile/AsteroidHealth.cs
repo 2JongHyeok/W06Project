@@ -126,9 +126,33 @@ public class AsteroidHealth : MonoBehaviour
         }
         else
         {
-            if (!(tileBeingDamaged is MineralRuleTile))
+            if (tileBeingDamaged is MineralRuleTile mineralTile)
             {
-                // 데미지를 입었을 때도 색상 정보를 SO에서 가져옵니다.
+                // 1. 광석의 원래 색상을 가져와 HSV로 변환합니다.
+                Color originalColor = mineralTile.mineralColor;
+                Color.RGBToHSV(originalColor, out float h, out float s, out float v_original);
+
+                // 2. 최대 내구도를 가져옵니다.
+                float maxDurability = maxDurabilityMap[cellPosition];
+                
+                // 3. 현재 내구도 비율을 계산합니다.
+                float durabilityRatio = newDurability / maxDurability;
+
+                // ✨ --- 여기가 핵심 수정사항! --- ✨
+                // 4. 어두워질 최저 밝기를 설정합니다. (예: 원래 밝기의 40%까지)
+                float minBrightnessFactor = 0.4f;
+                float minBrightness = v_original * minBrightnessFactor;
+
+                // 5. '최소 밝기'와 '원래 밝기' 사이를 내구도 비율에 따라 보간합니다.
+                // 이렇게 하면 원래 밝기(v_original)보다 절대 밝아지지 않습니다.
+                float newBrightness = Mathf.Lerp(minBrightness, v_original, durabilityRatio);
+
+                // 6. 계산된 새로운 밝기로 색상을 생성하여 적용합니다.
+                Color newColor = Color.HSVToRGB(h, s, newBrightness);
+                myTilemap.SetColor(cellPosition, newColor);
+            }
+            else // 일반 돌 타일의 경우
+            {
                 myTilemap.SetColor(cellPosition, colorSettings.GetColorForDurability(newDurability));
             }
         }
