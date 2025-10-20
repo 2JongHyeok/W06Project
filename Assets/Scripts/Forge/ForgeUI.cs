@@ -7,20 +7,17 @@ public class ForgeUI : MonoBehaviour
     [Header("Prefab References")]
     [SerializeField] private GameObject mainBranchPrefab;
     [SerializeField] private GameObject subBranchPrefab;
-    [SerializeField] private GameObject forgeNodePrefab; // 버튼이 포함된 노드 프리팹
+    [SerializeField] private GameObject forgeNodePrefab; // 실제 강화 노드 프리팹
+    [SerializeField] private GameObject arrowBodyPrefab; // 화살표 몸통 프리팹 (빈 칸용)
+    [SerializeField] private GameObject arrowCornerPrefab; // 꺾인 화살표 프리팹 (후행 브랜치용)
 
     [Header("UI Container")]
     [SerializeField] private Transform mainBranchContainer; // 메인 브랜치들이 생성될 부모
-
+    
     [Header("Layout Settings")]
     // 서브 브랜치 설정
     [SerializeField] private float subBranchHeight = 100f;        // 서브 브랜치 높이
-    [SerializeField] private float subBranchGapX = 130f;          // 서브 브랜치 간 X 간격 (depth용)
     [SerializeField] private float subBranchGapY = 30f;           // 서브 브랜치 간 Y 간격
-    
-    // 노드 설정
-    [SerializeField] private float nodeWidth = 100f;              // 노드 하나의 너비
-    [SerializeField] private float nodeHeight = 100f;             // 노드 하나의 높이
     
     // 메인 브랜치 설정
     [SerializeField] private float baseMainBranchHeight = 100f;   // 메인 브랜치 기본 높이
@@ -112,12 +109,12 @@ public class ForgeUI : MonoBehaviour
         }
     }
 
-    private (float nextYPosition, int createdCount) CreateSubBranchUI(SubBranchSO subBranchSO, Transform parent, float currentYPosition, int depth)
+    private (GameObject subBranchUI, float nextYPosition, int createdCount) CreateSubBranchUI(SubBranchSO subBranchSO, Transform parent, float currentYPosition, int depth)
     {
         if (subBranchPrefab == null)
         {
             Debug.LogError("SubBranchPrefab is null!");
-            return (currentYPosition, 0);
+            return (null, currentYPosition, 0);
         }
 
         // 서브 브랜치 UI 생성
@@ -130,25 +127,19 @@ public class ForgeUI : MonoBehaviour
         // 노드 개수 세기
         int nodeCount = subBranchSO.baseForgeSOs != null ? subBranchSO.baseForgeSOs.Length : 0;
         
-        // 서브 브랜치 길이를 노드 개수에 맞춰 조정
+        // 서브 브랜치 위치 조정 (크기는 프리팹에 설정된 값 사용)
         RectTransform subBranchRect = subBranchUI.GetComponent<RectTransform>();
         if (subBranchRect != null)
         {
             // 프리팹의 기존 위치 저장
             Vector2 originalPosition = subBranchRect.anchoredPosition;
-            
-            // 노드 개수에 따라 너비 조정
-            float calculatedWidth = nodeWidth * nodeCount;
-            subBranchRect.sizeDelta = new Vector2(calculatedWidth, subBranchRect.sizeDelta.y);
-            
-            // 기존 위치에 계산된 오프셋 추가
-            float xOffset = subBranchGapX * depth;
-            subBranchRect.anchoredPosition = new Vector2(originalPosition.x + xOffset, originalPosition.y + currentYPosition);
-            
-            // Debug.Log($"{branchPrefix}SubBranch {subBranchSO.subBranchType} - Width: {calculatedWidth} (Nodes: {nodeCount}), Position: X={originalPosition.x + xOffset}, Y={originalPosition.y + currentYPosition} (depth: {depth})");
+
+            // Y 위치만 조정
+            subBranchRect.anchoredPosition = new Vector2(originalPosition.x, originalPosition.y + currentYPosition);
+
         }
 
-        // 노드 컨테이너 찾기
+        // 노드 컨테이너 찾기 (Grid Layout은 프리팹에 이미 설정되어 있음)
         Transform nodeContainer = subBranchUI.transform.Find("NodeContainer");
         if (nodeContainer == null)
         {
@@ -159,40 +150,123 @@ public class ForgeUI : MonoBehaviour
         float nextYPosition = currentYPosition - subBranchHeight - subBranchGapY;
         int totalCreatedCount = 1; // 현재 서브브랜치
 
-        // 노드(BaseForgeSO) 생성 및 LockedSubBranch 체크
+        // 노드(BaseForgeSO) 생성 - Grid Layout에 순서대로 배치
         if (subBranchSO.baseForgeSOs != null)
         {
+            // Depth별로 노드 분류 (1~4)
+            Dictionary<int, List<BaseForgeSO>> nodesByDepth = new Dictionary<int, List<BaseForgeSO>>();
+            for (int d = 1; d <= 4; d++)
+            {
+                nodesByDepth[d] = new List<BaseForgeSO>();
+            }
+            
             // 각 ForgeId가 몇 번째인지 카운트
             Dictionary<ForgeId, int> forgeIdCount = new Dictionary<ForgeId, int>();
             
-            for (int i = 0; i < subBranchSO.baseForgeSOs.Length; i++)
+            foreach (var forgeSO in subBranchSO.baseForgeSOs)
             {
-                var forgeSO = subBranchSO.baseForgeSOs[i];
-                
-                // 같은 ForgeId 내에서 몇 번째인지 계산
-                if (!forgeIdCount.ContainsKey(forgeSO.forgeId))
+                int nodeDepth = Mathf.Clamp(forgeSO.depth, 1, 4);
+                nodesByDepth[nodeDepth].Add(forgeSO);
+            }
+            
+            // 노드가 있는 최대 Depth 찾기
+            int maxDepthWithNodes = 0;
+            for (int d = 4; d >= 1; d--)
+            {
+                if (nodesByDepth[d].Count > 0)
                 {
-                    forgeIdCount[forgeSO.forgeId] = 0;
+                    maxDepthWithNodes = d;
+                    break;
                 }
-                int indexInSameId = forgeIdCount[forgeSO.forgeId];
-                forgeIdCount[forgeSO.forgeId]++;
+            }
+            
+            // Depth 1~maxDepthWithNodes까지만 순회 (빈 칸 최소화)
+            for (int currentDepth = 1; currentDepth <= maxDepthWithNodes; currentDepth++)
+            {
+                if (nodesByDepth[currentDepth].Count > 0)
+                {
+                    // 이 Depth에 노드가 있으면 모두 생성
+                    foreach (var forgeSO in nodesByDepth[currentDepth])
+                    {
+                        // 같은 ForgeId 내에서 몇 번째인지 계산
+                        if (!forgeIdCount.ContainsKey(forgeSO.forgeId))
+                        {
+                            forgeIdCount[forgeSO.forgeId] = 0;
+                        }
+                        int indexInSameId = forgeIdCount[forgeSO.forgeId];
+                        forgeIdCount[forgeSO.forgeId]++;
+                        
+                        CreateForgeNodeUI(forgeSO, subBranchSO.subBranchType, indexInSameId, nodeContainer, depth);
+                    }
+                }
+                else
+                {
+                    // 해당 Depth에 노드가 없으면 화살표 몸통 배치
+                    CreateArrowBody(nodeContainer);
+                }
+            }
+            
+            Debug.Log($"<color=yellow>[PostBranch Check]</color> SubBranch: {subBranchSO.subBranchType}, Nodes: {subBranchSO.baseForgeSOs?.Length ?? 0}");
+            
+            // postSubBranches 처리 (실제 후행 브랜치 생성)
+            foreach (var forgeSO in subBranchSO.baseForgeSOs)
+            {
+                Debug.Log($"<color=yellow>[Node Check]</color> {forgeSO.upgradeName}, postSubBranches: {forgeSO.postSubBranches?.Length ?? 0}");
                 
-                CreateForgeNodeUI(forgeSO, subBranchSO.subBranchType, indexInSameId, nodeContainer, depth);
-                
-                // postSubBranches가 있으면 바로 다음에 LockedSubBranch 생성
                 if (forgeSO.postSubBranches != null && forgeSO.postSubBranches.Length > 0)
                 {
+                    Debug.Log($"<color=green>[PostBranch Found!]</color> {forgeSO.upgradeName} has {forgeSO.postSubBranches.Length} post branches");
+                    
                     foreach (var lockedSubBranch in forgeSO.postSubBranches)
                     {
+                        // 1. 후행 브랜치 생성
                         var result = CreateSubBranchUI(lockedSubBranch, parent, nextYPosition, depth + 1);
                         nextYPosition = result.nextYPosition;
                         totalCreatedCount += result.createdCount;
+                        
+                        Debug.Log($"<color=magenta>[SubBranch Created]</color> subBranchUI null? {result.subBranchUI == null}");
+                        
+                        // 2. 생성된 후행 브랜치에서 NodeContainer 찾기
+                        if (result.subBranchUI != null)
+                        {
+                            // 자식 구조 확인
+                            Debug.Log($"<color=yellow>[SubBranch Children]</color> {result.subBranchUI.name} has {result.subBranchUI.transform.childCount} children:");
+                            for (int i = 0; i < result.subBranchUI.transform.childCount; i++)
+                            {
+                                Debug.Log($"  Child {i}: {result.subBranchUI.transform.GetChild(i).name}");
+                            }
+                            
+                            Transform postNodeContainer = result.subBranchUI.transform.Find("NodeContainer");
+                            if (postNodeContainer == null)
+                            {
+                                // NodeContainer가 없으면 SubBranch 자체를 사용
+                                postNodeContainer = result.subBranchUI.transform;
+                                Debug.Log($"<color=orange>[NodeContainer]</color> Not found, using SubBranch itself");
+                            }
+                            
+                            Debug.Log($"<color=magenta>[NodeContainer]</color> Found? {postNodeContainer != null}");
+                            
+                            // 3. 후행 브랜치의 NodeContainer에 꺾인 화살표 생성
+                            GameObject cornerArrow = CreateCornerArrowAndReturn(postNodeContainer);
+                            
+                            Debug.Log($"<color=cyan>[Corner Arrow]</color> Created: {cornerArrow != null}, Prefab assigned: {arrowCornerPrefab != null}");
+                            
+                            // 4. 생성된 꺾인 화살표를 맨 앞(첫 번째 자식)으로 이동
+                            if (cornerArrow != null)
+                            {
+                                cornerArrow.transform.SetAsFirstSibling();
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogError($"<color=red>[ERROR]</color> result.subBranchUI is null!");
+                        }
                     }
                 }
             }
         }
 
-        return (nextYPosition, totalCreatedCount);
+        return (subBranchUI, nextYPosition, totalCreatedCount);
     }
 
     private void CreateForgeNodeUI(BaseForgeSO forgeSO, SubBranchType subBranchType, int indexInSameId, Transform parent, int depth)
@@ -203,21 +277,12 @@ public class ForgeUI : MonoBehaviour
             return;
         }
 
-        // 노드 UI 생성
+        // 노드 UI 생성 (Grid Layout이 자동으로 위치 조정)
         GameObject nodeUI = Instantiate(forgeNodePrefab, parent);
         forgeNodeUIObjects[forgeSO] = nodeUI;
 
         // 노드 이름 설정
-        nodeUI.name = $"Node_{forgeSO.forgeId}_{forgeSO.upgradeName}";
-
-        // X 위치는 부모(SubBranch)가 이미 설정했으므로 여기서는 설정하지 않음
-        // depth에 따른 추가 X 오프셋이 필요한 경우에만 설정
-        RectTransform nodeRect = nodeUI.GetComponent<RectTransform>();
-        if (nodeRect != null && depth > 0)
-        {
-            // 노드는 기본적으로 부모를 따르므로 추가 오프셋 불필요
-            // 필요시 여기서 추가 조정
-        }
+        nodeUI.name = $"Node_{forgeSO.forgeId}_{forgeSO.upgradeName}_Depth{forgeSO.depth}";
 
         // 노드 UI 컴포넌트 가져오기
         var nodeUIComponent = nodeUI.GetComponent<ForgeNodeUI>();
@@ -242,6 +307,61 @@ public class ForgeUI : MonoBehaviour
             {
                 Debug.LogWarning($"No Button found on ForgeNodePrefab for {forgeSO.upgradeName}");
             }
+        }
+    }
+
+    // 빈 노드 생성 (노드가 없는 Depth용)
+    private void CreateEmptyNode(Transform parent)
+    {
+        GameObject emptyNode = new GameObject("EmptySlot");
+        emptyNode.transform.SetParent(parent, false);
+        emptyNode.AddComponent<RectTransform>();
+    }
+    
+    // 화살표 몸통 생성 (노드가 없는 Depth용)
+    private void CreateArrowBody(Transform parent)
+    {
+        if (arrowBodyPrefab != null)
+        {
+            GameObject arrowBody = Instantiate(arrowBodyPrefab, parent);
+            arrowBody.name = "ArrowBody";
+        }
+        else
+        {
+            // 화살표 몸통 프리팹이 없으면 빈 칸
+            CreateEmptyNode(parent);
+        }
+    }
+    
+    // 꺾인 화살표 생성 (↓, 후행 브랜치용)
+    private void CreateCornerArrow(Transform parent)
+    {
+        if (arrowCornerPrefab != null)
+        {
+            GameObject cornerArrow = Instantiate(arrowCornerPrefab, parent);
+            cornerArrow.name = "ArrowCorner";
+        }
+        else
+        {
+            // 꺾인 화살표 프리팹이 없으면 빈 칸
+            CreateEmptyNode(parent);
+        }
+    }
+    
+    // 꺾인 화살표 생성 및 GameObject 반환
+    private GameObject CreateCornerArrowAndReturn(Transform parent)
+    {
+        if (arrowCornerPrefab != null)
+        {
+            GameObject cornerArrow = Instantiate(arrowCornerPrefab, parent);
+            cornerArrow.name = "ArrowCorner";
+            return cornerArrow;
+        }
+        else
+        {
+            // 꺾인 화살표 프리팹이 없으면 빈 칸 생성 후 null 반환
+            CreateEmptyNode(parent);
+            return null;
         }
     }
 
