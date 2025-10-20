@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TurretActivationManager : MonoBehaviour
 {
+    public GameObject WeaponModeText;
     [Header("--- 포탑 할당 ---")]
     [Tooltip("Z 키로 활성화될 유도탄 포탑")]
     public AutoTurret guidedMissileTurret;
@@ -50,7 +51,7 @@ public class TurretActivationManager : MonoBehaviour
     {
         missileStrategy.Interval += delta;
     } 
-    public void AddMissileTurret() { 
+    public void AddMissileTurret() {
         missileTurretPrefab.SetActive(true);
         guidedMissileTurret.ActivateTurret(missileStrategy);
     }
