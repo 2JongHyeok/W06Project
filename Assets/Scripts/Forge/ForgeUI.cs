@@ -109,7 +109,6 @@ public class ForgeUI : MonoBehaviour
         if (mainBranchRect != null)
         {
             mainBranchRect.sizeDelta = new Vector2(mainBranchRect.sizeDelta.x, calculatedHeight);
-            Debug.Log($"MainBranch {mainBranchSO.branchType} - Total Height: {calculatedHeight} = Branches({totalSubBranchCount} × {subBranchHeight}) + Gaps({totalSubBranchCount - 1} × {subBranchGapY})");
         }
     }
 

@@ -3,7 +3,10 @@ using UnityEngine;
 public enum EnemyType
 {
     Ranger,
-    Kamikaze
+    RangerTank,
+    Kamikaze,
+    KamikazeTank,
+    Parasite
 }
 
 public abstract class EnemyBaseSO : ScriptableObject
@@ -12,6 +15,6 @@ public abstract class EnemyBaseSO : ScriptableObject
     public EnemyType enemyType;
     public int enemyHP;
     public float enemySpeed;
-
+    public GameObject enemyPrefab;  
     public abstract void PerformAttack(Enemy enemy);
 }

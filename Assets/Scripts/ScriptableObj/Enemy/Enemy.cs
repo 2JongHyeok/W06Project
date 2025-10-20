@@ -1,36 +1,28 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine.Tilemaps;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Enemy Data")]
     public EnemyBaseSO enemyData;
-    public EnemyType enemyType;
-    public int enemyHP;
-    public float enemySpeed;
-    [HideInInspector] public Transform target;
-    public IObjectPool<GameObject> myPool;
+    
+    [Header("References")]
     public Transform firePoint;
-    public bool isAttacking = false;
-
-    public float attackCooldown;
-    public float attackTimer = 0f;
+    
+    // 런타임 상태 (외부에서 접근 필요)
+    [HideInInspector] public Transform target;
+    [HideInInspector] public IObjectPool<GameObject> myPool;
+    [HideInInspector] public int enemyHP;
+    [HideInInspector] public bool isDead = false;
+    [HideInInspector] public bool isAttacking = false; // WaveManager에서 초기화
+    [HideInInspector] public float attackTimer = 0f; // WaveManager에서 초기화
+    
+    // 내부 상태
+    private EnemyType enemyType;
+    private float enemySpeed;
+    private float attackCooldown;
     private void Start()
     {
-        enemyType = enemyData.enemyType;
-        enemyHP = enemyData.enemyHP;
-        enemySpeed = enemyData.enemySpeed;
-        // initialize attackCooldown for Ranger enemies after enemyData is available
-        if (enemyData != null && enemyData.enemyType == EnemyType.Ranger)
-        {
-            var ranger = enemyData as RangerEnemySO;
-            if (ranger != null)
-            {
-                attackCooldown = ranger.attackCooldown;
-            }
-        }
-
         if (target != null)
         {
             target.position = Vector2.zero;
@@ -44,7 +36,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (isAttacking && enemyData.enemyType == EnemyType.Ranger)
+        // Ranger 또는 RangerTank 타입이고 공격 중일 때
+        if (isAttacking && (enemyData.enemyType == EnemyType.Ranger || enemyData.enemyType == EnemyType.RangerTank))
         {
             if (attackTimer <= 0f)
             {
@@ -72,11 +65,46 @@ public class Enemy : MonoBehaviour
     {
         myPool = pool;
     }
+    
+    // 풀에서 재사용 시 상태 초기화
+    public void ResetState()
+    {
+        enemyType = enemyData.enemyType;
+        enemyHP = enemyData.enemyHP;
+        enemySpeed = enemyData.enemySpeed;
+        isAttacking = false;
+        attackTimer = 0f;
+        isDead = false;
+        
+        // Ranger 및 RangerTank 타입은 attackCooldown 설정
+        if (enemyData != null)
+        {
+            if (enemyData.enemyType == EnemyType.Ranger)
+            {
+                var ranger = enemyData as RangerEnemySO;
+                if (ranger != null)
+                {
+                    attackCooldown = ranger.attackCooldown;
+                }
+            }
+            else if (enemyData.enemyType == EnemyType.RangerTank)
+            {
+                var rangerTank = enemyData as RangerEnemyTankSO;
+                if (rangerTank != null)
+                {
+                    attackCooldown = rangerTank.attackCooldown;
+                }
+            }
+        }
+    }
     public void TakeDamage(int damage)
     {
+        if (isDead) return; // 이미 죽었으면 무시
+        
         enemyHP -= damage;
         if (enemyHP <= 0)
         {
+            isDead = true;
             myPool.Release(gameObject);
         }
     }
@@ -98,16 +126,26 @@ public class Enemy : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (enemyType == EnemyType.Kamikaze)
+        if (isDead) return; // 이미 죽었으면 폭발 처리 안함
+        
+        // Kamikaze 타입 폭발 처리 (enemyData로 직접 체크)
+        if (enemyData.enemyType == EnemyType.Kamikaze)
         {
+            isDead = true; // 폭발 시 죽음 처리
             (enemyData as KamikazeSO).Explode(this, collision);
+        }
+        else if (enemyData.enemyType == EnemyType.KamikazeTank)
+        {
+            isDead = true; // 폭발 시 죽음 처리
+            (enemyData as KamikazeTankSO).Explode(this, collision);
         }
     }
 
-    void OnEnable()
-    {
-        WaveManager.Instance.EnemyCount++;
-    }
+    // EnemyCount는 WaveManager의 풀 시스템에서 관리
+    // void OnEnable()
+    // {
+    //     WaveManager.Instance.EnemyCount++;
+    // }
     // void OnDestroy()
     // {
     //     WaveManager.Instance.EnemyCount--;
