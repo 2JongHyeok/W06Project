@@ -126,17 +126,26 @@ public class Enemy : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isDead) return; // 이미 죽었으면 폭발 처리 안함
+        HandleKamikazeCollision(collision);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        HandleKamikazeCollision(collision);
+    }
+
+    private void HandleKamikazeCollision(Collision2D collision)
+    {
+        // 이미 비활성화되었으면(풀로 반환되었으면) 무시
+        if (!gameObject.activeInHierarchy) return;
         
         // Kamikaze 타입 폭발 처리 (enemyData로 직접 체크)
-        if (enemyData.enemyType == EnemyType.Kamikaze)
+        if (enemyData != null && enemyData.enemyType == EnemyType.Kamikaze)
         {
-            isDead = true; // 폭발 시 죽음 처리
             (enemyData as KamikazeSO).Explode(this, collision);
         }
-        else if (enemyData.enemyType == EnemyType.KamikazeTank)
+        else if (enemyData != null && enemyData.enemyType == EnemyType.KamikazeTank)
         {
-            isDead = true; // 폭발 시 죽음 처리
             (enemyData as KamikazeTankSO).Explode(this, collision);
         }
     }

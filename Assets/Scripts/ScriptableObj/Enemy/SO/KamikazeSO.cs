@@ -33,18 +33,13 @@ public class KamikazeSO : EnemyBaseSO
             //     }
             //     return; // Core에 맞았으면 Tilemap 로직은 건너뜀
             // }
-            Collider2D[] hits = Physics2D.OverlapCircleAll(enemy.transform.position, explosionRadius, damageLayer);
-
-            foreach (var hit in hits)
+            // Core 데미지 처리 (폭발로 인한 Enemy 간 연쇄 방지)
+            if (collision.collider.CompareTag("Core"))
             {
-                // Core 태그만 처리
-                if (!hit.CompareTag("Core"))
-                    continue;
-
-               Core core = collision.collider.GetComponent<Core>();
+                Core core = collision.collider.GetComponent<Core>();
                 if (core != null)
                 {
-                    core.TakeDamage(damage);  // Core의 체력 감소 함수 호출
+                    core.TakeDamage(damage);
                 }
             }    
             Tilemap tilemap = collision.collider.GetComponent<Tilemap>();
