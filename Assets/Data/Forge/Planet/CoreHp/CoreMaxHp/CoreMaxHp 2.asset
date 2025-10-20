@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: CoreMaxHp 2
   m_EditorClassIdentifier: 
   forgeId: 1
-  upgradeName: "\uCF54\uC5B4 \uCCB4\uB825Lv.Max"
-  upgradeDescription: "\uCF54\uC5B4 \uCD5C\uB300 \uCC44\uB825\\n120 > <color=green>160</color>"
+  upgradeName: "\uCD5C\uB300 \uCCB4\uB825Lv.Max"
+  upgradeDescription: "\uCF54\uC5B4\uC758 \uCD5C\uB300 \uCCB4\uB825\uC744 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4.\\n\uCD5C\uB300
+    \uCCB4\uB825: 120 > <color=green>160</color> "
   depth: 4
-  coalCost: 10
-  ironCost: 5
-  goldCost: 1
-  diamondCost: 0
+  coalCost: 11
+  ironCost: 6
+  goldCost: 2
+  diamondCost: 1
   postSubBranches: []
   CoreMaxHp: 40

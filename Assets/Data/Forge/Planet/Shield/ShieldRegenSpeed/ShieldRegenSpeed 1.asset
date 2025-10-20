@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a52dc7130b4d0645b26c421ad42cf03, type: 3}
   m_Name: ShieldRegenSpeed 1
   m_EditorClassIdentifier: 
-  forgeId: 16
+  forgeId: 4
   upgradeName: "\uC274\uB4DC \uC7AC\uC0DD\uC131 Lv.1"
-  upgradeDescription: "\uD30C\uAD34\uB41C \uC274\uB4DC \uC7AC\uC0DD \uC2DC\uAC04\\n90
-    > <color=green>85</color>"
+  upgradeDescription: "\uD30C\uC190\uB41C \uC274\uB4DC\uC758 \uD68C\uBCF5 \uC18D\uB3C4\uB97C
+    \uD5A5\uC0C1\uC2DC\uD0B5\uB2C8\uB2E4.\\n\uD68C\uBCF5 \uC18D\uB3C4: 90\uCD08 >
+    <color=green>85\uCD08</color> "
+  depth: 1
   coalCost: 5
-  ironCost: 1
+  ironCost: 3
   goldCost: 0
   diamondCost: 0
   postSubBranches: []

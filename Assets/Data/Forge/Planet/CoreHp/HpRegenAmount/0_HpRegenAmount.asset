@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffc067897671d04fa641fe01a67676c, type: 3}
   m_Name: 0_HpRegenAmount
   m_EditorClassIdentifier: 
-  branchName: "\uCF54\uC5B4 \uCCB4\uB825 \uD68C\uBCF5"
+  branchName: "\uCF54\uC5B4 \uD68C\uBCF5"
   subBranchType: 2
   baseForgeSOs:
   - {fileID: 11400000, guid: 4b9778ce660b6ec4c873f3d70f6b9d88, type: 2}
