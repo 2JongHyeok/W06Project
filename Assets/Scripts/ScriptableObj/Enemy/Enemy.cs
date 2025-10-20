@@ -37,7 +37,9 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         // Ranger 또는 RangerTank 타입이고 공격 중일 때
-        if (isAttacking && (enemyData.enemyType == EnemyType.Ranger || enemyData.enemyType == EnemyType.RangerTank))
+        if (isAttacking && (enemyData.enemyType == EnemyType.Ranger || 
+                            enemyData.enemyType == EnemyType.RangerTank ||
+                            enemyData.enemyType == EnemyType.Parasite))
         {
             if (attackTimer <= 0f)
             {
@@ -95,12 +97,25 @@ public class Enemy : MonoBehaviour
                     attackCooldown = rangerTank.attackCooldown;
                 }
             }
+            else if (enemyData.enemyType == EnemyType.Parasite)
+            {
+                var parasite = enemyData as ParasiteSO;
+                if (parasite != null)
+                {
+                    attackCooldown = parasite.attackCooldown;
+                }
+            }
         }
     }
     public void TakeDamage(int damage)
     {
         if (isDead) return; // 이미 죽었으면 무시
-        
+
+        if (enemyData != null && enemyData.enemyType == EnemyType.Parasite)
+        {
+            return;
+        }
+
         enemyHP -= damage;
         if (enemyHP <= 0)
         {
@@ -111,17 +126,51 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (enemyData == null) return;
+
+        // 패러사이트는 "Respawn" 태그에 반응
+        if (enemyData.enemyType == EnemyType.Parasite)
         {
-            isAttacking = true;
+            if (collision.CompareTag("Respawn"))
+            {
+                isAttacking = true;
+            }
+            else if (collision.CompareTag("Weapon"))
+            {
+                isDead = true;
+                // (여기에 밟혀 죽는 이펙트/사운드 추가하면 좋음)
+                myPool.Release(gameObject); // 풀로 반환 (죽음)
+            }
+        }
+        // 레인저/탱크는 기존대로 "Player" 태그에 반응
+        else if (enemyData.enemyType == EnemyType.Ranger || enemyData.enemyType == EnemyType.RangerTank)
+        {
+            if (collision.CompareTag("Player"))
+            {
+                isAttacking = true;
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (enemyData == null) return;
+
+        // 패러사이트는 "Respawn" 태그에서 벗어났을 때
+        if (enemyData.enemyType == EnemyType.Parasite)
         {
-            isAttacking = false;
+            if (collision.CompareTag("Respawn"))
+            {
+                isAttacking = false;
+            }
+        }
+        // 레인저/탱크는 "Player" 태그에서 벗어났을 때
+        else if (enemyData.enemyType == EnemyType.Ranger || enemyData.enemyType == EnemyType.RangerTank)
+        {
+            if (collision.CompareTag("Player"))
+            {
+                isAttacking = false;
+            }
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
@@ -138,7 +187,7 @@ public class Enemy : MonoBehaviour
     {
         // 이미 비활성화되었으면(풀로 반환되었으면) 무시
         if (!gameObject.activeInHierarchy) return;
-        
+
         // Kamikaze 타입 폭발 처리 (enemyData로 직접 체크)
         if (enemyData != null && enemyData.enemyType == EnemyType.Kamikaze)
         {
