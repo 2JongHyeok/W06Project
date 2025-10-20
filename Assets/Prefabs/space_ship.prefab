@@ -29826,6 +29826,8 @@ MonoBehaviour:
   rotationalGlideReduction: 0.95
   angularStopThreshold: 0.1
   speedData: {fileID: 11400000, guid: 6f4526b49f62f3247bd5c11a6d8c174f, type: 2}
+  isOverweightState: {fileID: 11400000, guid: f3e36b747a3831942bf4e3bccb5a36b1, type: 2}
+  overweightThresholdPercent: 20
 --- !u!114 &5363256348143905287
 MonoBehaviour:
   m_ObjectHideFlags: 0

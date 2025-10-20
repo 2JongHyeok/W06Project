@@ -45,6 +45,10 @@ public class SpaceshipMotor : MonoBehaviour
 
     [Header("UI 방송 설정")]
     [SerializeField] private SpeedDataSO speedData;
+    [SerializeField] private BoolVariable isOverweightState;
+    [Tooltip("성능이 이 비율(%) 이하로 떨어지면 '과적' 경고가 뜹니다.")]
+    [Range(0f, 100f)]
+    [SerializeField] private float overweightThresholdPercent = 80f;
 
 
     public Rigidbody2D Rb { get; private set; }
@@ -91,6 +95,25 @@ public class SpaceshipMotor : MonoBehaviour
         speedData.CurrentSpeed = Rb.linearVelocity.magnitude;
         speedData.AbsoluteMaxSpeed = absoluteMaxSpeed;
         speedData.EffectiveMaxSpeed = effectiveMaxSpeed;
+        bool isOverweight = false;
+        if (absoluteMaxSpeed > 0)
+        {
+            // 현재 성능 비율을 계산합니다 (예: 75 / 100 = 0.75)
+            float performanceRatio = effectiveMaxSpeed / absoluteMaxSpeed;
+            // 설정된 임계치 비율을 계산합니다 (예: 80% -> 0.8)
+            float thresholdRatio = overweightThresholdPercent / 100f;
+
+            // 현재 성능이 임계치 '이하'일 경우 과적으로 판단합니다.
+            isOverweight = performanceRatio <= thresholdRatio;
+        }
+
+        // 상태가 변경되었을 때만 방송을 보냅니다.
+        if (isOverweightState.Value != isOverweight)
+        {
+            isOverweightState.Value = isOverweight;
+        }
+
+
     }
 
     // [추가] 유효 추력을 계산하는 로직을 별도 함수로 분리하여 재사용성을 높입니다.
