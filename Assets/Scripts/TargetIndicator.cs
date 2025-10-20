@@ -24,11 +24,11 @@ public class TargetIndicator : MonoBehaviour
     // --- 이 부분이 추가됐어. 똑똑히 봐. ---
     [Header("크기 제한 설정")]
     [Tooltip("가까울 때의 최대 크기 배율")]
-    [Range(0f, 2f)]
+    [Range(0f, 50f)]
     [SerializeField] private float maxScale = 1.0f;
 
     [Tooltip("아무리 멀어져도 유지할 최소 크기 배율")]
-    [Range(0f, 1f)]
+    [Range(0f, 10f)]
     [SerializeField] private float minScale = 0.2f;
 
 
