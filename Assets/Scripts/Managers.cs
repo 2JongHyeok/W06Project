@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [DefaultExecutionOrder(-1000)]
@@ -8,7 +9,7 @@ public class Managers : MonoBehaviour
     [Header("Gameplay Services")]
     public InventoryManger inventory;
     public TurretActivationManager turretActivationManager;
-    public Weapon weapon;
+    public Weapon[] weapon;
     public SpaceshipMotor spaceshipMotor;
     public SpaceshipWeapon spaceshipWeapon;
     public TilemapManager tilemapManager;
@@ -59,7 +60,7 @@ public class Managers : MonoBehaviour
     {
         inventory ??= FindAnyObjectByType<InventoryManger>();
         turretActivationManager ??= FindAnyObjectByType<TurretActivationManager>();
-        weapon ??= FindAnyObjectByType<Weapon>();
+        // weapon ??= FindAnyObjectByType<Weapon>();
         spaceshipMotor ??= FindAnyObjectByType<SpaceshipMotor>();
         spaceshipWeapon ??= FindAnyObjectByType<SpaceshipWeapon>();
         tilemapManager ??= FindAnyObjectByType<TilemapManager>();
@@ -72,11 +73,14 @@ public class Managers : MonoBehaviour
         // Weapon 기본값 셋업
         if (weapon != null)
         {
-            weapon.SetDamage(initialWeaponDamage);
-            weapon.SetAttackSpeed(initialWeaponFireRate);
-            weapon.SetCannonSpeed(initialWeaponRotationSpeed);
-            weapon.SetExplosionRange(initialWeaponExplosionRadius);
-            weapon.level = Mathf.Max(1, initialWeaponBulletLevel);
+            foreach (var w in weapon)
+            {
+                w.SetDamage(initialWeaponDamage);
+                w.SetAttackSpeed(initialWeaponFireRate);
+                w.SetCannonSpeed(initialWeaponRotationSpeed);
+                w.SetExplosionRange(initialWeaponExplosionRadius);
+                w.level = Mathf.Max(1, initialWeaponBulletLevel);
+            }
         }
 
         // Guided Missile(유도탄) 기본값 셋업
@@ -118,5 +122,29 @@ public class Managers : MonoBehaviour
         if (Instance.dontDestroyOnLoad) DontDestroyOnLoad(Instance.gameObject);
         if (Instance.autoResolveInAwake) Instance.AutoResolveRefs();
         return Instance;
+    }
+
+    public void ActiveWeapon(int index)
+    {
+        weapon[index].gameObject.SetActive(true);
+    }
+    public void AddWeaponDamage(int damage)
+    {
+        foreach (var w in weapon)
+        {
+            w.AddDamage(damage);
+        }
+    }
+    public void AddWeaponAttackSpeed(float rate)
+    {
+        foreach (var w in weapon)
+        {
+            w.AddAttackSpeed(rate);
+        }
+    }
+
+    public void ActiveWeapon(float bulletNumber)
+    {
+        throw new NotImplementedException();
     }
 }

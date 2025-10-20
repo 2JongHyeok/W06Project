@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ffc067897671d04fa641fe01a67676c, type: 3}
-  m_Name: 0_ShieldRegenSpeed
+  m_Name: 0_CannonUpgrade
   m_EditorClassIdentifier: 
-  branchName: "\uC274\uB4DC \uC7AC\uC0DD\uC131"
-  subBranchType: 4
+  branchName: "\uC8FC\uD3EC \uD0C4"
+  subBranchType: 5
   baseForgeSOs:
-  - {fileID: 11400000, guid: 7327a2be630d6e649b7b6f7bfdb30c20, type: 2}
-  - {fileID: 11400000, guid: b8b0bf1180523934283599ad39130872, type: 2}
+  - {fileID: 11400000, guid: 4760decab62394448867c8acc3072568, type: 2}
+  - {fileID: 11400000, guid: 6122eda987958b94eb0bee0661ae64e3, type: 2}

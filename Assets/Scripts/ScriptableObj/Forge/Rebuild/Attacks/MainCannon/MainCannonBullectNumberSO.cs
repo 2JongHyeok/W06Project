@@ -8,8 +8,7 @@ public class MainCannonBulletNumberSO : BaseForgeSO
     
     public override void Apply()
     {
-        if (Managers.Instance?.weapon == null) return;
-        for (int i = 0; i < Mathf.Max(1, (int)BulletNumber); i++)
-            Managers.Instance.weapon.UpgradeTurretBulletCount();
+
+        Managers.Instance.ActiveWeapon((int)BulletNumber);
     }
 }

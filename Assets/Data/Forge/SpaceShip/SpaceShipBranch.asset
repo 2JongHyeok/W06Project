@@ -15,8 +15,7 @@ MonoBehaviour:
   branchName: "\uC6B0\uC8FC\uC120"
   branchType: 0
   subBranches:
-  - {fileID: 11400000, guid: 74ab8f634c827cf449465a0a89b48d03, type: 2}
-  - {fileID: 11400000, guid: 75dad64a8faa43f4e91fde1cb5d24bfd, type: 2}
   - {fileID: 11400000, guid: 65986112d05460447bc704bfc5a041de, type: 2}
   - {fileID: 11400000, guid: 7e55f2b34946698458f39681eff4e910, type: 2}
-  - {fileID: 11400000, guid: d37e866378eb63b408f5f12f77a8d110, type: 2}
+  - {fileID: 11400000, guid: 75dad64a8faa43f4e91fde1cb5d24bfd, type: 2}
+  - {fileID: 11400000, guid: 74ab8f634c827cf449465a0a89b48d03, type: 2}

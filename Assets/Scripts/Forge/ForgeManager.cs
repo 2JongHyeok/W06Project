@@ -48,9 +48,6 @@ public class ForgeManager : MonoBehaviour
             }
         }
         
-        
-        GetForgeSO(ForgeId.MainCannonAtkDamage, 0);
-        
         // 패널 초기 상태는 비활성화
         if (forgePanel != null)
         {

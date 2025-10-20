@@ -28,7 +28,7 @@ public class PlanetBullet : MonoBehaviour
     {
         if (collision.collider.CompareTag("Enemy"))
         {
-            collision.collider.GetComponent<Enemy>().TakeDamage(Managers.Instance.weapon.GetDamage());
+            collision.collider.GetComponent<Enemy>().TakeDamage(Managers.Instance.weapon[0].GetDamage());
             Destroy(gameObject);
         }
         Destroy(gameObject); // 폭발 후 미사일 파괴

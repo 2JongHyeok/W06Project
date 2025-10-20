@@ -3,27 +3,22 @@ using UnityEngine;
 public enum SubBranchType
 {
     None,
-    // SpaceShip Move
-    SpaceShipMoveMaxSpeed,
-    SpaceShipMoveOrePerSlow,
-    // SpaceShip Mining
-    SpaceShipMiningDamage,
-    SpaceShipMiningRadius,
-    SpaceShipMiningSpeed,
-    // Attacks GuidedMissile
-    GuidedMissileUnlock,
-    GuidedMissileAtkDamage,
-    GuidedMissileAtkSpeed,
-    // Attacks MainCannon
-    MainCannonAtkDamage,
-    MainCannonAtkSpeed,
-    MainCannonBulletNumber,
-    MainCannonMoveSpeed,
     //Planet 
     PlanetCoreMaxHp,
     PlanetHpRegenAmount,
     PlanetShieldMaxHp,
-    PlanetShieldRegenSpeed
+    PlanetShieldRegenSpeed,
+    // Attacks MainCannon
+    MainCannonUpgrade,
+    MainCannonBulletNumber,
+    // Attacks GuidedMissile
+    GuidedMissile,
+    // SpaceShip Mining
+    SpaceShipMiningUpgrade,
+    SpaceShipMiningRadius,
+    // SpaceShip Move
+    SpaceShipMoveMaxSpeed,
+    SpaceShipMoveOrePerSlow
 }
 [CreateAssetMenu(fileName = "SubBranchSO", menuName = "ScriptableObjects/Forge/Branch/SubBranchSO", order = 1)]
 public class SubBranchSO : BranchSO

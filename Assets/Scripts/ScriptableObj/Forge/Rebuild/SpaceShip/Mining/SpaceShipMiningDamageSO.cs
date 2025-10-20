@@ -1,14 +1,15 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "SpaceShipMiningDamageSO", menuName = "ScriptableObjects/Forge/SpaceShip/Mining/SpaceShipMiningDamageSO", order = 1)]
-public class SpaceShipMiningDamageSO : BaseForgeSO
+[CreateAssetMenu(fileName = "SpaceShipMiningUpgradeSO", menuName = "ScriptableObjects/Forge/SpaceShip/Mining/SpaceShipMiningUpgradeSO", order = 1)]
+public class SpaceShipMiningUpgradeSO : BaseForgeSO
 {
     public float MiningDamage;
+    public float MiningSpeed;
     
-    protected override ForgeId GetForgeId() => ForgeId.SpaceShipMiningDamage;
+    protected override ForgeId GetForgeId() => ForgeId.SpaceShipMiningUpgrade;
     
     public override void Apply()
     {
-        if (Managers.Instance?.spaceshipWeapon != null)
             Managers.Instance.spaceshipWeapon.AddDamage((int)MiningDamage);
+        Managers.Instance.spaceshipWeapon.AddAttackSpeed(MiningSpeed);
     }
 }
