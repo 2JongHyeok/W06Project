@@ -18,7 +18,7 @@ public class InventoryUI : MonoBehaviour
 
     public void CreateOreUI(InventoryManger inventoryManger)
     {
-        OreUIParent.sizeDelta = new Vector2((GridWidth + GridSpacing) * inventoryManger.OreList.Length, OreUIParent.sizeDelta.y);
+        OreUIParent.sizeDelta = new Vector2(OreUIParent.sizeDelta.x, (GridWidth + GridSpacing) * inventoryManger.OreList.Length);
         OreUIList = new List<OreUI>();
         for(int i = 0; i < inventoryManger.OreList.Length; i++ ) 
         {

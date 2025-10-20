@@ -33,7 +33,7 @@ public class InvertedContextualUIController : MonoBehaviour
     {
         if (stateToWatch == null || uiElement == null) return;
 
-        // ✨ 여기가 핵심! ✨
+        // 여기가 핵심!
         // shouldBeActive 앞에 '!' (NOT 연산자)를 붙여서 신호를 반대로 적용합니다.
         bool shouldBeActive = !stateToWatch.Value; 
 
