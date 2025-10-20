@@ -84,7 +84,7 @@ public class WaveManager : MonoBehaviour
         // 스폰이 끝났지만 적이 남아있으면 대기
         if (EnemyCount > 0 && !isSpawning)
         {
-            waveTimerText.text = $"Wave {currentWaveIndex + 1} - Clear the enemies!";
+            waveTimerText.text = $"Wave {currentWaveIndex} - Clear the enemies!";
             enemyCountText.text = $"Enemies: {EnemyCount} / {totalEnemiesInWave}";
             return;
         }

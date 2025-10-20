@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5687629027153647095}
   - component: {fileID: 8104192729466963942}
   - component: {fileID: 4997158611832164921}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: SpaceshipMissile_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

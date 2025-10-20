@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d3e106c13f59574287bc2011c90fc9b, type: 3}
   m_Name: Wave2
   m_EditorClassIdentifier: 
-  waveName: Wave 1
-  enemySpawnInfos:
-  - enemyType: 0
-    count: 0
-  - enemyType: 2
-    count: 2
-  spawnInterval: 1
-  minSpawnPerInterval: 2
-  maxSpawnPerInterval: 2
+  rangerCount: 5
+  rangerTankCount: 0
+  kamikazeCount: 0
+  kamikazeTankCount: 0
+  parasiteCount: 0
+  spawnInterval: 3
+  minSpawnPerInterval: 1
+  maxSpawnPerInterval: 1

@@ -1021,6 +1021,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Procedual_gen_AsteroidsTilemap
       objectReference: {fileID: 0}
+    - target: {fileID: 8635862968213936377, guid: cb73e85f10d12c449b811e8ade6e643b, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
