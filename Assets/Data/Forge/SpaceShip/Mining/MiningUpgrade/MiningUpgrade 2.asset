@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d384677d119519a45ba2919425165469, type: 3}
   m_Name: MiningUpgrade 2
   m_EditorClassIdentifier: 
-  forgeId: 3
+  forgeId: 9
   upgradeName: "\uBBF8\uC0AC\uC77C \uD30C\uAD34\uB825 Lv.1"
   upgradeDescription: "\uCC44\uAD74 \uBBF8\uC0AC\uC77C \uB370\uBBF8\uC9C0\\n1 > <color=green>2</color>"
+  depth: 4
   coalCost: 2
   ironCost: 1
   goldCost: 0
   diamondCost: 0
   postSubBranches: []
   MiningDamage: 1
+  MiningSpeed: 0

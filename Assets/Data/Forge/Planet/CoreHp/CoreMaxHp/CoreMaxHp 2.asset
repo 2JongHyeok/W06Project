@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7445806a18514ff4696b945f3c48702d, type: 3}
   m_Name: CoreMaxHp 2
   m_EditorClassIdentifier: 
-  forgeId: 13
+  forgeId: 1
   upgradeName: "\uCF54\uC5B4 \uCCB4\uB825Lv.Max"
   upgradeDescription: "\uCF54\uC5B4 \uCD5C\uB300 \uCC44\uB825\\n120 > <color=green>160</color>"
+  depth: 4
   coalCost: 10
   ironCost: 5
   goldCost: 1

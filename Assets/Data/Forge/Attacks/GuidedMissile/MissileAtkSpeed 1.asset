@@ -15,6 +15,7 @@ MonoBehaviour:
   forgeId: 8
   upgradeName: "\uC7AC\uC7A5\uC804 \uC2DC\uAC04 Lv.1"
   upgradeDescription: "\uBBF8\uC0AC\uC77C \uC7AC\uC7A5\uC804 \uC2DC\uAC04\\n3 > <color=green>2.2</color>"
+  depth: 4
   coalCost: 6
   ironCost: 3
   goldCost: 0

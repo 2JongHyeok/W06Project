@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4150fc41a4f5f3645b47ba74e3c92766, type: 3}
   m_Name: MoveMaxSpeed 2
   m_EditorClassIdentifier: 
-  forgeId: 1
+  forgeId: 11
   upgradeName: "\uC6B0\uC8FC\uC120 \uCD9C\uB825 Lv.2"
   upgradeDescription: "\uC6B0\uC8FC\uC120 \uCD5C\uB300 \uC18D\uB3C4\\n60 > <color=green>75</color>"
+  depth: 4
   coalCost: 8
   ironCost: 4
   goldCost: 1

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3761431c3667a4458311362ca8b102e, type: 3}
   m_Name: ShieldMaxHp 2
   m_EditorClassIdentifier: 
-  forgeId: 15
+  forgeId: 3
   upgradeName: "\uC274\uB4DC \uB0B4\uAD6C\uB3C4 Lv.2"
   upgradeDescription: "\uD0C0\uC77C\uB2F9 \uC274\uB4DC \uB0B4\uAD6C\uB3C4\\n4 > <color=green>5</color>"
+  depth: 4
   coalCost: 8
   ironCost: 5
   goldCost: 1

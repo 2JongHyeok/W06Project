@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 227ef00996f005443a03829694d0b827, type: 3}
   m_Name: HpRegenAmount 1
   m_EditorClassIdentifier: 
-  forgeId: 14
+  forgeId: 2
   upgradeName: "\uCF54\uC5B4 \uCCB4\uB825 \uD68C\uBCF5"
   upgradeDescription: "\uCF54\uC5B4 \uCCB4\uB825 \uD68C\uBCF5\\n<color=red>+10</color>"
+  depth: 2
   coalCost: 3
   ironCost: 2
   goldCost: 0

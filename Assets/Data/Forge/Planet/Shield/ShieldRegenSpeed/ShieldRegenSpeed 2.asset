@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a52dc7130b4d0645b26c421ad42cf03, type: 3}
   m_Name: ShieldRegenSpeed 2
   m_EditorClassIdentifier: 
-  forgeId: 16
+  forgeId: 4
   upgradeName: "\uC274\uB4DC \uC7AC\uC0DD\uC131 Lv.Max"
   upgradeDescription: "\uD30C\uAD34\uB41C \uC274\uB4DC \uC7AC\uC0DD \uC2DC\uAC04\\n85
     > <color=green>70</color>"
+  depth: 4
   coalCost: 12
   ironCost: 4
   goldCost: 0

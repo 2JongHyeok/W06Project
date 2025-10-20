@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa8dbe64ac2fc40469cd7b6ecee485cc, type: 3}
   m_Name: MiningRadius 2
   m_EditorClassIdentifier: 
-  forgeId: 4
+  forgeId: 10
   upgradeName: "\uCC44\uAD74 \uBBF8\uC0AC\uC77C \uBC94\uC704 Lv.Max"
   upgradeDescription: "\uCC44\uAD74 \uBBF8\uC0AC\uC77C \uD3ED\uBC1C \uBC94\uC704\\n0.6
     > <color=green>1</color>"
+  depth: 4
   coalCost: 12
   ironCost: 6
   goldCost: 2
