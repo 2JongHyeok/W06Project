@@ -11,6 +11,7 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private Image nodeIcon;
     [SerializeField] private Slider chargeSlider; // 차징 게이지 슬라이더 (optional)
     [SerializeField] private CanvasGroup canvasGroup; // 잠금 상태 표시용 (optional)
+    [SerializeField] private TextMeshProUGUI upgradeNameText; // 업그레이드 이름 텍스트
     
     [Header("Ore Cost Text")]
     [SerializeField] private TextMeshProUGUI coalText;
@@ -73,6 +74,12 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (forgeSO == null) return;
 
+        // 업그레이드 이름 표시
+        if (upgradeNameText != null)
+        {
+            upgradeNameText.text = forgeSO.upgradeName;
+        }
+
         // 아이콘 표시 (있다면)
         // if (nodeIcon != null && forgeSO.icon != null)
         // {
@@ -116,10 +123,21 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             return;
         }
         
-        // 구매 가능 여부 확인 (서브브랜치 해금 + ForgeId 레벨 일치)
-        bool canPurchase = forgeManger.CanPurchaseForge(subBranchType, forgeSO.forgeId, forgeIndexInSameId);
+        // 재사용 가능한 노드인지 확인
+        bool isReusable = forgeSO is IReuse reuse && reuse.IsReusable;
         
-        isLocked = !canPurchase;
+        if (isReusable)
+        {
+            // 재사용 가능한 노드는 항상 구매 가능 (비용만 체크)
+            isLocked = false;
+        }
+        else
+        {
+            // 일반 노드는 구매 가능 여부 확인
+            bool canPurchase = forgeManger.CanPurchaseForge(subBranchType, forgeSO.forgeId, forgeIndexInSameId);
+            isLocked = !canPurchase;
+        }
+        
         SetVisualLocked(isLocked);
     }
     
@@ -307,10 +325,27 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 차징 완료 시 호출
     private void OnChargeComplete()
     {
-        Debug.Log($"<color=green>[Charge Complete]</color> {forgeSO.upgradeName}");
+        // 재사용 가능한 노드인지 확인
+        bool isReusable = forgeSO is IReuse reuse && reuse.IsReusable;
+        
+        if (isReusable)
+        {
+            Debug.Log($"<color=cyan>[Reusable Purchase]</color> {forgeSO.upgradeName}");
+        }
+        else
+        {
+            Debug.Log($"<color=green>[Charge Complete]</color> {forgeSO.upgradeName}");
+        }
         
         // 콜백 실행 (강화 적용)
         onChargeCompleteCallback?.Invoke(forgeSO);
+        
+        // 재사용 가능한 노드는 구매 후에도 계속 사용 가능
+        if (isReusable)
+        {
+            // 잠금 상태 유지 (항상 구매 가능)
+            UpdateLockState();
+        }
         
         // 툴팁 갱신 (자원 소모 반영)
         if (tooltipUI != null && isHovering && forgeSO != null)

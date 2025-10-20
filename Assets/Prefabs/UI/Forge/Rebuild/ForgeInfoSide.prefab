@@ -2318,6 +2318,8 @@ GameObject:
   - component: {fileID: 6955119655795438168}
   - component: {fileID: 8793588443691676646}
   - component: {fileID: 3941930028943879011}
+  - component: {fileID: 4498914738329383226}
+  - component: {fileID: 4168031057108877991}
   m_Layer: 5
   m_Name: ForgeInfoSide
   m_TagString: Untagged
@@ -2409,7 +2411,35 @@ MonoBehaviour:
   goldCostText: {fileID: 6787890512275273099}
   diamondCostText: {fileID: 2769518643388011479}
   chargeSlider: {fileID: 3768434937921483080}
+  backgroundImage: {fileID: 8793588443691676646}
+  normalColor: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 1}
+  unaffordableColor: {r: 0.3962264, g: 0, b: 0, a: 1}
   offset: {x: 10, y: 10}
+--- !u!225 &4498914738329383226
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8188685796744585029}
+  m_Enabled: 1
+  m_Alpha: 0.9
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
+--- !u!114 &4168031057108877991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8188685796744585029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aba2b01177f1abe4095e98a1508dd6f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0, y: 0}
 --- !u!1 &8198329531877320987
 GameObject:
   m_ObjectHideFlags: 0
