@@ -42,6 +42,11 @@ public class SpaceshipMotor : MonoBehaviour
     [Range(0.9f, 1f)][SerializeField] private float rotationalGlideReduction = 0.95f;
     [SerializeField] private float angularStopThreshold = 0.1f;
 
+
+    [Header("UI 방송 설정")]
+    [SerializeField] private SpeedDataSO speedData;
+
+
     public Rigidbody2D Rb { get; private set; }
 
     private void Awake()
@@ -68,42 +73,51 @@ public class SpaceshipMotor : MonoBehaviour
         Rb.angularDamping = angularDrag;
     }
 
+    private void FixedUpdate()
+    {
+        if (speedData == null) return;
 
-// Move 함수는 이제 오직 '가속'만을 담당합니다.
+        // 1. 이론상 최대 속도를 계산합니다. (최대추력 / 저항)
+        float absoluteMaxSpeed = (movementDrag > 0) ? thrustPower / movementDrag : 0f;
+
+        // 2. 무게가 적용된 유효 추력을 계산합니다.
+        float effectiveThrust = CalculateEffectiveThrust();
+
+        // 3. 무게가 적용된 유효 최대 속도를 계산합니다. (유효추력 / 저항)
+        float effectiveMaxSpeed = (movementDrag > 0) ? effectiveThrust / movementDrag : 0f;
+
+        // 4. 모든 계산된 값을 방송국(SO)에 업데이트합니다.
+        speedData.CurrentSpeed = Rb.linearVelocity.magnitude;
+        speedData.AbsoluteMaxSpeed = absoluteMaxSpeed;
+        speedData.EffectiveMaxSpeed = effectiveMaxSpeed;
+    }
+
+    // [추가] 유효 추력을 계산하는 로직을 별도 함수로 분리하여 재사용성을 높입니다.
+    private float CalculateEffectiveThrust()
+    {
+        float multiplier = 1.0f;
+        if (cargoSystem != null)
+        {
+            int oreCount = cargoSystem.GetCollectedOreCount();
+            int penaltyWeight = oreCount * (oreCount + 1) / 2;
+            float totalReductionPercent = penaltyWeight * thrustReductionPerOre;
+            multiplier = 1.0f - (totalReductionPercent / 100.0f);
+            multiplier = Mathf.Max(0f, multiplier);
+        }
+        return thrustPower * multiplier;
+    }
+
+
+
+
+
     public void Move(float thrustInput, float boostMultiplier)
     {
         if (Mathf.Abs(thrustInput) > 0.01f)
         {
-            // --- 여기가 핵심 수정 부분 ---
-            
-            // 1. 기본 추력에서 시작합니다.
-            float effectiveThrust = thrustPower;
-
-            // 2. 카고 시스템이 연결되어 있다면, 무게 패널티를 계산합니다.
-            if (cargoSystem != null)
-            {
-                int oreCount = cargoSystem.GetCollectedOreCount();
-                
-                // ★ 여기가 바로 새롭게 변경된 비선형 패널티 계산식입니다 ★
-                // 1+2+3+...+N = N * (N+1) / 2 공식을 사용합니다.
-                // 예: 3개일 경우 -> 3 * 4 / 2 = 6. 즉, 6개 분량의 패널티를 받습니다.
-                int penaltyWeight = oreCount * (oreCount + 1) / 2;
-                
-                // 3. 총 감소율(%)을 계산합니다. (예: 3개, 개당 5% -> 6 * 5% = 30%)
-                float totalReductionPercent = penaltyWeight * thrustReductionPerOre;
-
-                // 4. 실제 적용할 추력 배율을 계산합니다. (예: 1.0f - 0.30f = 0.7f)
-                float thrustMultiplier = 1.0f - (totalReductionPercent / 100.0f);
-                
-                // 5. 추력이 0 미만이 되지 않도록 최소값을 0으로 제한합니다.
-                thrustMultiplier = Mathf.Max(0f, thrustMultiplier);
-                
-                // 6. 최종 유효 추력을 계산합니다.
-                effectiveThrust *= thrustMultiplier;
-            }
-            
-            // 7. 계산된 최종 추력을 힘으로 가합니다.
-            Rb.AddForce(transform.up * effectiveThrust * thrustInput * boostMultiplier, ForceMode2D.Force);
+            // 이제 힘을 가할 때도 매번 유효 추력을 계산해서 적용합니다.
+            float forceToApply = CalculateEffectiveThrust();
+            Rb.AddForce(transform.up * forceToApply * thrustInput * boostMultiplier, ForceMode2D.Force);
         }
     }
     // Rotate 함수는 변경할 필요가 없습니다.

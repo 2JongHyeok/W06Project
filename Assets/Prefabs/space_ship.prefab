@@ -29822,6 +29822,8 @@ MonoBehaviour:
   stopThreshold: 0.1
   additiveTorque: 4
   angularDrag: 4
+  thrustData: {fileID: 11400000, guid: 28ddef621f4ae9f47ad928aff1228e8d, type: 2}
+  sliderLerpSpeed: 10
   stoppingTorque: 10
   rotationalGlideReduction: 0.95
   angularStopThreshold: 0.1
