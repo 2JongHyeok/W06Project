@@ -1503,18 +1503,18 @@ MonoBehaviour:
   core: {fileID: 0}
   dontDestroyOnLoad: 1
   autoResolveInAwake: 1
-  initialWeaponDamage: 10
-  initialWeaponFireRate: 0.1
-  initialWeaponRotationSpeed: 100
-  initialWeaponExplosionRadius: 1.5
+  initialWeaponDamage: 1
+  initialWeaponFireRate: 0.6
+  initialWeaponRotationSpeed: 60
+  initialWeaponExplosionRadius: 0
   initialWeaponBulletLevel: 1
-  initialMissileDamage: 20
+  initialMissileDamage: 3
   initialMissileInterval: 3
-  initialThrustPower: 2000
+  initialThrustPower: 50
   initialThrustReductionPerOre: 5
-  initialMiningDamage: 25
-  initialMiningAttackSpeed: 0.5
-  initialMiningRadius: 2
+  initialMiningDamage: 1
+  initialMiningAttackSpeed: 0.6
+  initialMiningRadius: 0.4
 --- !u!1 &1001158639
 GameObject:
   m_ObjectHideFlags: 0
@@ -5006,7 +5006,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8920092929309086370}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.36223957
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
