@@ -15,6 +15,7 @@ public class Managers : MonoBehaviour
     public TilemapManager tilemapManager;
     public Core core;
     public Planet planet;
+    public SubWeaponManager subWeaponManager;
 
     [Header("Options")]
     [SerializeField] private bool dontDestroyOnLoad = true;
@@ -74,6 +75,7 @@ public class Managers : MonoBehaviour
         tilemapManager ??= FindAnyObjectByType<TilemapManager>();
         core ??= FindAnyObjectByType<Core>();
         planet ??= FindAnyObjectByType<Planet>();
+        subWeaponManager ??= FindAnyObjectByType<SubWeaponManager>();
     }
 
     // 씬 시작 시, 강화 기반 수치들의 기준값을 한 번에 셋팅합니다.
@@ -121,6 +123,10 @@ public class Managers : MonoBehaviour
         }
 
         // Planet Tiles (Shield) 기본값 셋업 - Planet.cs의 SerializedField 사용
+        if (planet != null)
+        {
+            planet.SetDelay(initialTileRespawnDelay);
+        }
         // (Planet.cs에서 직접 설정하므로 여기서는 별도 설정 불필요)
     }
 
@@ -170,9 +176,7 @@ public class Managers : MonoBehaviour
     public void AddCoreMaxHP(int amount)
     {
         if (core == null) return;
-        core.maxHP += amount;
-        core.RefreshHPText(); // UI 즉시 갱신
-        Debug.Log($"Core MaxHP increased by {amount}. New MaxHP: {core.maxHP}");
+        core.AddMaxHP(amount);
     }
     
     public void HealCoreHP(int amount)
@@ -186,13 +190,11 @@ public class Managers : MonoBehaviour
     {
         if (planet == null) return;
         planet.AddTileMaxHP(amount);
-        Debug.Log($"Planet tile (shield) MaxHP increased by {amount}");
     }
     
     public void ReduceTileRespawnDelay(float reductionAmount)
     {
         if (planet == null) return;
         planet.ReduceRespawnDelay(reductionAmount);
-        Debug.Log($"Planet tile (shield) respawn delay reduced by {reductionAmount}");
     }
 }

@@ -20,7 +20,7 @@ public class Core : MonoBehaviour
     {
         if (CoreHpText != null)
         {
-            CoreHpText.text = $"Core HP: {currentHP}";
+            CoreHpText.text = $"Core HP: {currentHP}/{maxHP}";
         }
     }
 
@@ -28,7 +28,6 @@ public class Core : MonoBehaviour
     {
         currentHP -= damage;
         UpdateHPText();
-        Debug.Log($"Core HP: {currentHP}/{maxHP}");
 
         if (currentHP <= 0)
         {
@@ -59,9 +58,19 @@ public class Core : MonoBehaviour
     // 1회성 HP 회복 메서드
     public void HealHP(int amount)
     {
+        int oldHP = currentHP;
         currentHP = Mathf.Min(currentHP + amount, maxHP);
         UpdateHPText();
-        Debug.Log($"Core HP Healed: +{amount}, Current: {currentHP}/{maxHP}");
+        Debug.Log($"[Core] HP Healed: +{amount} ({oldHP} → {currentHP}/{maxHP})");
+    }
+    
+    // 외부에서 MaxHP 증가 및 UI 갱신
+    public void AddMaxHP(int amount)
+    {
+        maxHP += amount;
+        currentHP += amount; // 현재 HP도 함께 증가
+        UpdateHPText();
+        Debug.Log($"[Core] MaxHP increased: +{amount} (New MaxHP: {maxHP}, CurrentHP: {currentHP})");
     }
     
     // 외부에서 UI 갱신 호출용
