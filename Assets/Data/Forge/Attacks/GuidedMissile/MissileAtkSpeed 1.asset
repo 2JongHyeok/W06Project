@@ -23,4 +23,4 @@ MonoBehaviour:
   goldCost: 2
   diamondCost: 1
   postSubBranches: []
-  AtkSpeed: -0.5
+  AtkSpeed: -0.9

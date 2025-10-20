@@ -1569,7 +1569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Enemy
-  scanRange: 10
+  scanRange: 15
   targetLayers:
     serializedVersion: 2
     m_Bits: 512
@@ -2066,6 +2066,7 @@ MonoBehaviour:
   tilemapManager: {fileID: 0}
   core: {fileID: 0}
   planet: {fileID: 0}
+  subWeaponManager: {fileID: 0}
   dontDestroyOnLoad: 1
   autoResolveInAwake: 1
   initialWeaponDamage: 1
@@ -2073,8 +2074,8 @@ MonoBehaviour:
   initialWeaponRotationSpeed: 60
   initialWeaponExplosionRadius: 0
   initialWeaponBulletLevel: 1
-  initialMissileDamage: 3
-  initialMissileInterval: 3
+  initialMissileDamage: 10
+  initialMissileInterval: 1
   initialThrustPower: 50
   initialThrustReductionPerOre: 0.8
   initialMiningDamage: 1

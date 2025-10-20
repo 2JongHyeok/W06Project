@@ -46,10 +46,12 @@ public class TurretActivationManager : MonoBehaviour
     // 필요시 증감도 지원
     public void AddMissileDamage(float delta)
     {
-        Debug.Log("미사일 데미지 찍힘");
         missileStrategy.baseDamage += delta;
     } 
-    public void AddMissileInterval(float delta) => missileStrategy.interval += delta;
+    public void AddMissileInterval(float delta)
+    {
+        missileStrategy.interval += delta;
+    } 
     public void AddMissileTurret() { 
         missileTurretPrefab.SetActive(true);
         guidedMissileTurret.ActivateTurret(missileStrategy);

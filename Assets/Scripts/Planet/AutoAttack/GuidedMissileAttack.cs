@@ -66,6 +66,7 @@ public class GuidedMissileAttack : IAttackStrategy
     private IEnumerator AttackRoutine(Transform turretTransform, AutoTurret turret)
     {
         var wait = new WaitForSeconds(interval);
+        
         while (true)
         {
             if (!turretTransform || !turret) yield break;
@@ -76,6 +77,7 @@ public class GuidedMissileAttack : IAttackStrategy
                 // 2D라면 Atan2 버전 사용 권장
                 SmoothLookAt2D(turretTransform, target, 360f, -90f);
                 Attack(turretTransform, target);
+                Debug.Log(interval);
             }
             if (waitDirty)
             {
