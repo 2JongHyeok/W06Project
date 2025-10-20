@@ -17,6 +17,6 @@ MonoBehaviour:
   kamikazeCount: 3
   kamikazeTankCount: 0
   parasiteCount: 0
-  spawnInterval: 4
+  spawnInterval: 1
   minSpawnPerInterval: 1
   maxSpawnPerInterval: 1
