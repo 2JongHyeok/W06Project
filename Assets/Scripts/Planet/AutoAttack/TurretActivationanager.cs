@@ -37,20 +37,22 @@ public class TurretActivationManager : MonoBehaviour
 
         Debug.Log("공격 전략 준비 완료. Z, X, C 키를 눌러 포탑을 활성화하세요.");
     }
-    public float GetMissileDamage() => missileStrategy.baseDamage;
-    public void SetMissileDamage(float v) => missileStrategy.baseDamage = v;
+    public float GetMissileDamage() => missileStrategy.Damage;
+    public void SetMissileDamage(float v) => missileStrategy.Damage = v;
 
-    public float GetMissileInterval() => missileStrategy.interval;
-    public void SetMissileInterval(float v) => missileStrategy.interval = v;
+    public float GetMissileInterval() => missileStrategy.Interval;
+    public void SetMissileInterval(float v) => missileStrategy.Interval = v;
 
     // 필요시 증감도 지원
     public void AddMissileDamage(float delta)
     {
-        missileStrategy.baseDamage += delta;
+        missileStrategy.Damage += delta;
+        Debug.Log($"[Missile] Damage increased: +{delta} (New: {missileStrategy.Damage})");
     } 
     public void AddMissileInterval(float delta)
     {
-        missileStrategy.interval += delta;
+        missileStrategy.Interval += delta;
+        Debug.Log($"[Missile] Interval changed: +{delta}s (New: {missileStrategy.Interval}s)");
     } 
     public void AddMissileTurret() { 
         missileTurretPrefab.SetActive(true);
