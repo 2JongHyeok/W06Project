@@ -11,6 +11,6 @@ public class ParasiteSO : EnemyBaseSO
 
     public override void PerformAttack(Enemy enemy)
     {
-        // Instantiate(bulletPrefab, enemy.firePoint.position, enemy.firePoint.rotation);
+        Instantiate(ParasitePrefab, enemy.firePoint.position, enemy.firePoint.rotation);
     }
 }
