@@ -12,7 +12,10 @@ public class ForgeManger : MonoBehaviour
     public Dictionary<SubBranchType, SubBranchSO> SubBranch = new Dictionary<SubBranchType, SubBranchSO>();
     public Dictionary<SubBranchType, SubBranchSO> LockedSubBranch = new Dictionary<SubBranchType, SubBranchSO>();
     public HashSet<SubBranchType> UnlockedSubBranches = new HashSet<SubBranchType>(); // 해금된 서브브랜치
-    
+
+    [Header("상태 방송")]
+    [SerializeField] private BoolVariable isForgeOpenState;
+
     // 각 ForgeId의 현재 레벨 (몇 번째 강화까지 구매했는지)
     private int[] forgeLevel = new int[System.Enum.GetValues(typeof(ForgeId)).Length];
     
@@ -102,6 +105,11 @@ public class ForgeManger : MonoBehaviour
         {
             forgePanel.SetActive(true);
             Time.timeScale = 0f; // 시간 정지
+
+            if (isForgeOpenState != null)
+            {
+                isForgeOpenState.Value = true;
+            }
         }
     }
     
@@ -112,6 +120,11 @@ public class ForgeManger : MonoBehaviour
         {
             forgePanel.SetActive(false);
             Time.timeScale = 1f; // 시간 재개
+
+            if (isForgeOpenState != null)
+            {
+                isForgeOpenState.Value = false;
+            }
         }
     }
     
