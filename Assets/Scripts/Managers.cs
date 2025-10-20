@@ -8,6 +8,7 @@ public class Managers : MonoBehaviour
     public static Managers Instance { get; private set; }
 
     public GameObject RestartPanel;
+    public GameObject WeaponModeText;
 
     [Header("Gameplay Services")]
     public InventoryManger inventory;

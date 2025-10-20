@@ -26,10 +26,12 @@ public class WaveManager : MonoBehaviour
     private int currentWaveIndex = 0;
     public float countdown = 10f;
     private bool isSpawning = false;
+    private bool isFirst = true; // 게임 시작 시 첫 번째 카운트다운인지 확인
 
     [Header("UI")]
     public TMP_Text waveTimerText;
     public TMP_Text enemyCountText;
+    public TMP_Text miningInstructionText; // 채굴 안내 텍스트
 
     [HideInInspector] public int EnemyCount = 0;
     private int totalEnemiesInWave = 0; // 현재 웨이브의 총 적 수
@@ -59,6 +61,11 @@ public class WaveManager : MonoBehaviour
             waveTimerText.text = "";
         if (enemyCountText != null)
             enemyCountText.text = "";
+        if (miningInstructionText != null)
+        {
+            miningInstructionText.text = "";
+            miningInstructionText.color = Color.green; // 초록색으로 설정
+        }
     }
 
     private void Update()
@@ -70,11 +77,15 @@ public class WaveManager : MonoBehaviour
             {
                 waveTimerText.text = "All Waves Completed!";
                 enemyCountText.text = "Victory!";
+                if (miningInstructionText != null)
+                    miningInstructionText.text = "";
             }
             else
             {
                 waveTimerText.text = $"Final Wave";
                 enemyCountText.text = $"Enemies: {EnemyCount}";
+                if (miningInstructionText != null)
+                    miningInstructionText.text = "";
             }
             return;
         }
@@ -84,14 +95,23 @@ public class WaveManager : MonoBehaviour
         {
             waveTimerText.text = $"Wave {currentWaveIndex + 1}";
             enemyCountText.text = $"Enemies: {EnemyCount}";
+            if (miningInstructionText != null)
+            {
+                miningInstructionText.color = Color.red; // 빨간색으로 변경
+                miningInstructionText.text = "적이 오고 있다! 기지로 돌아가라!";
+            }
             return;
         }
 
         // 스폰이 끝났지만 적이 남아있으면 대기
         if (EnemyCount > 0 && !isSpawning)
         {
-            waveTimerText.text = $"Wave {currentWaveIndex} - Clear the enemies!";
             enemyCountText.text = $"Enemies: {EnemyCount}";
+            if (miningInstructionText != null)
+            {
+                miningInstructionText.color = Color.red; // 빨간색으로 변경
+                miningInstructionText.text = "적이 오고 있다! 기지로 돌아가라!";
+            }
             return;
         }
 
@@ -106,11 +126,26 @@ public class WaveManager : MonoBehaviour
             {
                 StartCoroutine(SpawnWave());
                 countdown = timeBetweenWaves;
+                isFirst = false; // 첫 번째 웨이브가 시작되면 더 이상 첫 시작이 아님
             }
             else
             {
                 waveTimerText.text = $"Next Wave In: {Mathf.Ceil(countdown)}";
                 enemyCountText.text = "Mining Phase";
+                if (miningInstructionText != null)
+                {
+                    if (isFirst)
+                    {
+                        // 첫 시작 시에는 자원 탐색 메시지 표시 안 함
+                        miningInstructionText.text = "";
+                    }
+                    else
+                    {
+                        // 웨이브 사이에는 초록색으로 자원 탐색 메시지 표시
+                        miningInstructionText.color = Color.green;
+                        miningInstructionText.text = "자원을 탐색하세요";
+                    }
+                }
             }
         }
     }

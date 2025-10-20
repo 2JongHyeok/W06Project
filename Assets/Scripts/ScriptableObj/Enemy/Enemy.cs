@@ -24,11 +24,22 @@ public class Enemy : MonoBehaviour
     private EnemyType enemyType;
     private float enemySpeed;
     private float attackCooldown;
+    
+    // 피격 이펙트
+    private HitFlashEffect hitFlashEffect;
     private void Start()
     {
         if (target != null)
         {
             target.position = Vector2.zero;
+        }
+        
+        // HitFlashEffect 컴포넌트 찾기
+        hitFlashEffect = GetComponent<HitFlashEffect>();
+        if (hitFlashEffect == null)
+        {
+            // 없으면 자동으로 추가
+            hitFlashEffect = gameObject.AddComponent<HitFlashEffect>();
         }
     }
     
@@ -92,6 +103,12 @@ public class Enemy : MonoBehaviour
         attackTimer = 0f;
         isDead = false;
         
+        // 피격 이펙트 초기화
+        if (hitFlashEffect != null)
+        {
+            hitFlashEffect.ResetColor();
+        }
+        
         // Ranger 및 RangerTank 타입은 attackCooldown 설정
         if (enemyData != null)
         {
@@ -131,6 +148,13 @@ public class Enemy : MonoBehaviour
         }
 
         enemyHP -= damage;
+        
+        // 피격 이펙트 재생
+        if (hitFlashEffect != null)
+        {
+            hitFlashEffect.Flash();
+        }
+        
         if (enemyHP <= 0)
         {
             isDead = true;

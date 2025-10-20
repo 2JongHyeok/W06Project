@@ -50,7 +50,7 @@ public class TurretActivationManager : MonoBehaviour
     {
         missileStrategy.Interval += delta;
     } 
-    public void AddMissileTurret() { 
+    public void AddMissileTurret() {
         missileTurretPrefab.SetActive(true);
         guidedMissileTurret.ActivateTurret(missileStrategy);
     }

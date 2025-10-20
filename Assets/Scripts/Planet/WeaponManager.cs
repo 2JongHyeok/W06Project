@@ -39,6 +39,7 @@ public class SubWeaponManager : MonoBehaviour
     // UI 버튼 등에 연결
     public void LevelUp()
     {
+        Managers.Instance.WeaponModeText.SetActive(true);
         level = Mathf.Clamp(level + 1, 0, 2);
         UpdateWeaponState();
     }

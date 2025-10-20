@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minDistance: 50
   maxDistance: 80
-  spawnChance: 0.05
+  spawnChance: 0.2
   asteroidPool:
   - asteroidPrefab: {fileID: 2161304723462897001, guid: 51b8ba96543ff844883755f3a3ac4ef1, type: 3}
     weight: 60
