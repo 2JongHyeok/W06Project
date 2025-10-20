@@ -26,7 +26,7 @@ public class ForgeUI : MonoBehaviour
     [SerializeField] private float baseMainBranchHeight = 100f;   // 메인 브랜치 기본 높이
 
     [Header("References")]
-    [SerializeField] private ForgeManger forgeManger;
+    [SerializeField] private ForgeManager forgeManager;
     [SerializeField] private InventoryManger inventoryManger; // 인벤토리 매니저 추가
     [SerializeField] private ForgeTooltipUI tooltipUI; // Tooltip UI 프리팹 또는 씬의 Tooltip
 
@@ -39,14 +39,14 @@ public class ForgeUI : MonoBehaviour
     {
         ClearExistingUI();
 
-        if (forgeManger == null || forgeManger.mainBranches == null)
+        if (forgeManager == null || forgeManager.mainBranches == null)
         {
             Debug.LogError("ForgeManger or mainBranches is null!");
             return;
         }
 
         // 각 메인 브랜치에 대해 UI 생성
-        foreach (var mainBranch in forgeManger.mainBranches)
+        foreach (var mainBranch in forgeManager.mainBranches)
         {
             CreateMainBranchUI(mainBranch);
         }
@@ -224,7 +224,7 @@ public class ForgeUI : MonoBehaviour
         var nodeUIComponent = nodeUI.GetComponent<ForgeNodeUI>();
         if (nodeUIComponent != null)
         {
-            nodeUIComponent.Initialize(forgeSO, subBranchType, indexInSameId, forgeManger, OnForgeNodeClicked);
+            nodeUIComponent.Initialize(forgeSO, subBranchType, indexInSameId, forgeManager, OnForgeNodeClicked);
         }
         else
         {
@@ -257,7 +257,7 @@ public class ForgeUI : MonoBehaviour
         Debug.Log($"<color=yellow>ForgeId:</color> {forgeSO.forgeId}");
         
         // ForgeManger 확인
-        if (forgeManger == null)
+        if (forgeManager == null)
         {
             Debug.LogError("<color=red>ForgeManger not found!</color>");
             Debug.Log("=================================================");
@@ -304,7 +304,7 @@ public class ForgeUI : MonoBehaviour
             Debug.Log($"  - Diamond: -{forgeSO.diamondCost}");
             
             // ForgeManger를 통해 강화 적용
-            forgeManger.ForgeApply(forgeSO);
+            forgeManager.ForgeApply(forgeSO);
             Debug.Log($"<color=green>[Forge Applied Successfully!]</color> {forgeSO.upgradeName}");
             
             // UI 갱신 (후행 브랜치 언락 or 인덱스 변경)

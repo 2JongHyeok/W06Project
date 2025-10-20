@@ -26,7 +26,7 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private SubBranchType subBranchType; // 이 노드가 속한 서브브랜치
     private int forgeIndexInSameId; // 같은 ForgeId 내에서 몇 번째인지 (0부터 시작)
     private Action<BaseForgeSO> onChargeCompleteCallback;
-    private ForgeManger forgeManger;
+    private ForgeManager forgeManger;
     private bool isLocked = false; // 잠금 상태
     
     // Tooltip 관련
@@ -38,7 +38,7 @@ public class ForgeNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private Coroutine chargeCoroutine;
     private bool isHovering = false; // 마우스 호버 상태
 
-    public void Initialize(BaseForgeSO forgeData, SubBranchType subBranch, int indexInSameId, ForgeManger manager, Action<BaseForgeSO> onChargeComplete)
+    public void Initialize(BaseForgeSO forgeData, SubBranchType subBranch, int indexInSameId, ForgeManager manager, Action<BaseForgeSO> onChargeComplete)
     {
         forgeSO = forgeData;
         subBranchType = subBranch;

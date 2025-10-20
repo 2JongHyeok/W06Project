@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ForgeManger : MonoBehaviour
+public class ForgeManager : MonoBehaviour
 {
     [Header("UI Panel")]
     [SerializeField] private GameObject forgePanel; // 포지 UI 패널
