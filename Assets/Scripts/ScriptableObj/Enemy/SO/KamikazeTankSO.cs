@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(fileName = "KamikazeSO", menuName = "ScriptableObjects/Enemy/KamikazeSO", order = 1)]
-public class KamikazeSO : EnemyBaseSO
+[CreateAssetMenu(fileName = "KamikazeTankSO", menuName = "ScriptableObjects/Enemy/KamikazeTankSO", order = 1)]
+public class KamikazeTankSO : EnemyBaseSO
 {
-    [Header("Kamikaze Stats")]
+    [Header("KamikazeTank Stats")]
     public GameObject ExplosionEffectPrefab;
     public int damage = 10;
     public float explosionRadius = 3f; // 폭발 범위

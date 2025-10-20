@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0034b101fa1ee2c4fb38d5f5586b9b8f, type: 3}
-  m_Name: RangerEnemySO
+  m_Script: {fileID: 11500000, guid: 85d4c88fe6c1a484688e4b3f3094bf28, type: 3}
+  m_Name: ParasiteSO
   m_EditorClassIdentifier: 
-  enemyType: 0
-  enemyHP: 3
-  enemySpeed: 4
+  enemyType: 4
+  enemyHP: 0
+  enemySpeed: 0
   enemyPrefab: {fileID: 0}
-  bulletPrefab: {fileID: 6360892650054380025, guid: ef343e70042ee1140871eafb98ce9661, type: 3}
-  attackRange: 999
-  bulletSpeed: 1
-  attackCooldown: 0.5
+  ParasitePrefab: {fileID: 6360892650054380025, guid: 3d29ee9112aae784da1687e8ed4153fc, type: 3}
+  attackRange: 5
+  bulletSpeed: 10
+  attackCooldown: 2

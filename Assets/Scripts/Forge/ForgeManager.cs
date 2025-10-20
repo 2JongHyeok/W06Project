@@ -48,18 +48,6 @@ public class ForgeManager : MonoBehaviour
             }
         }
         
-        foreach (var item in SubBranch)
-        {
-            Debug.Log(item.Key + " / " + item.Value.subBranchType);
-        }
-        
-        foreach (var item in LockedSubBranch)
-        {
-            Debug.Log("LockedSubBranch: " + item.Key + " / " + item.Value.subBranchType);
-        }
-        
-        Debug.Log($"<color=cyan>Initially Unlocked SubBranches: {UnlockedSubBranches.Count}</color>");
-        Debug.Log($"<color=cyan>Total Forge Types: {forgeTotalLevels.Count}</color>");
         
         GetForgeSO(ForgeId.MainCannonAtkDamage, 0);
         
